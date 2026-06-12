@@ -1,0 +1,1074 @@
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 135deg;
+  inherits: false;
+}
+
+@keyframes rotate-gradient {
+  to {
+    --angle: 495deg;
+  }
+}
+
+/* ===========================
+   FITBOARD — Basic Page Styles
+   =========================== */
+
+/* CSS Variables */
+:root {
+  --nav-green: #ABD372;
+  --black: #0B0B0B;
+  --text-white: #FFFFFE;
+  --yellow-accent: #FFD600;
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: linear-gradient(180deg, #FFD700 0%, #F3DA67 100%);
+  color: var(--black);
+  min-height: 100vh;
+  overflow-x: auto;
+}
+
+/* ─── L-Shape Container ─── */
+.l-shape {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1001;
+  filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.25));
+}
+
+/* ─── Navbar ─── */
+.navbar {
+  width: 100%;
+  height: 80px;
+  background-color: var(--nav-green);
+  position: relative;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+}
+
+.nav-logo {
+  position: absolute;
+  left: 50px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px;
+  font-weight: 400;
+  color: var(--black);
+  text-decoration: none;
+  line-height: 1;
+}
+
+.back-home-btn {
+  position: absolute;
+  right: 50px;
+  width: 150px;
+  height: 34.5px;
+  background-color: var(--black);
+  border-radius: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-white);
+  transition: opacity 0.2s ease;
+}
+
+.back-arrow {
+  width: 8px;
+  height: 16px;
+  display: inline-block;
+  transform: rotate(180deg);
+  margin-right: 2px;
+}
+
+.back-home-btn:hover {
+  opacity: 0.85;
+}
+
+/* ─── Sidebar ─── */
+.sidebar {
+  position: absolute;
+  top: 80px;
+  left: 0;
+  width: 200px;
+  height: calc(100vh - 80px);
+  background-color: var(--nav-green);
+  padding: 24px 0;
+}
+
+.sidebar-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--black);
+  padding: 0 25px;
+  margin-bottom: 16px;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 25px 0 21px; /* static padding with 4px left space allocated for border */
+  border-left: 4px solid transparent;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--black);
+  text-decoration: none;
+  gap: 12px;
+  transition: background-color 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+              border-left-color 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Active Tab Accent */
+.sidebar-item.active {
+  background-color: var(--yellow-accent);
+  font-weight: 700;
+  border-left-color: var(--yellow-accent);
+  width: calc(100%);
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  position: relative;
+  z-index: 10;
+}
+
+/* Hover Accent */
+.sidebar-item:not(.active):hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+/* ─── Main Content Area ─── */
+.main-content {
+  margin-left: 200px;
+  margin-top: 80px;
+  padding:  40px 40px 40px 40px;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+/* ─── Calc Title Block ─── */
+.calc-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.calc-title-block {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  contain: layout;
+}
+
+.calc-icon {
+  width: 36px;
+  height: 36px;
+}
+
+.calc-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  color: #0B0B0B;
+  line-height: 31px;
+}
+
+.calc-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(11, 11, 11, 0.6);
+  line-height: 16px;
+  margin-top: 2px;
+}
+
+/* ─── Entry Tab ─── */
+.entry-tab {
+  width: 350px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  filter: drop-shadow(9px 4px 4px rgba(0,0,0,0.25));
+}
+
+/* ─── Section Labels ─── */
+.section-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #0B0B0B;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(0,0,0,0.12);
+  margin: 4px 0;
+}
+
+/* ─── Input Rows ─── */
+.input-row {
+  display: flex;
+  gap: 16px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.input-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #0B0B0B;
+  line-height: 16px;
+}
+
+.input-field {
+  width: 100%;
+  height: 32px;
+  border: 1px solid #0B0B0B;
+  border-radius: 4px;
+  padding: 0 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #0B0B0B;
+  background: #FFFFFF;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.input-field:focus {
+  border-color: #FFD600;
+  border-width: 2px;
+}
+
+/* ─── Buttons ─── */
+.btn-calculate {
+  width: 100%;
+  height: 44px;
+  background: #FFD600;
+  border: none;
+  border-radius: 100px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0B0B0B;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: opacity 0.2s ease;
+}
+
+.btn-calculate:hover {
+  opacity: 0.85;
+}
+
+.btn-reset {
+  width: 100%;
+  height: 44px;
+  background: transparent;
+  border: 1.5px solid #0B0B0B;
+  border-radius: 100px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #0B0B0B;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-reset:hover {
+  background-color: rgba(0,0,0,0.06);
+}
+
+/* ─── Calc SPA Panels ─── */
+.calc-panel {
+  grid-column: 1;
+  grid-row: 1;
+  display: none;
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.calc-panel.active {
+  display: block;
+}
+
+.calc-panel.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Basic Preview Layout ─── */
+.basic-main-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 80px;
+}
+
+.preview-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 480px;
+}
+
+
+
+.preview-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  line-height: 1.2;
+  color: #0B0B0B;
+}
+
+#preview-heading {
+  margin-top: 10px;
+}
+
+#results-heading,
+#array-results-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  line-height: 29px;
+  color: #0B0B0B;
+  width: 380px;
+  margin: 20px auto 8px auto;
+  text-align: left;
+}
+
+.results-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  width: 380px;
+  margin: 0 auto 16px auto;
+}
+
+.result-card {
+  box-sizing: border-box;
+  background: #FFFFFF;
+  border: 1px solid rgba(154, 154, 154, 0.5);
+  box-shadow: 5px 5px 8.9px rgba(0, 0, 0, 0.25);
+  border-radius: 19px;
+  width: 120px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.result-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 34px;
+  font-weight: 400;
+  color: #0B0B0B;
+  line-height: 41px;
+  text-align: center;
+}
+
+.result-label {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: rgba(11, 11, 11, 0.6);
+  text-align: center;
+}
+
+.preview-canvas-wrap {
+  border-radius: 12px;
+  overflow: hidden;
+  filter: drop-shadow(11px 11px 11px rgba(0,0,0,0.25));
+  background: transparent;
+  position: relative;
+}
+
+.preview-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.export-container {
+  position: relative;
+  display: inline-block;
+  margin-right: 50px;
+}
+
+.export-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 6px;
+  display: flex;
+  visibility: hidden;
+  opacity: 0;
+  flex-direction: column;
+  gap: 3px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  width: 140px;
+  box-sizing: border-box;
+  
+  /* elastic transition matching calculators dropdown */
+  transform: translateY(15px) scale(0.95);
+  transform-origin: top right;
+  transition: opacity 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              visibility 0.35s;
+
+  /* Gradient border matching image, stroke thickness set to 2.5px */
+  border: 2.5px solid transparent;
+  background-image: linear-gradient(#fff, #fff), linear-gradient(var(--angle), #FF0055 0%, #7F00FF 35%, #00F0FF 70%, #FFD600 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.export-container.open .export-dropdown {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  animation: rotate-gradient 6s linear infinite;
+}
+
+.export-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 9px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.export-item:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.export-item:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.export-icon {
+  width: 21px;
+  height: 21px;
+  object-fit: contain;
+}
+
+.export-item span {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.download-trigger-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: #0b0b0b;
+  backdrop-filter: blur(4px);
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+.download-trigger-btn:hover {
+  background: #ffffff;
+  transform: scale(1.08);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  color: #006536;
+}
+
+.download-trigger-btn:active {
+  transform: scale(0.95);
+}
+
+.download-trigger-btn svg {
+  width: 14px;
+  height: 12px;
+}
+
+#pcb-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.breakdown-table {
+  width: 380px;
+  margin: 16px auto 0 auto;
+  display: none;
+}
+
+.breakdown-label {
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: rgba(0, 0, 0, 0.52);
+  margin-bottom: 8px;
+  text-align: left;
+  padding-left: 8px;
+}
+
+.breakdown-grid {
+  box-sizing: border-box;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  box-shadow: 6px 6px 12.9px rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  padding: 8px 16px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  row-gap: 0;
+  column-gap: 0;
+}
+
+.bd-key {
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: rgba(11, 11, 11, 0.7);
+  opacity: 0.9;
+  border-bottom: 0.5px solid #828282;
+  padding: 8px 0;
+}
+
+.bd-val {
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: rgba(11, 11, 11, 0.7);
+  opacity: 0.9;
+  text-align: right;
+  border-bottom: 0.5px solid #828282;
+  padding: 8px 0;
+}
+
+.breakdown-grid span:nth-last-child(-n+2) {
+  border-bottom: none;
+}
+
+/* ─── Other Sizes Layout ─── */
+.other-sizes-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 240px;
+  margin-top: 32px; /* aligns title nicely with PREVIEW heading */
+}
+
+.other-sizes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.other-size-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 4px 4px 8px rgba(0,0,0,0.12);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.2s ease,
+              background-color 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.other-size-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 6px 8px 16px rgba(0,0,0,0.18);
+  background: #FAFAFA;
+}
+
+.other-size-card.active {
+  border-color: #006536;
+  background: #FFFFFF;
+}
+
+.other-size-canvas {
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.other-size-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.other-size-dim {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  color: #0B0B0B;
+  line-height: 1.1;
+}
+
+.other-size-parts {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  color: rgba(11, 11, 11, 0.8);
+}
+
+.other-size-util {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  color: #006536;
+  font-weight: 700;
+}
+
+/* ─── Preview Placeholder empty state ─── */
+.preview-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 24px;
+  min-height: 400px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.placeholder-svg {
+  width: 200px;
+  height: 200px;
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+
+.preview-placeholder:hover .placeholder-svg {
+  opacity: 0.95;
+}
+
+.placeholder-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: rgba(11, 11, 11, 0.65);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.low-util {
+  color: #C62828 !important;
+}
+
+/* ═══ VIEW TRANSITIONS API ═══ */
+@view-transition {
+  navigation: auto;
+}
+
+/* Allow the shared elements to animate independently */
+::view-transition-old(basic-icon),
+::view-transition-new(basic-icon),
+::view-transition-old(array-icon),
+::view-transition-new(array-icon),
+::view-transition-old(round-icon),
+::view-transition-new(round-icon),
+::view-transition-old(shear-icon),
+::view-transition-new(shear-icon) {
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(basic-title),
+::view-transition-new(basic-title),
+::view-transition-old(array-title),
+::view-transition-new(array-title),
+::view-transition-old(round-title),
+::view-transition-new(round-title),
+::view-transition-old(shear-title),
+::view-transition-new(shear-title) {
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+}
+
+/* ─── Collapsible Panel Fit Card ─── */
+.collapsible-card {
+  margin-top: 16px;
+  width: 360px; /* same width as array-result-bar */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.collapsible-header {
+  width: 100%;
+  height: 50px;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  cursor: pointer;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-radius 0.15s ease, box-shadow 0.15s ease;
+}
+
+.collapsible-card.open .collapsible-header {
+  border-radius: 8px;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.collapsible-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.collapsible-plus-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--yellow-accent, #FFD600);
+  color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', sans-serif; /* DM Sans is much easier to center perfectly than Bebas Neue */
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.collapsible-header-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.collapsible-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000000;
+  line-height: 1.2;
+}
+
+.collapsible-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  color: #5E5E5E;
+  margin-top: 1px;
+}
+
+.collapsible-caret {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  object-fit: contain;
+  transform: rotate(90deg); /* point down by default */
+  filter: brightness(0); /* make the white SVG triangle black */
+  transition: transform 0.2s ease;
+}
+
+.collapsible-card.open .collapsible-caret {
+  transform: rotate(-90deg); /* point up when open */
+}
+
+.collapsible-content {
+  display: flex; /* keep as flex for transitions to function correctly */
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-8px);
+  margin-top: 0;
+  padding: 0 20px;
+  width: 100%;
+  border: 0 solid rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  background: #FFFFFF;
+  flex-direction: column;
+  gap: 10px; /* slightly more compact gaps than 12px */
+  box-sizing: border-box;
+  transition: max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+              margin-top 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              padding 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              border-width 0.25s ease,
+              box-shadow 0.25s ease;
+}
+
+.collapsible-card.open .collapsible-content {
+  max-height: 450px;
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 12px;
+  padding: 16px 20px; /* compact padding */
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.section-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  color: #5E5E5E;
+  margin-top: -12px;
+  margin-bottom: 4px;
+}
+
+/* Custom styling for inputs and buttons inside the panel fit collapsible section */
+.collapsible-content .input-field {
+  height: 32px;
+  border: 1.5px solid #000000;
+  border-radius: 8px;
+  font-size: 13px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.collapsible-content .input-row {
+  margin-top: 4px;
+}
+
+.collapsible-content .btn-calculate,
+.collapsible-content .btn-reset {
+  height: 30px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.collapsible-content .btn-calculate {
+  background: #FFD600;
+  border: none;
+  color: #0B0B0B;
+}
+
+.collapsible-content .btn-calculate:hover {
+  opacity: 0.85;
+}
+
+.collapsible-content .btn-reset {
+  background: #FFFFFF;
+  border: 1.5px solid #000000;
+  color: #0B0B0B;
+}
+
+.collapsible-content .btn-reset:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.collapsible-content .button-row {
+  margin-top: 16px;
+}
+
+/* ─── Nesting Pattern Switch ─── */
+.nesting-toggle {
+  position: relative;
+  width: 143px !important;
+  height: 34.5px !important;
+  background: #FFFFFF;
+  border: 0.75px solid #C4C4C4;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+  border-radius: 17.25px !important;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+  flex: none !important;
+}
+
+.nesting-slider {
+  position: absolute;
+  width: 44px;
+  height: 28px;
+  background: #FFD600;
+  border-radius: 14px;
+  top: 2.5px;
+  left: 2.25px;
+  z-index: 1;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nesting-toggle.pattern-auto .nesting-slider {
+  transform: translateX(0);
+}
+
+.nesting-toggle.pattern-hex .nesting-slider {
+  transform: translateX(46.5px);
+}
+
+.nesting-toggle.pattern-grid .nesting-slider {
+  transform: translateX(93px);
+}
+
+.nesting-option {
+  position: relative;
+  width: 33.33%;
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px !important;
+  line-height: 16px !important;
+  color: #838586;
+  z-index: 2;
+  transition: color 0.2s ease, font-weight 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.nesting-option.active {
+  color: #0B0B0B;
+  font-weight: 500;
+  background: transparent;
+}
+
+.nesting-icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 143px;
+  height: 34px;
+  flex: none !important;
+}
+
+.nesting-icon-box {
+  width: 34px;
+  height: 34px;
+  border: 0.75px solid #C4C4C4;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  cursor: pointer;
+  position: relative;
+  overflow: visible; /* allows Auto SVG arrows to overflow box edges */
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.nesting-icon-box.active {
+  border: 1px solid #006536; /* active highlight border */
+  background: #C1D99E; /* green background highlight */
+}
+
+.nesting-icon-box:hover:not(.active) {
+  opacity: 0.85;
+}
+
+/* Specific image styling inside nesting icon boxes to replicate Figma scale */
+#nesting-icon-auto img {
+  width: 44px !important;
+  height: 44px !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  max-width: none !important;
+}
+
+#nesting-icon-hex img, #nesting-icon-grid img {
+  width: 34px !important;
+  height: 34px !important;
+  display: block !important;
+}
+
+.section-divider.black-divider {
+  background: #000000;
+  height: 2px;
+  margin: 4px 0;
+}
+

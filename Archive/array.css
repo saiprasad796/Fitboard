@@ -1,0 +1,440 @@
+/* ===========================
+   FITBOARD — Array Page Styles
+   =========================== */
+
+/* Specific layout adjustments for the array input columns */
+.array-input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Label styling for sub-sections inside the form */
+.array-sub-section-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(11, 11, 11, 0.4);
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+/* Stepper Custom Component */
+.stepper-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid #0B0B0B;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 32px;
+  background: #FFFFFF;
+}
+
+.stepper-btn {
+  width: 32px;
+  height: 100%;
+  background: #FFD600; /* yellow accent */
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0B0B0B;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: opacity 0.15s ease;
+}
+
+.stepper-btn:hover {
+  opacity: 0.85;
+}
+
+.stepper-btn:active {
+  opacity: 0.7;
+}
+
+.stepper-input {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0B0B0B;
+  background: transparent;
+  outline: none;
+  pointer-events: none; /* disable direct clicking/typing */
+}
+
+/* Array Result Bar / Result Card */
+.array-result-bar {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 360px;
+  height: 72px;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 0 24px;
+  margin: 16px auto 0 auto;
+  filter: drop-shadow(4px 4px 4.8px rgba(0, 0, 0, 0.25));
+}
+
+.array-result-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.array-result-title {
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 11px;
+  color: rgba(0, 0, 0, 0.4);
+  margin-bottom: 1px;
+}
+
+#array-pcbs-label {
+  margin-top: 1px;
+  margin-bottom: 0;
+}
+
+.array-result-value-wrapper {
+  display: flex;
+  align-items: baseline;
+}
+
+.array-size-val-num,
+.array-result-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 31px;
+  color: #000000;
+}
+
+.array-result-unit {
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 26px;
+  color: #000000;
+  margin-left: 4px;
+}
+
+#array-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.calc-title-block {
+  contain: layout;
+}
+
+/* ═══ VIEW TRANSITIONS API ═══ */
+@view-transition {
+  navigation: auto;
+}
+
+/* Allow the shared elements to animate independently */
+::view-transition-old(basic-icon),
+::view-transition-new(basic-icon),
+::view-transition-old(array-icon),
+::view-transition-new(array-icon),
+::view-transition-old(round-icon),
+::view-transition-new(round-icon),
+::view-transition-old(shear-icon),
+::view-transition-new(shear-icon) {
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(basic-title),
+::view-transition-new(basic-title),
+::view-transition-old(array-title),
+::view-transition-new(array-title),
+::view-transition-old(round-title),
+::view-transition-new(round-title),
+::view-transition-old(shear-title),
+::view-transition-new(shear-title) {
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Fade the rest of the page */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+}
+
+/* ─── Collapsible Panel Fit Card ─── */
+/* ─── Collapsible Panel Fit Card ─── */
+.collapsible-card {
+  margin-top: 16px;
+  width: 360px; /* same width as array-result-bar */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.collapsible-header {
+  width: 100%;
+  height: 50px;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  cursor: pointer;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-radius 0.15s ease, box-shadow 0.15s ease;
+}
+
+.collapsible-card.open .collapsible-header {
+  border-radius: 8px;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.collapsible-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.collapsible-plus-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--yellow-accent, #FFD600);
+  color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', sans-serif; /* DM Sans is much easier to center perfectly than Bebas Neue */
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.collapsible-header-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.collapsible-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000000;
+  line-height: 1.2;
+}
+
+.collapsible-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  color: #5E5E5E;
+  margin-top: 1px;
+}
+
+.collapsible-caret {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  object-fit: contain;
+  transform: rotate(90deg); /* point down by default */
+  filter: brightness(0); /* make the white SVG triangle black */
+  transition: transform 0.2s ease;
+}
+
+.collapsible-card.open .collapsible-caret {
+  transform: rotate(-90deg); /* point up when open */
+}
+
+.collapsible-content {
+  display: flex; /* keep as flex for transitions to function correctly */
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-8px);
+  margin-top: 0;
+  padding: 0 20px;
+  width: 100%;
+  border: 0 solid rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  background: #FFFFFF;
+  flex-direction: column;
+  gap: 10px; /* slightly more compact gaps than 12px */
+  box-sizing: border-box;
+  transition: max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+              margin-top 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              padding 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              border-width 0.25s ease,
+              box-shadow 0.25s ease;
+}
+
+.collapsible-card.open .collapsible-content {
+  max-height: 450px;
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 12px;
+  padding: 16px 20px; /* compact padding */
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.section-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  color: #5E5E5E;
+  margin-top: -12px;
+  margin-bottom: 4px;
+}
+
+/* Custom styling for inputs and buttons inside the panel fit collapsible section */
+.collapsible-content .input-field {
+  height: 32px;
+  border: 1.5px solid #000000;
+  border-radius: 8px;
+  font-size: 13px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.collapsible-content .input-row {
+  margin-top: 4px;
+}
+
+.collapsible-content .btn-calculate,
+.collapsible-content .btn-reset {
+  height: 30px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.collapsible-content .btn-calculate {
+  background: #FFD600;
+  border: none;
+  color: #0B0B0B;
+}
+
+.collapsible-content .btn-calculate:hover {
+  opacity: 0.85;
+}
+
+.collapsible-content .btn-reset {
+  background: #FFFFFF;
+  border: 1.5px solid #000000;
+  color: #0B0B0B;
+}
+
+.collapsible-content .btn-reset:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.collapsible-content .button-row {
+  margin-top: 16px;
+}
+
+/* 3-Column layout styling for Array Calculator */
+#panel-array .basic-main-row {
+  gap: 40px;
+}
+
+.panel-preview-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 480px;
+}
+
+/* Header alignment for labels and toggle switch */
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+/* Toggle Switch Component */
+.toggle-switch {
+  position: relative;
+  width: 80px;
+  height: 26px;
+  background: #FFFFFF;
+  border: 0.75px solid #C4C4C4;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.toggle-slider {
+  position: absolute;
+  width: 37px;
+  height: 20px;
+  background: #FFD600;
+  border-radius: 10px;
+  top: 2.25px;
+  left: 2.25px;
+  z-index: 1;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle-switch.unit-in .toggle-slider {
+  transform: translateX(37px);
+}
+
+.toggle-label {
+  position: relative;
+  width: 50%;
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 9px;
+  line-height: 12px;
+  color: #838586;
+  z-index: 2;
+  transition: color 0.2s ease, font-weight 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.toggle-label.active {
+  color: #0B0B0B;
+  font-weight: 700;
+}

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FITBOARD — PCB Panelization at the speed of thought</title>
+  <meta name="description" content="Fitboard is a state-of-the-art PCB panelization tool. Calculate, optimize, and visualize your PCB panels in real time.">
+  
+  <!-- Google Fonts: Bebas Neue, DM Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Reset Styles */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #1A1A1A;
+      font-family: 'DM Sans', sans-serif;
+      color: #000000;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    /* Frame Container (1512px wide, 958px height matching Figma) */
+    .frame-container {
+      width: 1512px;
+      height: 958px;
+      position: relative;
+      background: linear-gradient(180deg, #FFD600 0%, #EED66B 100%);
+      box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+
+    /* Navbar Background */
+    .navbar {
+      position: absolute;
+      width: 1512px;
+      height: 80px;
+      left: 0px;
+      top: 0px;
+      background: linear-gradient(0deg, #ABD372, #ABD372);
+      z-index: 10;
+    }
+
+    /* Logo "FITBOARD" */
+    .nav-logo {
+      position: absolute;
+      width: 120px;
+      height: 48px;
+      left: 50px;
+      top: 22px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 40px;
+      line-height: 48px;
+      letter-spacing: 0.01em;
+      color: #000000;
+      text-decoration: none;
+    }
+
+    /* Nav Link "How it works" */
+    .nav-link-how {
+      position: absolute;
+      width: 84px;
+      height: 18px;
+      left: 225px;
+      top: 35px;
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 18px;
+      letter-spacing: 0.01em;
+      color: #0B0B0B;
+      text-decoration: none;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+    .nav-link-how:hover {
+      opacity: 1;
+    }
+
+    /* Calculators Dropdown Container */
+    .dropdown {
+      position: absolute;
+      width: 87px;
+      height: 18px;
+      left: 345px;
+      top: 35px;
+      z-index: 12;
+    }
+
+    .nav-link-calc {
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 18px;
+      letter-spacing: 0.01em;
+      color: #0B0B0B;
+      text-decoration: none;
+      opacity: 0.8;
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      transition: opacity 0.2s ease;
+      cursor: pointer;
+    }
+    .nav-link-calc:hover {
+      opacity: 1;
+    }
+
+    /* Dropdown contents menu */
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #FFFFFF;
+      min-width: 180px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      border-radius: 8px;
+      padding: 8px 0;
+      z-index: 15;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .dropdown-item {
+      color: #0B0B0B;
+      padding: 10px 16px;
+      text-decoration: none;
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      transition: background-color 0.2s ease, padding-left 0.2s ease;
+    }
+
+    .dropdown-item:hover {
+      background-color: rgba(171, 211, 114, 0.2);
+      padding-left: 20px;
+      color: #008C4A;
+    }
+
+    /* About Link */
+    .nav-link-about {
+      position: absolute;
+      width: 41px;
+      height: 18px;
+      left: 460px;
+      top: 35px;
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 18px;
+      letter-spacing: 0.01em;
+      color: #0B0B0B;
+      text-decoration: none;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+    .nav-link-about:hover {
+      opacity: 1;
+    }
+
+    /* Contact Link */
+    .nav-link-contact {
+      position: absolute;
+      width: 54px;
+      height: 18px;
+      left: 1300px;
+      top: 35px;
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 18px;
+      letter-spacing: 0.01em;
+      color: #0B0B0B;
+      text-decoration: none;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+    .nav-link-contact:hover {
+      opacity: 1;
+    }
+
+    /* Sign In Button (Rectangle 44) */
+    .nav-signin-btn {
+      box-sizing: border-box;
+      position: absolute;
+      width: 80px;
+      height: 32px;
+      left: 1380px;
+      top: 28px;
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.2s ease;
+    }
+    .nav-signin-btn:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    /* Sign In text inside button */
+    .nav-signin-text {
+      width: 44px;
+      height: 18px;
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 18px;
+      letter-spacing: 0.01em;
+      color: #000000;
+      text-align: center;
+    }
+
+    /* Hero Headline Eyebrow */
+    .hero-eyebrow {
+      position: absolute;
+      width: 163px;
+      height: 14px;
+      left: 120px;
+      top: 180px;
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 11px;
+      line-height: 14px;
+      letter-spacing: 0.15em;
+      color: rgba(0, 0, 0, 0.5);
+      text-transform: uppercase;
+    }
+
+    /* Hero Main Headline (width 368px, height 450px matching Figma wrap limits) */
+    .hero-headline {
+      position: absolute;
+      width: 368px;
+      height: 450px;
+      left: 120px;
+      top: 215px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 88px;
+      line-height: 90px;
+      color: #000000;
+    }
+
+    /* Subtext tag (width 145px, height 44px matching Figma) */
+    .hero-subtext {
+      position: absolute;
+      width: 145px;
+      height: 44px;
+      left: 120px;
+      top: 680px;
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 22px;
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    /* CTA Button background (Rectangle 45) & Start Panelizing text wrapper */
+    .hero-cta-btn {
+      position: absolute;
+      width: 215px;
+      height: 50px;
+      left: 112px;
+      top: 759px;
+      background: #0A0A0A;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      filter: drop-shadow(2px 6px 5px rgba(0, 0, 0, 0.3));
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
+    }
+
+    .hero-cta-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 25px rgba(255, 214, 0, 0.6), 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-cta-text {
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 20px;
+      line-height: 26px;
+      color: #FFFBFB;
+    }
+
+    /* Floating Panel Images (using absolute coordinates directly from Figma Landing page.txt) */
+    .panel-img {
+      position: absolute;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* Big Panel: left 958, top 224, width 301, height 455.64 */
+    .panel-big {
+      left: 958px;
+      top: 224px;
+      width: 301px;
+      height: 455.64px;
+      filter: drop-shadow(10px 9px 7.2px rgba(0, 0, 0, 0.25));
+      animation: floatBig 5s ease-in-out infinite;
+    }
+
+    /* Small Panel: left 1197 (Figma value!), top 421, width 183, height 258.91 */
+    .panel-small {
+      left: 1197px;
+      top: 421px;
+      width: 183px;
+      height: 258.91px;
+      filter: drop-shadow(10px 9px 4px rgba(0, 0, 0, 0.25));
+      animation: floatSmall 5s ease-in-out infinite;
+      animation-delay: 1.2s;
+    }
+
+    /* Array Panel: left 784, top 526, width 198.75, height 153.75 */
+    .panel-array {
+      left: 784px;
+      top: 526px;
+      width: 198.75px;
+      height: 153.75px;
+      filter: drop-shadow(10px 10px 4px rgba(0, 0, 0, 0.25));
+      animation: floatArray 5s ease-in-out infinite;
+      animation-delay: 2.4s;
+    }
+
+    /* Staggered Floating Keyframes */
+    @keyframes floatBig {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes floatSmall {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes floatArray {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* Page Entrance Animations Trigger Classes */
+    .fade-up-init {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-up-active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.3s; }
+    .stagger-3 { transition-delay: 0.5s; }
+    .stagger-4 { transition-delay: 0.7s; }
+  </style>
+</head>
+<body>
+
+  <div class="frame-container">
+    
+    <!-- Navbar -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+      <!-- Logo -->
+      <a href="fitboard.html" class="nav-logo">FITBOARD</a>
+      
+      <!-- Nav Links -->
+      <a href="#how-it-works" class="nav-link-how">How it works</a>
+      
+      <!-- Calculators Dropdown Menu -->
+      <div class="dropdown">
+        <a class="nav-link-calc">Calculators ▾</a>
+        <div class="dropdown-content">
+          <a href="fitboard-calculator.html?type=basic" class="dropdown-item">Basic Calculator</a>
+          <a href="fitboard-calculator.html?type=array" class="dropdown-item">Array Calculator</a>
+          <a href="fitboard-calculator.html?type=round" class="dropdown-item">Round Part Calculator</a>
+          <a href="fitboard-calculator.html?type=shear" class="dropdown-item">Panel Shear Calculator</a>
+        </div>
+      </div>
+      
+      <!-- About -->
+      <a href="#about" class="nav-link-about">About</a>
+      
+      <!-- Contact -->
+      <a href="#contact" class="nav-link-contact">Contact</a>
+      
+      <!-- Sign In Button -->
+      <a href="fitboard-404.html" class="nav-signin-btn">
+        <span class="nav-signin-text">Sign In</span>
+      </a>
+    </nav>
+
+    <!-- Hero Content Elements (Positioned 100% matching Figma specifications) -->
+    <p class="hero-eyebrow fade-up-init stagger-1">PCB Panelization Tool</p>
+    
+    <h1 class="hero-headline fade-up-init stagger-2">
+      PCB Panelization at the speed of thought.
+    </h1>
+    
+    <p class="hero-subtext fade-up-init stagger-3">
+      Everything you need. Nothing you don’t.
+    </p>
+    
+    <!-- Start Panelizing CTA Button -->
+    <a href="fitboard-calculator.html" class="hero-cta-btn fade-up-init stagger-4">
+      <span class="hero-cta-text">Start Panelizing ▶</span>
+    </a>
+
+    <!-- Floating Panels -->
+    <img src="Assets/Big Panel.svg" alt="Big PCB Panel" class="panel-img panel-big">
+    <img src="Assets/Small Panel.svg" alt="Small PCB Panel" class="panel-img panel-small">
+    <img src="Assets/Array.svg" alt="Array PCB Panel" class="panel-img panel-array">
+
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Trigger entrance scroll/load animations
+      const anims = document.querySelectorAll('.fade-up-init');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-up-active');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1
+      });
+
+      anims.forEach(el => observer.observe(el));
+    });
+  </script>
+
+</body>
+</html>

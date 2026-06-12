@@ -1,0 +1,2062 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FITBOARD — Array Calculator</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&family=Inter:wght@400&display=swap"
+    rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="basic.css">
+  <link rel="stylesheet" href="array.css">
+</head>
+
+<body>
+
+  <!-- ═══ L-SHAPE NAV & SIDEBAR CONTAINER ═══ -->
+  <div class="l-shape">
+    <!-- ═══ NAVBAR ═══ -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+      <a href="index.html" class="nav-logo">FITBOARD</a>
+      <a href="index.html" class="back-home-btn">
+        <img src="Triangle.svg" class="back-arrow" alt=""> Back to Home
+      </a>
+    </nav>
+
+    <!-- ═══ SIDEBAR ═══ -->
+    <aside class="sidebar">
+      <div class="sidebar-label">CALCULATORS</div>
+      <nav class="sidebar-menu">
+        <a href="basic.html" class="sidebar-item" data-tab="basic">
+          <img src="basic-icon.svg" class="sidebar-icon" alt="">
+          <span>Basic</span>
+        </a>
+        <a href="#array" class="sidebar-item active" data-tab="array">
+          <img src="array-icon.svg" class="sidebar-icon" alt="">
+          <span>Array</span>
+        </a>
+        <a href="basic.html#round-part" class="sidebar-item" data-tab="round-part">
+          <img src="round-icon.svg" class="sidebar-icon" alt="">
+          <span>Round Part</span>
+        </a>
+        <a href="basic.html#panel-shear" class="sidebar-item" data-tab="panel-shear">
+          <img src="shear-icon.svg" class="sidebar-icon" alt="">
+          <span>Panel Shear</span>
+        </a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- ═══ MAIN CONTENT AREA ═══ -->
+  <main class="main-content">
+
+    <!-- ─── Array Panel ─── -->
+    <div id="panel-array" class="calc-panel active">
+      <div class="calc-wrapper">
+        <!-- Title Block -->
+        <div class="calc-title-block">
+          <img src="array-icon.svg" class="calc-icon" alt="Array Calculator Icon" style="view-transition-name: array-icon;">
+          <div class="calc-title-text">
+            <h2 class="calc-title" style="view-transition-name: array-title;">Array Calculator</h2>
+            <p class="calc-subtitle">Build your Array, then fit it on a panel</p>
+          </div>
+        </div>
+
+        <!-- Main Calculator Layout Row -->
+        <div class="basic-main-row">
+
+          <!-- Entry Form -->
+          <div class="entry-tab" id="entry-tab">
+            <!-- PCB SIZE -->
+            <div class="section-header-row">
+              <p class="section-label" style="margin-bottom: 0;">PCB SIZE</p>
+              <div class="toggle-switch" id="pcb-unit-toggle">
+                <div class="toggle-slider"></div>
+                <span class="toggle-label mm active">mm</span>
+                <span class="toggle-label in">in</span>
+              </div>
+            </div>
+            <div class="input-row">
+              <div class="input-group">
+                <label class="input-label" id="lbl-part-width">PCB Length</label>
+                <input type="number" class="input-field" id="part-width" value="0" min="0">
+              </div>
+              <div class="input-group">
+                <label class="input-label" id="lbl-part-height">PCB Width</label>
+                <input type="number" class="input-field" id="part-height" value="0" min="0">
+              </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- ARRAY CONFIGURATION -->
+            <p class="section-label">ARRAY CONFIGURATION</p>
+            <div class="input-row">
+              <div class="input-group">
+                <label class="input-label">Rows</label>
+                <div class="stepper-box">
+                  <button type="button" class="stepper-btn" id="btn-rows-dec">−</button>
+                  <input type="number" class="stepper-input" id="array-rows" value="1" min="1" readonly>
+                  <button type="button" class="stepper-btn" id="btn-rows-inc">+</button>
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="input-label">Columns</label>
+                <div class="stepper-box">
+                  <button type="button" class="stepper-btn" id="btn-cols-dec">−</button>
+                  <input type="number" class="stepper-input" id="array-cols" value="1" min="1" readonly>
+                  <button type="button" class="stepper-btn" id="btn-cols-inc">+</button>
+                </div>
+              </div>
+            </div>
+            <div class="input-row">
+              <div class="input-group">
+                <label class="input-label" id="lbl-spacing">Part-to-part</label>
+                <input type="number" class="input-field" id="spacing" value="0" min="0">
+              </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- RAIL -->
+            <p class="section-label">RAIL</p>
+            <div class="input-row">
+              <div class="input-group">
+                <label class="input-label" id="lbl-rail-left">Rail Left</label>
+                <input type="number" class="input-field" id="rail-left" value="0" min="0">
+              </div>
+              <div class="input-group">
+                <label class="input-label" id="lbl-rail-right">Rail Right</label>
+                <input type="number" class="input-field" id="rail-right" value="0" min="0">
+              </div>
+            </div>
+            <div class="input-row">
+              <div class="input-group">
+                <label class="input-label" id="lbl-rail-top">Rail Top</label>
+                <input type="number" class="input-field" id="rail-top" value="0" min="0">
+              </div>
+              <div class="input-group">
+                <label class="input-label" id="lbl-rail-bottom">Rail Bottom</label>
+                <input type="number" class="input-field" id="rail-bottom" value="0" min="0">
+              </div>
+            </div>
+
+            <!-- Reset Button -->
+            <button class="btn-reset" id="btn-reset" type="button" style="margin-top: 16px;">
+              Reset ↺
+            </button>
+          </div>
+
+          <!-- Preview Column (Middle) -->
+          <div class="preview-column">
+            <!-- Placeholder -->
+            <div class="preview-placeholder" id="preview-placeholder">
+              <svg class="placeholder-svg" width="200" height="200" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 20 20 L 20 100 L 100 100 Z" fill="#0B0B0B" opacity="0.06" transform="translate(4, 4)"/>
+                <path d="M 20 20 L 20 100 L 100 100 Z M 32 45 L 75 88 L 32 88 Z" fill="rgba(255, 255, 255, 0.45)" stroke="#0B0B0B" stroke-width="2.5" stroke-linejoin="round" fill-rule="evenodd"/>
+                <path d="M 20 30 H 27 M 20 35 H 24 M 20 40 H 27 M 20 45 H 24 M 20 50 H 27 M 20 55 H 24 M 20 60 H 27 M 20 65 H 24 M 20 70 H 27 M 20 75 H 24 M 20 80 H 27 M 20 85 H 24 M 20 90 H 27" stroke="#0B0B0B" stroke-width="1.2" stroke-linecap="round"/>
+                <path d="M 30 100 V 93 M 35 100 V 96 M 40 100 V 93 M 45 100 V 96 M 50 100 V 93 M 55 100 V 96 M 60 100 V 93 M 65 100 V 96 M 70 100 V 93 M 75 100 V 96 M 80 100 V 93 M 85 100 V 96 M 90 100 V 93" stroke="#0B0B0B" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+              <p class="placeholder-text">Enter parameters to see preview</p>
+            </div>
+
+            <div class="preview-header-row" id="preview-heading" style="display: none;">
+              <p class="preview-heading">ARRAY PREVIEW:</p>
+              <div class="export-container" id="export-container-array">
+                <button class="download-trigger-btn" id="download-trigger-array" title="Export Options">
+                  <svg width="13" height="11" viewBox="0 0 13 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.5 0.5V8.5" stroke="currentColor" stroke-linecap="round"/>
+                    <path d="M6.5 8.5L9.5 5.5" stroke="currentColor" stroke-linecap="round"/>
+                    <path d="M6.5 8.5L3.5 5.5" stroke="currentColor" stroke-linecap="round"/>
+                    <path d="M0.5 7.5V10.5H12.5V7.5" stroke="currentColor" stroke-linecap="round"/>
+                  </svg>
+                </button>
+                <div class="export-dropdown" id="export-dropdown-array">
+                  <button class="export-item" id="export-dxf-array">
+                    <img src="DXF ICON.svg" class="export-icon" alt="">
+                    <span>DXF Export</span>
+                  </button>
+                  <button class="export-item" id="export-pdf-array">
+                    <img src="PDF ICON.svg" class="export-icon" alt="">
+                    <span>PDF Export</span>
+                  </button>
+                  <button class="export-item" id="export-png-array">
+                    <img src="PNG ICON.svg" class="export-icon" alt="">
+                    <span>PNG Export</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Preview Canvas Wrap -->
+            <div class="preview-canvas-wrap" id="preview-canvas-wrap" style="display: none;">
+              <canvas id="array-canvas" width="480" height="576"></canvas>
+            </div>
+
+            <!-- Result Bar below canvas -->
+            <div class="array-result-bar" id="array-result-bar" style="display: none;">
+              <div class="array-result-group">
+                <div class="array-result-title">Array Size (Calculated)</div>
+                <div class="array-result-value-wrapper">
+                  <span class="array-size-val-num" id="array-size-val">0 x 0</span>
+                  <span class="array-result-unit" id="array-result-unit">mm</span>
+                </div>
+              </div>
+              <div class="array-result-group" style="align-items: flex-end;">
+                <div class="array-result-title">Configuration</div>
+                <div class="array-result-value" id="array-pcbs-val">1 x 1</div>
+                <div class="array-result-title" id="array-pcbs-label">1 PCBs per Array</div>
+              </div>
+            </div>
+
+            <!-- ─── CALCULATE PANEL FIT (Collapsible) ─── -->
+            <div class="collapsible-card" id="calc-panel-card" style="display: none;">
+              <button type="button" class="collapsible-header" id="btn-toggle-panel-fit">
+                <div class="collapsible-header-left">
+                  <span class="collapsible-plus-icon">+</span>
+                  <div class="collapsible-header-text">
+                    <span class="collapsible-title">Calculate panel fit</span>
+                    <span class="collapsible-subtitle">How many Arrays fit on panel?</span>
+                  </div>
+                </div>
+                <img src="Triangle.svg" class="collapsible-caret" alt="">
+              </button>
+              <div class="collapsible-content" id="panel-fit-content">
+                
+                <!-- PANEL SIZE -->
+                <div class="section-header-row" style="margin-top: -4px;">
+                  <p class="section-label" style="margin-bottom: 0;">PANEL SIZE</p>
+                  <div class="toggle-switch unit-in" id="panel-unit-toggle">
+                    <div class="toggle-slider"></div>
+                    <span class="toggle-label mm">mm</span>
+                    <span class="toggle-label in active">in</span>
+                  </div>
+                </div>
+                <p class="section-desc">Array size is auto-filled. Enter your panel dimensions.</p>
+                <div class="input-row" style="margin-top: -6px;">
+                  <div class="input-group">
+                    <label class="input-label" id="lbl-panel-width">Panel Length</label>
+                    <input type="number" class="input-field" id="array-panel-width" value="0" min="0">
+                  </div>
+                  <div class="input-group">
+                    <label class="input-label" id="lbl-panel-height">Panel Width</label>
+                    <input type="number" class="input-field" id="array-panel-height" value="0" min="0">
+                  </div>
+                </div>
+
+                <div class="input-row" style="margin-top: 6px;">
+                  <div class="input-group">
+                    <label class="input-label" id="lbl-array-to-array-spacing">Array to Array spacing</label>
+                    <input type="number" class="input-field" id="array-to-array-spacing" value="0" min="0">
+                  </div>
+                </div>
+
+                <div class="section-divider" style="margin-top: 2px; margin-bottom: 2px;"></div>
+
+                <!-- MARGINS -->
+                <p class="section-label" style="margin-top: -4px;">MARGINS</p>
+                <div class="input-row" style="margin-top: -6px;">
+                  <div class="input-group">
+                    <label class="input-label" id="lbl-margin-left">Left</label>
+                    <input type="number" class="input-field" id="array-margin-left" value="0" min="0">
+                  </div>
+                  <div class="input-group">
+                    <label class="input-label" id="lbl-margin-right">Right</label>
+                    <input type="number" class="input-field" id="array-margin-right" value="0" min="0">
+                  </div>
+                </div>
+                <div class="input-row" style="margin-top: 6px;">
+                  <div class="input-group">
+                    <label class="input-label" id="lbl-margin-top">Top</label>
+                    <input type="number" class="input-field" id="array-margin-top" value="0" min="0">
+                  </div>
+                  <div class="input-group">
+                    <label class="input-label" id="lbl-margin-bottom">Bottom</label>
+                    <input type="number" class="input-field" id="array-margin-bottom" value="0" min="0">
+                  </div>
+                </div>
+
+                <div class="button-row" style="display: flex; gap: 16px; margin-top: 4px;">
+                  <button class="btn-calculate" id="btn-panel-fit-calculate" type="button" style="flex: 1; margin-top: 0;">
+                    Calculate →
+                  </button>
+                  <button class="btn-reset" id="btn-panel-fit-reset" type="button" style="flex: 1;">
+                    Reset ↻
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel Preview Column (Right) -->
+          <div class="panel-preview-column" id="array-panel-preview-column" style="display: none;">
+            <div class="preview-header-row" style="width: 100%;">
+              <p class="preview-heading">PANEL PREVIEW:</p>
+              <div class="export-container" id="export-container-array-panel">
+                <button class="download-trigger-btn" id="download-trigger-array-panel" title="Export Options">
+                  <svg width="13" height="11" viewBox="0 0 13 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.5 0.5V8.5" stroke="currentColor" stroke-linecap="round"/>
+                    <path d="M6.5 8.5L9.5 5.5" stroke="currentColor" stroke-linecap="round"/>
+                    <path d="M6.5 8.5L3.5 5.5" stroke="currentColor" stroke-linecap="round"/>
+                    <path d="M0.5 7.5V10.5H12.5V7.5" stroke="currentColor" stroke-linecap="round"/>
+                  </svg>
+                </button>
+                <div class="export-dropdown" id="export-dropdown-array-panel">
+                  <button class="export-item" id="export-dxf-array-panel">
+                    <img src="DXF ICON.svg" class="export-icon" alt="">
+                    <span>DXF Export</span>
+                  </button>
+                  <button class="export-item" id="export-pdf-array-panel">
+                    <img src="PDF ICON.svg" class="export-icon" alt="">
+                    <span>PDF Export</span>
+                  </button>
+                  <button class="export-item" id="export-png-array-panel">
+                    <img src="PNG ICON.svg" class="export-icon" alt="">
+                    <span>PNG Export</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel Canvas Wrap -->
+            <div class="preview-canvas-wrap" id="array-panel-canvas-wrap">
+              <canvas id="array-panel-canvas" width="480" height="576"></canvas>
+            </div>
+
+            <!-- Results Heading -->
+            <p class="preview-heading" id="array-results-heading" style="margin-top: 20px; margin-bottom: 8px;">RESULT:</p>
+
+            <!-- Results Cards Row -->
+            <div class="results-row" id="array-results-row">
+              <div class="result-card">
+                <span class="result-value" id="array-result-panel-size">0"×0"</span>
+                <span class="result-label">Panel</span>
+              </div>
+              <div class="result-card">
+                <span class="result-value" id="array-result-units">0</span>
+                <span class="result-label">Arrays per panel</span>
+              </div>
+              <div class="result-card">
+                <span class="result-value" id="array-result-util">0%</span>
+                <span class="result-label">Utilization</span>
+              </div>
+            </div>
+
+            <!-- Breakdown Table -->
+            <div class="breakdown-table" id="array-breakdown-table">
+              <p class="breakdown-label">Breakdown</p>
+              <div class="breakdown-grid">
+                <span class="bd-key">Array size</span>
+                <span class="bd-val" id="array-bd-array-size">0" × 0"</span>
+
+                <span class="bd-key">No.of Arrays</span>
+                <span class="bd-val" id="array-bd-arrays">0 × 0 (0 total)</span>
+
+                <span class="bd-key">Utilization</span>
+                <span class="bd-val" id="array-bd-util">0%</span>
+
+                <span class="bd-key">Left margin</span>
+                <span class="bd-val" id="array-bd-left">0mm</span>
+
+                <span class="bd-key">Right margin</span>
+                <span class="bd-val" id="array-bd-right">0mm</span>
+
+                <span class="bd-key">Top margin</span>
+                <span class="bd-val" id="array-bd-top">0mm</span>
+
+                <span class="bd-key">Bottom margin</span>
+                <span class="bd-val" id="array-bd-bottom">0mm</span>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Other Sizes Column -->
+          <div class="other-sizes-column" id="other-sizes-column" style="display: none;">
+            <p class="preview-heading">OTHER SIZES:</p>
+            <div id="other-sizes-list" class="other-sizes-list"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+// ─── CANVAS PREVIEW & CALCULATION LOGIC ───
+document.addEventListener('DOMContentLoaded', () => {
+  // Slide up the panel on load (matches basic tab transition)
+  const panel = document.getElementById('panel-array');
+  if (panel) {
+    panel.offsetHeight; // trigger reflow
+    panel.classList.add('show');
+  }
+
+  const canvas = document.getElementById('array-canvas');
+  const ctx = canvas ? canvas.getContext('2d') : null;
+
+  const MM_PER_INCH = 25.4;
+  const CANVAS_W = 480;
+  const CANVAS_H = 576;
+  const PADDING = 48;
+
+  // --- UNIT STATE & TOGGLE SWITCH LOGIC ---
+  let pcbUnit = 'mm'; // 'mm' or 'in'
+  let panelUnit = 'in'; // 'mm' or 'in'
+
+  function convertValue(val, fromUnit, toUnit) {
+    if (isNaN(val) || val <= 0) return 0;
+    if (fromUnit === toUnit) return val;
+    if (fromUnit === 'mm' && toUnit === 'in') {
+      const res = val / MM_PER_INCH;
+      return parseFloat(res.toFixed(3)); // format cleanly
+    }
+    if (fromUnit === 'in' && toUnit === 'mm') {
+      const res = val * MM_PER_INCH;
+      return parseFloat(res.toFixed(1)); // format cleanly
+    }
+    return val;
+  }
+
+  function updatePCBUnitLabels() {
+    const resultUnitEl = document.getElementById('array-result-unit');
+    if (resultUnitEl) {
+      resultUnitEl.textContent = pcbUnit;
+    }
+  }
+
+  function updatePanelUnitLabels() {
+    // Dynamic label suffixes removed per user request
+  }
+
+  function setPCBUnit(newUnit) {
+    if (pcbUnit === newUnit) return;
+    const toggle = document.getElementById('pcb-unit-toggle');
+    
+    // Convert input values
+    const fields = ['part-width', 'part-height', 'spacing', 'rail-left', 'rail-right', 'rail-top', 'rail-bottom'];
+    fields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        const currentVal = parseFloat(el.value) || 0;
+        if (currentVal > 0) {
+          el.value = convertValue(currentVal, pcbUnit, newUnit);
+        }
+      }
+    });
+
+    // Update active state in UI
+    pcbUnit = newUnit;
+    if (toggle) {
+      if (pcbUnit === 'in') {
+        toggle.classList.add('unit-in');
+        toggle.querySelector('.mm').classList.remove('active');
+        toggle.querySelector('.in').classList.add('active');
+      } else {
+        toggle.classList.remove('unit-in');
+        toggle.querySelector('.mm').classList.add('active');
+        toggle.querySelector('.in').classList.remove('active');
+      }
+    }
+
+    updatePCBUnitLabels();
+    drawArrayPreview();
+    if (document.getElementById('calc-panel-card').classList.contains('open')) {
+      calculatePanelFit();
+    }
+  }
+
+  function setupPCBUnitToggle() {
+    const toggle = document.getElementById('pcb-unit-toggle');
+    if (!toggle) return;
+
+    toggle.querySelector('.mm').addEventListener('click', (e) => {
+      e.stopPropagation();
+      setPCBUnit('mm');
+    });
+    toggle.querySelector('.in').addEventListener('click', (e) => {
+      e.stopPropagation();
+      setPCBUnit('in');
+    });
+    toggle.addEventListener('click', () => {
+      setPCBUnit(pcbUnit === 'mm' ? 'in' : 'mm');
+    });
+
+    updatePCBUnitLabels();
+  }
+
+  function setPanelUnit(newUnit) {
+    if (panelUnit === newUnit) return;
+    const toggle = document.getElementById('panel-unit-toggle');
+
+    // Convert input values
+    const fields = [
+      'array-panel-width', 'array-panel-height',
+      'array-margin-left', 'array-margin-right',
+      'array-margin-top', 'array-margin-bottom',
+      'array-to-array-spacing'
+    ];
+    fields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        const currentVal = parseFloat(el.value) || 0;
+        if (currentVal > 0) {
+          el.value = convertValue(currentVal, panelUnit, newUnit);
+        }
+      }
+    });
+
+    // Update active state in UI
+    panelUnit = newUnit;
+    if (toggle) {
+      if (panelUnit === 'in') {
+        toggle.classList.add('unit-in');
+        toggle.querySelector('.mm').classList.remove('active');
+        toggle.querySelector('.in').classList.add('active');
+      } else {
+        toggle.classList.remove('unit-in');
+        toggle.querySelector('.mm').classList.add('active');
+        toggle.querySelector('.in').classList.remove('active');
+      }
+    }
+
+    updatePanelUnitLabels();
+    calculatePanelFit();
+  }
+
+  function setupPanelUnitToggle() {
+    const toggle = document.getElementById('panel-unit-toggle');
+    if (!toggle) return;
+
+    toggle.querySelector('.mm').addEventListener('click', (e) => {
+      e.stopPropagation();
+      setPanelUnit('mm');
+    });
+    toggle.querySelector('.in').addEventListener('click', (e) => {
+      e.stopPropagation();
+      setPanelUnit('in');
+    });
+    toggle.addEventListener('click', () => {
+      setPanelUnit(panelUnit === 'mm' ? 'in' : 'mm');
+    });
+
+    updatePanelUnitLabels();
+  }
+
+  // Initialize toggles
+  setupPCBUnitToggle();
+  setupPanelUnitToggle();
+
+  const mouseBiteImg = new Image();
+  mouseBiteImg.src = 'Assets/Mouse-Bites.svg';
+  mouseBiteImg.onload = () => {
+    drawArrayPreview();
+  };
+  mouseBiteImg.onerror = () => {
+    drawArrayPreview();
+  };
+
+  function val(id) {
+    const el = document.getElementById(id);
+    return el ? (parseFloat(el.value) || 0) : 0;
+  }
+
+  function getInputs() {
+    const spVal = val('spacing');
+    const unitScale = pcbUnit === 'in' ? MM_PER_INCH : 1;
+    return {
+      partW: val('part-width') * unitScale,
+      partH: val('part-height') * unitScale,
+      arrayCols: Math.max(1, parseInt(val('array-cols')) || 1),
+      arrayRows: Math.max(1, parseInt(val('array-rows')) || 1),
+      spacingX: spVal * unitScale,
+      spacingY: spVal * unitScale,
+      railLeft: val('rail-left') * unitScale,
+      railRight: val('rail-right') * unitScale,
+      railTop: val('rail-top') * unitScale,
+      railBottom: val('rail-bottom') * unitScale
+    };
+  }
+
+  function drawMouseBiteNative(ctx, cx, cy, w, h, isVertical) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    if (isVertical) {
+      ctx.rotate(Math.PI / 2);
+    }
+    
+    const toX = (x) => (x / 4 - 0.5) * w;
+    const toY = (y) => (y / 7 - 0.5) * h;
+    const toR = (r) => (r / 4) * w;
+    
+    ctx.beginPath();
+    ctx.moveTo(toX(4), toY(6.5));
+    ctx.bezierCurveTo(toX(4), toY(3.7), toX(0), toY(3.7), toX(0), toY(6.5));
+    ctx.lineTo(toX(0), toY(0));
+    ctx.bezierCurveTo(toX(0), toY(2.8), toX(4), toY(2.8), toX(4), toY(0));
+    ctx.lineTo(toX(4), toY(6.5));
+    ctx.closePath();
+    ctx.fillStyle = '#006536';
+    ctx.fill();
+    
+    ctx.fillStyle = '#FFFFFF';
+    const circles = [
+      [0.25, 4.24976],
+      [3.75, 4.24976],
+      [0.25, 3.24988],
+      [3.75, 3.24988],
+      [0.25, 2.24951],
+      [3.75, 2.24951]
+    ];
+    circles.forEach(([cx_svg, cy_svg]) => {
+      ctx.beginPath();
+      ctx.arc(toX(cx_svg), toY(cy_svg), toR(0.25), 0, Math.PI * 2);
+      ctx.fill();
+    });
+    
+    ctx.restore();
+  }
+
+  function drawMouseBite(ctx, img, cx, cy, span, isVertical) {
+    const w = span;
+    const h = span * (7 / 4);
+    let success = false;
+    if (img && img.complete && img.naturalWidth > 0) {
+      try {
+        if (isVertical) {
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(Math.PI / 2);
+          ctx.drawImage(img, -w / 2, -h / 2, w, h);
+          ctx.restore();
+        } else {
+          ctx.drawImage(img, cx - w / 2, cy - h / 2, w, h);
+        }
+        success = true;
+      } catch (e) {
+        console.warn("SVG rendering failed/restricted, using native fallback", e);
+      }
+    }
+    if (!success) {
+      drawMouseBiteNative(ctx, cx, cy, w, h, isVertical);
+    }
+  }
+
+  function drawArrayPreview() {
+    if (!ctx) return;
+
+    const i = getInputs();
+
+    const placeholderEl = document.getElementById('preview-placeholder');
+    const headingEl = document.getElementById('preview-heading');
+    const canvasWrapEl = document.getElementById('preview-canvas-wrap');
+    const resultBarEl = document.getElementById('array-result-bar');
+    const calcPanelCard = document.getElementById('calc-panel-card');
+
+    const hasPart = i.partW > 0 && i.partH > 0;
+
+    if (!hasPart) {
+      ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+      if (placeholderEl) placeholderEl.style.display = 'flex';
+      if (headingEl) headingEl.style.display = 'none';
+      if (canvasWrapEl) canvasWrapEl.style.display = 'none';
+      if (resultBarEl) resultBarEl.style.display = 'none';
+      if (calcPanelCard) calcPanelCard.style.display = 'none';
+      return;
+    }
+
+    // Show layout elements
+    if (placeholderEl) placeholderEl.style.display = 'none';
+    if (headingEl) headingEl.style.display = 'flex';
+    if (canvasWrapEl) canvasWrapEl.style.display = 'block';
+    if (resultBarEl) resultBarEl.style.display = 'flex';
+    if (calcPanelCard) calcPanelCard.style.display = 'block';
+
+    // Calculate total array dimensions in mm
+    const totalW = (i.partW * i.arrayCols) + (i.spacingX * (i.arrayCols - 1)) + i.railLeft + i.railRight;
+    const totalH = (i.partH * i.arrayRows) + (i.spacingY * (i.arrayRows - 1)) + i.railTop + i.railBottom;
+
+    if (totalW <= 0 || totalH <= 0) {
+      ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+      return;
+    }
+
+    // Scale factor: scale to fit within canvas with padding
+    const scaleX = (CANVAS_W - PADDING * 2) / totalW;
+    const scaleY = (CANVAS_H - PADDING * 2) / totalH;
+    const scale = Math.min(scaleX, scaleY);
+
+    const pxW = totalW * scale;
+    const pxH = totalH * scale;
+
+    // Dynamic canvas height adjustment to fit the scaled array + 12px padding
+    const dpr = window.devicePixelRatio || 1;
+    const currentCanvasH = Math.round(pxH + 12);
+    canvas.width = CANVAS_W * dpr;
+    canvas.height = currentCanvasH * dpr;
+    canvas.style.height = `${currentCanvasH}px`;
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, CANVAS_W, currentCanvasH);
+
+    const originX = (CANVAS_W - pxW) / 2;
+    const originY = 6;
+
+    // Layer 1 — Rail border
+    const hasRail = i.railLeft > 0 || i.railRight > 0 || i.railTop > 0 || i.railBottom > 0;
+    if (hasRail) {
+      ctx.fillStyle = '#C1D99E';
+      ctx.fillRect(originX, originY, pxW, pxH);
+
+      ctx.fillStyle = '#006536';
+      const spacingVal = i.spacingX; // Part-to-part spacing in mm
+      
+      const topStripH = Math.max(0, i.railTop - spacingVal) * scale;
+      const bottomStripH = Math.max(0, i.railBottom - spacingVal) * scale;
+      const leftStripW = Math.max(0, i.railLeft - spacingVal) * scale;
+      const rightStripW = Math.max(0, i.railRight - spacingVal) * scale;
+
+      if (topStripH > 0) {
+        ctx.fillRect(originX, originY, pxW, topStripH);
+      }
+      if (bottomStripH > 0) {
+        ctx.fillRect(originX, originY + pxH - bottomStripH, pxW, bottomStripH);
+      }
+      if (leftStripW > 0) {
+        ctx.fillRect(originX, originY + topStripH, leftStripW, pxH - topStripH - bottomStripH);
+      }
+      if (rightStripW > 0) {
+        ctx.fillRect(originX + pxW - rightStripW, originY + topStripH, rightStripW, pxH - topStripH - bottomStripH);
+      }
+
+      ctx.strokeStyle = '#005C30';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(originX, originY, pxW, pxH);
+    }
+
+    // Layer 2 — PCB rectangles & Layer 3 — Part-to-part spacing
+    const usableX = originX + (i.railLeft * scale);
+    const usableY = originY + (i.railTop * scale);
+
+    const pcbPxW = i.partW * scale;
+    const pcbPxH = i.partH * scale;
+    const spacingPx = i.spacingX * scale;
+
+    for (let r = 0; r < i.arrayRows; r++) {
+      for (let c = 0; c < i.arrayCols; c++) {
+        const px = usableX + c * (pcbPxW + spacingPx);
+        const py = usableY + r * (pcbPxH + spacingPx);
+
+        // Draw PCB rectangle
+        ctx.fillStyle = '#008C4A';
+        ctx.fillRect(px, py, pcbPxW, pcbPxH);
+        ctx.strokeStyle = '#005C30';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(px, py, pcbPxW, pcbPxH);
+      }
+    }
+
+    // Draw mouse bites only if hasRail is true and spacing is greater than 0
+    if (hasRail && i.spacingX > 0) {
+      const railTabSpan = spacingPx;
+
+      // Layer 4 — Mouse bites between PCB columns (vertical gaps / horizontal connection)
+      if (i.spacingX > 0 && i.arrayCols > 1) {
+        for (let r = 0; r < i.arrayRows; r++) {
+          for (let c = 0; c < i.arrayCols - 1; c++) {
+            const rightEdgeX = usableX + (c + 1) * (pcbPxW + spacingPx) - spacingPx;
+            const midX = rightEdgeX + spacingPx / 2;
+            const midY = usableY + r * (pcbPxH + spacingPx) + pcbPxH / 2;
+            drawMouseBite(ctx, mouseBiteImg, midX, midY, spacingPx, false);
+          }
+        }
+      }
+
+      // Layer 5 — Mouse bites between PCB rows (horizontal gaps / vertical connection)
+      if (i.spacingY > 0 && i.arrayRows > 1) {
+        for (let r = 0; r < i.arrayRows - 1; r++) {
+          for (let c = 0; c < i.arrayCols; c++) {
+            const bottomEdgeY = usableY + (r + 1) * (pcbPxH + spacingPx) - spacingPx;
+            const midX = usableX + c * (pcbPxW + spacingPx) + pcbPxW / 2;
+            const midY = bottomEdgeY + spacingPx / 2;
+            drawMouseBite(ctx, mouseBiteImg, midX, midY, spacingPx, true);
+          }
+        }
+      }
+
+      // Layer 6 — Mouse bites on rail edges (where PCBs face the rail)
+      if (i.railTop > 0) {
+        for (let c = 0; c < i.arrayCols; c++) {
+          const midX = usableX + c * (pcbPxW + spacingPx) + pcbPxW / 2;
+          const edgeY = usableY - spacingPx / 2;
+          drawMouseBite(ctx, mouseBiteImg, midX, edgeY, railTabSpan, true);
+        }
+      }
+      if (i.railBottom > 0) {
+        for (let c = 0; c < i.arrayCols; c++) {
+          const midX = usableX + c * (pcbPxW + spacingPx) + pcbPxW / 2;
+          const pcbBottomY = usableY + i.arrayRows * pcbPxH + (i.arrayRows - 1) * spacingPx;
+          const edgeY = pcbBottomY + spacingPx / 2;
+          drawMouseBite(ctx, mouseBiteImg, midX, edgeY, railTabSpan, true);
+        }
+      }
+      if (i.railLeft > 0) {
+        for (let r = 0; r < i.arrayRows; r++) {
+          const midY = usableY + r * (pcbPxH + spacingPx) + pcbPxH / 2;
+          const edgeX = usableX - spacingPx / 2;
+          drawMouseBite(ctx, mouseBiteImg, edgeX, midY, railTabSpan, false);
+        }
+      }
+      if (i.railRight > 0) {
+        for (let r = 0; r < i.arrayRows; r++) {
+          const midY = usableY + r * (pcbPxH + spacingPx) + pcbPxH / 2;
+          const pcbRightX = usableX + i.arrayCols * pcbPxW + (i.arrayCols - 1) * spacingPx;
+          const edgeX = pcbRightX + spacingPx / 2;
+          drawMouseBite(ctx, mouseBiteImg, edgeX, midY, railTabSpan, false);
+        }
+      }
+    }
+
+    // Update result bar
+    const arraySizeVal = document.getElementById('array-size-val');
+    if (arraySizeVal) {
+      const displayW = pcbUnit === 'in' ? (totalW / MM_PER_INCH) : totalW;
+      const displayH = pcbUnit === 'in' ? (totalH / MM_PER_INCH) : totalH;
+      const fmtW = displayW % 1 === 0 ? displayW.toFixed(0) : (pcbUnit === 'in' ? displayW.toFixed(2) : displayW.toFixed(1));
+      const fmtH = displayH % 1 === 0 ? displayH.toFixed(0) : (pcbUnit === 'in' ? displayH.toFixed(2) : displayH.toFixed(1));
+      arraySizeVal.textContent = fmtW + ' x ' + fmtH;
+    }
+    const arrayPcbsVal = document.getElementById('array-pcbs-val');
+    if (arrayPcbsVal) {
+      arrayPcbsVal.textContent = i.arrayCols + ' x ' + i.arrayRows;
+    }
+    const arrayPcbsLabel = document.getElementById('array-pcbs-label');
+    if (arrayPcbsLabel) {
+      const totalPcbs = i.arrayCols * i.arrayRows;
+      arrayPcbsLabel.textContent = totalPcbs + ' PCBs per Array';
+    }
+  }
+
+  // Stepper buttons logic
+  function setupStepper(decId, incId, inputId) {
+    const decBtn = document.getElementById(decId);
+    const incBtn = document.getElementById(incId);
+    const inputEl = document.getElementById(inputId);
+
+    if (decBtn && incBtn && inputEl) {
+      decBtn.addEventListener('click', () => {
+        let val = parseInt(inputEl.value) || 1;
+        if (val > 1) {
+          inputEl.value = val - 1;
+          drawArrayPreview();
+        }
+      });
+
+      incBtn.addEventListener('click', () => {
+        let val = parseInt(inputEl.value) || 1;
+        if (val < 20) {
+          inputEl.value = val + 1;
+          drawArrayPreview();
+        }
+      });
+    }
+  }
+
+  setupStepper('btn-rows-dec', 'btn-rows-inc', 'array-rows');
+  setupStepper('btn-cols-dec', 'btn-cols-inc', 'array-cols');
+
+  let activeOldValue = '';
+  [
+    'part-width', 'part-height',
+    'rail-left', 'rail-right',
+    'rail-top', 'rail-bottom',
+    'spacing'
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('focus', () => { activeOldValue = el.value; });
+
+      el.addEventListener('input', () => {
+        if (/^0\d+$/.test(el.value)) {
+          el.value = parseInt(el.value, 10);
+        }
+        if (parseFloat(el.value) !== parseFloat(activeOldValue)) {
+          drawArrayPreview();
+        }
+      });
+
+      el.addEventListener('blur', () => {
+        const val = parseFloat(el.value);
+        const parsedOld = parseFloat(activeOldValue);
+        const isChanged = isNaN(parsedOld) || val !== parsedOld;
+
+        if (!isNaN(val)) {
+          el.value = val;
+        } else {
+          el.value = 0;
+        }
+
+        if (isChanged) {
+          drawArrayPreview();
+        }
+      });
+
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          el.blur();
+          drawArrayPreview();
+        }
+      });
+    }
+  });
+
+  const btnReset = document.getElementById('btn-reset');
+  if (btnReset) {
+    btnReset.addEventListener('click', () => {
+      // Reset PCB unit state to defaults (mm)
+      pcbUnit = 'mm';
+      const pcbToggle = document.getElementById('pcb-unit-toggle');
+      if (pcbToggle) {
+        pcbToggle.classList.remove('unit-in');
+        pcbToggle.querySelector('.mm').classList.add('active');
+        pcbToggle.querySelector('.in').classList.remove('active');
+      }
+      updatePCBUnitLabels();
+
+      document.querySelectorAll('.input-field, .stepper-input').forEach(f => {
+        if (f.id === 'array-cols' || f.id === 'array-rows') {
+          f.value = 1;
+        } else {
+          f.value = 0;
+        }
+      });
+      drawArrayPreview();
+      const placeholderEl = document.getElementById('preview-placeholder');
+      if (placeholderEl) placeholderEl.style.display = 'flex';
+      const headingEl = document.getElementById('preview-heading');
+      if (headingEl) headingEl.style.display = 'none';
+      const canvasWrapEl = document.getElementById('preview-canvas-wrap');
+      if (canvasWrapEl) canvasWrapEl.style.display = 'none';
+      const otherSizesEl = document.getElementById('other-sizes-column');
+      if (otherSizesEl) otherSizesEl.style.display = 'none';
+      const otherSizesList = document.getElementById('other-sizes-list');
+      if (otherSizesList) otherSizesList.innerHTML = '';
+      
+      const resPanelSize = document.getElementById('array-result-panel-size');
+      if (resPanelSize) resPanelSize.textContent = '12"×18"';
+      const resUnits = document.getElementById('array-result-units');
+      if (resUnits) resUnits.textContent = '0';
+      const resUtil = document.getElementById('array-result-util');
+      if (resUtil) resUtil.textContent = '0%';
+
+      const bdArraySize = document.getElementById('array-bd-array-size');
+      if (bdArraySize) {
+        bdArraySize.textContent = '0" × 0"';
+      }
+
+      const bdArrays = document.getElementById('array-bd-arrays');
+      if (bdArrays) bdArrays.textContent = '0 × 0 (0 total)';
+      const bdUtil = document.getElementById('array-bd-util');
+      if (bdUtil) {
+        bdUtil.textContent = '0%';
+        bdUtil.classList.remove('low-util');
+      }
+
+      ['array-bd-left', 'array-bd-right', 'array-bd-top', 'array-bd-bottom'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = '0mm';
+      });
+
+      const rightColEl = document.getElementById('array-panel-preview-column');
+      if (rightColEl) rightColEl.style.display = 'none';
+
+      if (calcPanelCard) {
+        calcPanelCard.classList.remove('open');
+      }
+    });
+  }
+
+  // Collapsible Card Accordion logic
+  const btnTogglePanelFit = document.getElementById('btn-toggle-panel-fit');
+  const calcPanelCard = document.getElementById('calc-panel-card');
+  if (btnTogglePanelFit && calcPanelCard) {
+    btnTogglePanelFit.addEventListener('click', () => {
+      const previewCol = document.getElementById('array-panel-preview-column');
+      const isPreviewVisible = previewCol && previewCol.style.display === 'flex';
+      if (isPreviewVisible) {
+        return; // Do not toggle/close if preview is already visible
+      }
+      calcPanelCard.classList.toggle('open');
+    });
+  }
+
+  function drawSingleArrayInPanel(ctx, x, y, rotated, i, scale) {
+    const totalW = (i.partW * i.arrayCols) + (i.spacingX * (i.arrayCols - 1)) + i.railLeft + i.railRight;
+    const totalH = (i.partH * i.arrayRows) + (i.spacingY * (i.arrayRows - 1)) + i.railTop + i.railBottom;
+
+    ctx.save();
+
+    const gridW = rotated ? totalH : totalW;
+    const gridH = rotated ? totalW : totalH;
+    const centerX = x + (gridW * scale) / 2;
+    const centerY = y + (gridH * scale) / 2;
+
+    ctx.translate(centerX, centerY);
+    if (rotated) {
+      ctx.rotate(Math.PI / 2);
+    }
+
+    const localX = -totalW * scale / 2;
+    const localY = -totalH * scale / 2;
+    const pxW = totalW * scale;
+    const pxH = totalH * scale;
+
+    const hasRail = i.railLeft > 0 || i.railRight > 0 || i.railTop > 0 || i.railBottom > 0;
+    if (hasRail) {
+      ctx.fillStyle = '#C1D99E';
+      ctx.fillRect(localX, localY, pxW, pxH);
+
+      ctx.fillStyle = '#006536';
+      const spacingVal = i.spacingX;
+      const topStripH = Math.max(0, i.railTop - spacingVal) * scale;
+      const bottomStripH = Math.max(0, i.railBottom - spacingVal) * scale;
+      const leftStripW = Math.max(0, i.railLeft - spacingVal) * scale;
+      const rightStripW = Math.max(0, i.railRight - spacingVal) * scale;
+
+      if (topStripH > 0) ctx.fillRect(localX, localY, pxW, topStripH);
+      if (bottomStripH > 0) ctx.fillRect(localX, localY + pxH - bottomStripH, pxW, bottomStripH);
+      if (leftStripW > 0) ctx.fillRect(localX, localY + topStripH, leftStripW, pxH - topStripH - bottomStripH);
+      if (rightStripW > 0) ctx.fillRect(localX + pxW - rightStripW, localY + topStripH, rightStripW, pxH - topStripH - bottomStripH);
+    } else {
+      ctx.fillStyle = '#C1D99E';
+      ctx.fillRect(localX, localY, pxW, pxH);
+    }
+
+    const usableX = localX + (i.railLeft * scale);
+    const usableY = localY + (i.railTop * scale);
+
+    const pcbPxW = i.partW * scale;
+    const pcbPxH = i.partH * scale;
+    const spacingPx = i.spacingX * scale;
+
+    for (let r = 0; r < i.arrayRows; r++) {
+      for (let c = 0; c < i.arrayCols; c++) {
+        const px = usableX + c * (pcbPxW + spacingPx);
+        const py = usableY + r * (pcbPxH + spacingPx);
+
+        ctx.fillStyle = '#008C4A';
+        ctx.fillRect(px, py, pcbPxW, pcbPxH);
+        ctx.strokeStyle = '#C1D99E';
+        ctx.lineWidth = 0.2;
+        ctx.strokeRect(px, py, pcbPxW, pcbPxH);
+      }
+    }
+
+    // Draw mouse bites in the panel preview
+    if (hasRail && i.spacingX > 0) {
+      const railTabSpan = spacingPx;
+
+      // Layer 4 — Mouse bites between PCB columns (vertical gaps / horizontal connection)
+      if (i.spacingX > 0 && i.arrayCols > 1) {
+        for (let r = 0; r < i.arrayRows; r++) {
+          for (let c = 0; c < i.arrayCols - 1; c++) {
+            const rightEdgeX = usableX + (c + 1) * (pcbPxW + spacingPx) - spacingPx;
+            const midX = rightEdgeX + spacingPx / 2;
+            const midY = usableY + r * (pcbPxH + spacingPx) + pcbPxH / 2;
+            drawMouseBite(ctx, mouseBiteImg, midX, midY, spacingPx, false);
+          }
+        }
+      }
+
+      // Layer 5 — Mouse bites between PCB rows (horizontal gaps / vertical connection)
+      if (i.spacingY > 0 && i.arrayRows > 1) {
+        for (let r = 0; r < i.arrayRows - 1; r++) {
+          for (let c = 0; c < i.arrayCols; c++) {
+            const bottomEdgeY = usableY + (r + 1) * (pcbPxH + spacingPx) - spacingPx;
+            const midX = usableX + c * (pcbPxW + spacingPx) + pcbPxW / 2;
+            const midY = bottomEdgeY + spacingPx / 2;
+            drawMouseBite(ctx, mouseBiteImg, midX, midY, spacingPx, true);
+          }
+        }
+      }
+
+      // Layer 6 — Mouse bites on rail edges (where PCBs face the rail)
+      if (i.railTop > 0) {
+        for (let c = 0; c < i.arrayCols; c++) {
+          const midX = usableX + c * (pcbPxW + spacingPx) + pcbPxW / 2;
+          const edgeY = usableY - spacingPx / 2;
+          drawMouseBite(ctx, mouseBiteImg, midX, edgeY, railTabSpan, true);
+        }
+      }
+      if (i.railBottom > 0) {
+        for (let c = 0; c < i.arrayCols; c++) {
+          const midX = usableX + c * (pcbPxW + spacingPx) + pcbPxW / 2;
+          const pcbBottomY = usableY + i.arrayRows * pcbPxH + (i.arrayRows - 1) * spacingPx;
+          const edgeY = pcbBottomY + spacingPx / 2;
+          drawMouseBite(ctx, mouseBiteImg, midX, edgeY, railTabSpan, true);
+        }
+      }
+      if (i.railLeft > 0) {
+        for (let r = 0; r < i.arrayRows; r++) {
+          const midY = usableY + r * (pcbPxH + spacingPx) + pcbPxH / 2;
+          const edgeX = usableX - spacingPx / 2;
+          drawMouseBite(ctx, mouseBiteImg, edgeX, midY, railTabSpan, false);
+        }
+      }
+      if (i.railRight > 0) {
+        for (let r = 0; r < i.arrayRows; r++) {
+          const midY = usableY + r * (pcbPxH + spacingPx) + pcbPxH / 2;
+          const pcbRightX = usableX + i.arrayCols * pcbPxW + (i.arrayCols - 1) * spacingPx;
+          const edgeX = pcbRightX + spacingPx / 2;
+          drawMouseBite(ctx, mouseBiteImg, edgeX, midY, railTabSpan, false);
+        }
+      }
+    }
+
+    ctx.strokeStyle = '#005C30';
+    ctx.lineWidth = 0.4;
+    ctx.strokeRect(localX, localY, pxW, pxH);
+
+    ctx.restore();
+  }
+
+  function calculatePanelFit() {
+    const i = getInputs();
+    const hasPart = i.partW > 0 && i.partH > 0;
+    if (!hasPart) return;
+
+    const totalW = (i.partW * i.arrayCols) + (i.spacingX * (i.arrayCols - 1)) + i.railLeft + i.railRight;
+    const totalH = (i.partH * i.arrayRows) + (i.spacingY * (i.arrayRows - 1)) + i.railTop + i.railBottom;
+
+    if (totalW <= 0 || totalH <= 0) return;
+
+    const unitScale = panelUnit === 'mm' ? (1 / MM_PER_INCH) : 1;
+    const panelW = val('array-panel-width') * unitScale;
+    const panelH = val('array-panel-height') * unitScale;
+    const mLeft = val('array-margin-left') * unitScale;
+    const mRight = val('array-margin-right') * unitScale;
+    const mTop = val('array-margin-top') * unitScale;
+    const mBottom = val('array-margin-bottom') * unitScale;
+    const spA_in = Math.max(0, val('array-to-array-spacing')) * unitScale;
+
+    if (panelW <= 0 || panelH <= 0) return;
+
+    const usableW_in = panelW - (mLeft + mRight);
+    const usableH_in = panelH - (mTop + mBottom);
+    if (usableW_in <= 0 || usableH_in <= 0) return;
+
+    const arrayWin = totalW / MM_PER_INCH;
+    const arrayHin = totalH / MM_PER_INCH;
+    const sp = spA_in;
+
+    const colsA = Math.floor((usableW_in + sp) / (arrayWin + sp));
+    const rowsA = Math.floor((usableH_in + sp) / (arrayHin + sp));
+    const totalA = colsA * rowsA;
+
+    const colsB = Math.floor((usableW_in + sp) / (arrayHin + sp));
+    const rowsB = Math.floor((usableH_in + sp) / (arrayWin + sp));
+    const totalB = colsB * rowsB;
+
+    let cols, rows, total, rotated;
+    if (totalA >= totalB) {
+      cols = colsA; rows = rowsA; total = totalA; rotated = false;
+    } else {
+      cols = colsB; rows = rowsB; total = totalB; rotated = true;
+    }
+
+    const pcbsPerArray = i.arrayCols * i.arrayRows;
+    const totalPCBs = total * pcbsPerArray;
+
+    const usedAreaMM2 = totalW * totalH * total;
+    const panelAreaMM2 = panelW * panelH * 645.16;
+    const util = panelAreaMM2 > 0 ? (usedAreaMM2 / panelAreaMM2) * 100 : 0;
+
+    const resPanelSize = document.getElementById('array-result-panel-size');
+    if (resPanelSize) {
+      if (panelUnit === 'mm') {
+        resPanelSize.textContent = (panelW * MM_PER_INCH).toFixed(0) + '×' + (panelH * MM_PER_INCH).toFixed(0) + 'mm';
+      } else {
+        resPanelSize.textContent = panelW.toFixed(0) + '"×' + panelH.toFixed(0) + '"';
+      }
+    }
+    const resUnits = document.getElementById('array-result-units');
+    if (resUnits) {
+      resUnits.textContent = total;
+    }
+    const resUtil = document.getElementById('array-result-util');
+    if (resUtil) {
+      resUtil.textContent = util.toFixed(1) + '%';
+    }
+
+    const rightColEl = document.getElementById('array-panel-preview-column');
+    if (rightColEl) rightColEl.style.display = 'flex';
+
+    const breakdownEl = document.getElementById('array-breakdown-table');
+    if (breakdownEl) breakdownEl.style.display = 'block';
+
+    const bdArraySize = document.getElementById('array-bd-array-size');
+    if (bdArraySize) {
+      if (panelUnit === 'mm') {
+        bdArraySize.textContent = totalW.toFixed(1) + 'mm × ' + totalH.toFixed(1) + 'mm';
+      } else {
+        bdArraySize.textContent = (totalW / MM_PER_INCH).toFixed(2) + '" × ' + (totalH / MM_PER_INCH).toFixed(2) + '"';
+      }
+    }
+    const bdArrays = document.getElementById('array-bd-arrays');
+    if (bdArrays) {
+      bdArrays.textContent = cols + ' × ' + rows + ' (' + total + ' total)';
+    }
+    const bdUtil = document.getElementById('array-bd-util');
+    if (bdUtil) {
+      bdUtil.textContent = util.toFixed(1) + '%';
+      if (util < 70) {
+        bdUtil.classList.add('low-util');
+      } else {
+        bdUtil.classList.remove('low-util');
+      }
+    }
+
+    const gridW_in = (rotated ? totalH : totalW) / MM_PER_INCH;
+    const gridH_in = (rotated ? totalW : totalH) / MM_PER_INCH;
+    const occupiedW_in = cols > 0 ? (cols * gridW_in + (cols - 1) * spA_in) : 0;
+    const occupiedH_in = rows > 0 ? (rows * gridH_in + (rows - 1) * spA_in) : 0;
+    const extraW_in = Math.max(0, usableW_in - occupiedW_in);
+    const extraH_in = Math.max(0, usableH_in - occupiedH_in);
+    const actualMLeft = mLeft + extraW_in / 2;
+    const actualMRight = mRight + extraW_in / 2;
+    const actualMTop = mTop + extraH_in / 2;
+    const actualMBottom = mBottom + extraH_in / 2;
+
+    const bdLeft = document.getElementById('array-bd-left');
+    if (bdLeft) {
+      if (panelUnit === 'mm') {
+        bdLeft.textContent = (actualMLeft * MM_PER_INCH).toFixed(1) + 'mm';
+      } else {
+        bdLeft.textContent = actualMLeft.toFixed(2) + '"';
+      }
+    }
+    const bdRight = document.getElementById('array-bd-right');
+    if (bdRight) {
+      if (panelUnit === 'mm') {
+        bdRight.textContent = (actualMRight * MM_PER_INCH).toFixed(1) + 'mm';
+      } else {
+        bdRight.textContent = actualMRight.toFixed(2) + '"';
+      }
+    }
+    const bdTop = document.getElementById('array-bd-top');
+    if (bdTop) {
+      if (panelUnit === 'mm') {
+        bdTop.textContent = (actualMTop * MM_PER_INCH).toFixed(1) + 'mm';
+      } else {
+        bdTop.textContent = actualMTop.toFixed(2) + '"';
+      }
+    }
+    const bdBottom = document.getElementById('array-bd-bottom');
+    if (bdBottom) {
+      if (panelUnit === 'mm') {
+        bdBottom.textContent = (actualMBottom * MM_PER_INCH).toFixed(1) + 'mm';
+      } else {
+        bdBottom.textContent = actualMBottom.toFixed(2) + '"';
+      }
+    }
+
+    const panelCanvas = document.getElementById('array-panel-canvas');
+    if (panelCanvas) {
+      const panelCtx = panelCanvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      const CANVAS_W = 480;
+      const CANVAS_H = 576;
+      const PADDING = 48;
+
+      const scaleX = (CANVAS_W - PADDING * 2) / panelW;
+      const scaleY = (CANVAS_H - PADDING * 2) / panelH;
+      const scale = Math.min(scaleX, scaleY);
+
+      const pxW = panelW * scale;
+      const pxH = panelH * scale;
+
+      const currentCanvasH = Math.round(pxH + 12);
+      panelCanvas.width = CANVAS_W * dpr;
+      panelCanvas.height = currentCanvasH * dpr;
+      panelCanvas.style.height = `${currentCanvasH}px`;
+      panelCtx.scale(dpr, dpr);
+      panelCtx.clearRect(0, 0, CANVAS_W, currentCanvasH);
+
+      const originX = (CANVAS_W - pxW) / 2;
+      const originY = 6;
+
+      panelCtx.fillStyle = '#C1D99E';
+      panelCtx.fillRect(originX, originY, pxW, pxH);
+      panelCtx.strokeStyle = '#000000';
+      panelCtx.lineWidth = 0.5;
+      panelCtx.strokeRect(originX, originY, pxW, pxH);
+
+      const mLpx = mLeft * scale;
+      const mRpx = mRight * scale;
+      const mTpx = mTop * scale;
+      const mBpx = mBottom * scale;
+
+      panelCtx.fillStyle = '#006536';
+      if (mLpx > 0) panelCtx.fillRect(originX, originY, mLpx, pxH);
+      if (mRpx > 0) panelCtx.fillRect(originX + pxW - mRpx, originY, mRpx, pxH);
+      if (mTpx > 0) panelCtx.fillRect(originX, originY, pxW, mTpx);
+      if (mBpx > 0) panelCtx.fillRect(originX, originY + pxH - mBpx, pxW, mBpx);
+
+      const usableX = originX + mLpx;
+      const usableY = originY + mTpx;
+      const usableW = pxW - mLpx - mRpx;
+      const usableH = pxH - mTpx - mBpx;
+
+      if (usableW > 0 && usableH > 0 && total > 0) {
+        const arrayW_mm = totalW;
+        const arrayH_mm = totalH;
+
+        const gridW_mm = rotated ? arrayH_mm : arrayW_mm;
+        const gridH_mm = rotated ? arrayW_mm : arrayH_mm;
+
+        const gridW_px = gridW_mm * (scale / MM_PER_INCH);
+        const gridH_px = gridH_mm * (scale / MM_PER_INCH);
+        const spA_px = spA_in * scale;
+
+        const gridW_total_px = cols * gridW_px + (cols - 1) * spA_px;
+        const gridH_total_px = rows * gridH_px + (rows - 1) * spA_px;
+
+        const startX = usableX + (usableW - gridW_total_px) / 2;
+        const startY = usableY + (usableH - gridH_total_px) / 2;
+
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const ax = startX + c * (gridW_px + spA_px);
+            const ay = startY + r * (gridH_px + spA_px);
+            drawSingleArrayInPanel(panelCtx, ax, ay, rotated, i, scale / MM_PER_INCH);
+          }
+        }
+      }
+    }
+  }
+
+  const btnPanelFitCalculate = document.getElementById('btn-panel-fit-calculate');
+  if (btnPanelFitCalculate) {
+    btnPanelFitCalculate.addEventListener('click', calculatePanelFit);
+  }
+
+  [
+    'array-panel-width', 'array-panel-height',
+    'array-margin-left', 'array-margin-right',
+    'array-margin-top', 'array-margin-bottom',
+    'array-to-array-spacing'
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          el.blur();
+          calculatePanelFit();
+        }
+      });
+    }
+  });
+
+  const btnPanelFitReset = document.getElementById('btn-panel-fit-reset');
+  if (btnPanelFitReset) {
+    btnPanelFitReset.addEventListener('click', () => {
+      // Reset Panel unit state to defaults (in)
+      panelUnit = 'in';
+      const panelToggle = document.getElementById('panel-unit-toggle');
+      if (panelToggle) {
+        panelToggle.classList.add('unit-in');
+        panelToggle.querySelector('.mm').classList.remove('active');
+        panelToggle.querySelector('.in').classList.add('active');
+      }
+      updatePanelUnitLabels();
+
+      [
+        'array-panel-width', 'array-panel-height',
+        'array-margin-left', 'array-margin-right',
+        'array-margin-top', 'array-margin-bottom',
+        'array-to-array-spacing'
+      ].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = 0;
+      });
+
+      const resPanelSize = document.getElementById('array-result-panel-size');
+      if (resPanelSize) resPanelSize.textContent = '12"×18"';
+      const resUnits = document.getElementById('array-result-units');
+      if (resUnits) resUnits.textContent = '0';
+      const resUtil = document.getElementById('array-result-util');
+      if (resUtil) resUtil.textContent = '0%';
+
+      const bdArraySize = document.getElementById('array-bd-array-size');
+      if (bdArraySize) bdArraySize.textContent = '0" × 0"';
+      const bdArrays = document.getElementById('array-bd-arrays');
+      if (bdArrays) bdArrays.textContent = '0 × 0 (0 total)';
+      const bdUtil = document.getElementById('array-bd-util');
+      if (bdUtil) {
+        bdUtil.textContent = '0%';
+        bdUtil.classList.remove('low-util');
+      }
+
+      ['array-bd-left', 'array-bd-right', 'array-bd-top', 'array-bd-bottom'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = '0"';
+      });
+
+      const rightColEl = document.getElementById('array-panel-preview-column');
+      if (rightColEl) rightColEl.style.display = 'none';
+
+      if (calcPanelCard) {
+        calcPanelCard.classList.remove('open');
+      }
+    });
+  }
+
+  // ─── HIGH RESOLUTION EXPORT DRAWING HELPERS ───
+  function drawArrayCanvasForExport(ctx, width, height, padding, i, totalW, totalH, mouseBiteImg, pcbUnit) {
+    ctx.clearRect(0, 0, width, height);
+
+    const scaleX = (width - padding * 2) / totalW;
+    const scaleY = (height - padding * 2) / totalH;
+    const scale = Math.min(scaleX, scaleY);
+
+    const pxW = totalW * scale;
+    const pxH = totalH * scale;
+
+    const originX = (width - pxW) / 2;
+    const originY = 6 * (width / 480);
+
+    const hasRail = i.railLeft > 0 || i.railRight > 0 || i.railTop > 0 || i.railBottom > 0;
+    if (hasRail) {
+      ctx.fillStyle = '#C1D99E';
+      ctx.fillRect(originX, originY, pxW, pxH);
+
+      ctx.fillStyle = '#006536';
+      const spacingVal = i.spacingX;
+      
+      const topStripH = Math.max(0, i.railTop - spacingVal) * scale;
+      const bottomStripH = Math.max(0, i.railBottom - spacingVal) * scale;
+      const leftStripW = Math.max(0, i.railLeft - spacingVal) * scale;
+      const rightStripW = Math.max(0, i.railRight - spacingVal) * scale;
+
+      if (topStripH > 0) ctx.fillRect(originX, originY, pxW, topStripH);
+      if (bottomStripH > 0) ctx.fillRect(originX, originY + pxH - bottomStripH, pxW, bottomStripH);
+      if (leftStripW > 0) ctx.fillRect(originX, originY + topStripH, leftStripW, pxH - topStripH - bottomStripH);
+      if (rightStripW > 0) ctx.fillRect(originX + pxW - rightStripW, originY + topStripH, rightStripW, pxH - topStripH - bottomStripH);
+
+      ctx.strokeStyle = '#005C30';
+      ctx.lineWidth = 2 * (width / 480);
+      ctx.strokeRect(originX, originY, pxW, pxH);
+    } else {
+      ctx.fillStyle = '#C1D99E';
+      ctx.fillRect(originX, originY, pxW, pxH);
+    }
+
+    const usableX = originX + (i.railLeft * scale);
+    const usableY = originY + (i.railTop * scale);
+
+    const pcbPxW = i.partW * scale;
+    const pcbPxH = i.partH * scale;
+    const spacingPx = i.spacingX * scale;
+
+    for (let r = 0; r < i.arrayRows; r++) {
+      for (let c = 0; c < i.arrayCols; c++) {
+        const px = usableX + c * (pcbPxW + spacingPx);
+        const py = usableY + r * (pcbPxH + spacingPx);
+
+        ctx.fillStyle = '#008C4A';
+        ctx.fillRect(px, py, pcbPxW, pcbPxH);
+        ctx.strokeStyle = '#005C30';
+        ctx.lineWidth = 1 * (width / 480);
+        ctx.strokeRect(px, py, pcbPxW, pcbPxH);
+      }
+    }
+
+    if (hasRail && i.spacingX > 0) {
+      const railTabSpan = spacingPx;
+      
+      const drawBite = (cx, cy, v) => {
+        const w = railTabSpan;
+        const h = railTabSpan * (7 / 4);
+        if (mouseBiteImg && mouseBiteImg.complete && mouseBiteImg.naturalWidth > 0) {
+          try {
+            if (v) {
+              ctx.save();
+              ctx.translate(cx, cy);
+              ctx.rotate(Math.PI / 2);
+              ctx.drawImage(mouseBiteImg, -w / 2, -h / 2, w, h);
+              ctx.restore();
+            } else {
+              ctx.drawImage(mouseBiteImg, cx - w / 2, cy - h / 2, w, h);
+            }
+            return;
+          } catch (e) {}
+        }
+        // Fallback
+        ctx.save();
+        ctx.translate(cx, cy);
+        if (v) ctx.rotate(Math.PI / 2);
+        ctx.beginPath();
+        ctx.moveTo((-0.5)*w, 0.42*h);
+        ctx.bezierCurveTo((-0.5)*w, 0.02*h, 0.5*w, 0.02*h, 0.5*w, 0.42*h);
+        ctx.lineTo(0.5*w, (-0.5)*h);
+        ctx.bezierCurveTo(0.5*w, (-0.1)*h, (-0.5)*w, (-0.1)*h, (-0.5)*w, (-0.5)*h);
+        ctx.closePath();
+        ctx.fillStyle = '#006536';
+        ctx.fill();
+        ctx.restore();
+      };
+
+      if (i.arrayCols > 1) {
+        for (let r = 0; r < i.arrayRows; r++) {
+          for (let c = 0; c < i.arrayCols - 1; c++) {
+            const rightEdgeX = usableX + (c + 1) * (pcbPxW + spacingPx) - spacingPx;
+            const midX = rightEdgeX + spacingPx / 2;
+            const midY = usableY + r * (pcbPxH + spacingPx) + pcbPxH / 2;
+            drawBite(midX, midY, false);
+          }
+        }
+      }
+
+      if (i.arrayRows > 1) {
+        for (let r = 0; r < i.arrayRows - 1; r++) {
+          for (let c = 0; c < i.arrayCols; c++) {
+            const bottomEdgeY = usableY + (r + 1) * (pcbPxH + spacingPx) - spacingPx;
+            const midX = usableX + c * (pcbPxW + spacingPx) + pcbPxW / 2;
+            const midY = bottomEdgeY + spacingPx / 2;
+            drawBite(midX, midY, true);
+          }
+        }
+      }
+
+      if (i.railTop > 0) {
+        for (let c = 0; c < i.arrayCols; c++) {
+          const midX = usableX + c * (pcbPxW + spacingPx) + pcbPxW / 2;
+          const edgeY = usableY - spacingPx / 2;
+          drawBite(midX, edgeY, true);
+        }
+      }
+      if (i.railBottom > 0) {
+        for (let c = 0; c < i.arrayCols; c++) {
+          const midX = usableX + c * (pcbPxW + spacingPx) + pcbPxW / 2;
+          const pcbBottomY = usableY + i.arrayRows * pcbPxH + (i.arrayRows - 1) * spacingPx;
+          const edgeY = pcbBottomY + spacingPx / 2;
+          drawBite(midX, edgeY, true);
+        }
+      }
+      if (i.railLeft > 0) {
+        for (let r = 0; r < i.arrayRows; r++) {
+          const midY = usableY + r * (pcbPxH + spacingPx) + pcbPxH / 2;
+          const edgeX = usableX - spacingPx / 2;
+          drawBite(edgeX, midY, false);
+        }
+      }
+      if (i.railRight > 0) {
+        for (let r = 0; r < i.arrayRows; r++) {
+          const midY = usableY + r * (pcbPxH + spacingPx) + pcbPxH / 2;
+          const pcbRightX = usableX + i.arrayCols * pcbPxW + (i.arrayCols - 1) * spacingPx;
+          const edgeX = pcbRightX + spacingPx / 2;
+          drawBite(edgeX, midY, false);
+        }
+      }
+    }
+  }
+
+  function drawArrayPanelCanvasForExport(ctx, width, height, padding, panelW, panelH, mLeft, mRight, mTop, mBottom, i, res, cols, rows, rotated, spA, mouseBiteImg, pcbUnit) {
+    const MM_PER_INCH = 25.4;
+    ctx.clearRect(0, 0, width, height);
+
+    const scaleX = (width - padding * 2) / panelW;
+    const scaleY = (height - padding * 2) / panelH;
+    const scale = Math.min(scaleX, scaleY);
+
+    const pxW = panelW * scale;
+    const pxH = panelH * scale;
+
+    const originX = (width - pxW) / 2;
+    const originY = 6 * (width / 480);
+
+    ctx.fillStyle = '#C1D99E';
+    ctx.fillRect(originX, originY, pxW, pxH);
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 0.5 * (width / 480);
+    ctx.strokeRect(originX, originY, pxW, pxH);
+
+    const mLpx = mLeft * scale;
+    const mRpx = mRight * scale;
+    const mTpx = mTop * scale;
+    const mBpx = mBottom * scale;
+
+    ctx.fillStyle = '#006536';
+    if (mLpx > 0) ctx.fillRect(originX, originY, mLpx, pxH);
+    if (mRpx > 0) ctx.fillRect(originX + pxW - mRpx, originY, mRpx, pxH);
+    if (mTpx > 0) ctx.fillRect(originX, originY, pxW, mTpx);
+    if (mBpx > 0) ctx.fillRect(originX, originY + pxH - mBpx, pxW, mBpx);
+
+    const usableX = originX + mLpx;
+    const usableY = originY + mTpx;
+    const usableW = pxW - mLpx - mRpx;
+    const usableH = pxH - mTpx - mBpx;
+
+    if (usableW > 0 && usableH > 0 && cols > 0 && rows > 0) {
+      const arrayW_mm = (i.partW * i.arrayCols) + (i.spacingX * (i.arrayCols - 1)) + i.railLeft + i.railRight;
+      const arrayH_mm = (i.partH * i.arrayRows) + (i.spacingY * (i.arrayRows - 1)) + i.railTop + i.railBottom;
+
+      const gridW_mm = rotated ? arrayH_mm : arrayW_mm;
+      const gridH_mm = rotated ? arrayW_mm : arrayH_mm;
+
+      const gridW_px = gridW_mm * (scale / MM_PER_INCH);
+      const gridH_px = gridH_mm * (scale / MM_PER_INCH);
+      const spA_px = spA * scale;
+
+      const gridW_total_px = cols * gridW_px + (cols - 1) * spA_px;
+      const gridH_total_px = rows * gridH_px + (rows - 1) * spA_px;
+
+      const startX = usableX + (usableW - gridW_total_px) / 2;
+      const startY = usableY + (usableH - gridH_total_px) / 2;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const ax = startX + c * (gridW_px + spA_px);
+          const ay = startY + r * (gridH_px + spA_px);
+
+          ctx.save();
+          const centerX = ax + gridW_px / 2;
+          const centerY = ay + gridH_px / 2;
+          ctx.translate(centerX, centerY);
+          if (rotated) {
+            ctx.rotate(Math.PI / 2);
+          }
+          const scaleExportVal = scale / MM_PER_INCH;
+          drawArrayCanvasForExport(ctx, arrayW_mm * scaleExportVal, arrayH_mm * scaleExportVal, 0, i, arrayW_mm, arrayH_mm, mouseBiteImg, pcbUnit);
+          ctx.restore();
+        }
+      }
+    }
+  }
+
+  // ─── DXF GENERATORS ───
+  function generateArrayDXF(i) {
+    let dxf = [];
+    dxf.push("0", "SECTION", "2", "ENTITIES");
+    function addLine(x1, y1, x2, y2, l) {
+      dxf.push("0", "LINE", "8", l || "0", "10", x1.toFixed(3), "20", y1.toFixed(3), "11", x2.toFixed(3), "21", y2.toFixed(3));
+    }
+    function addRect(x, y, w, h, l) {
+      addLine(x, y, x + w, y, l);
+      addLine(x + w, y, x + w, y + h, l);
+      addLine(x + w, y + h, x, y + h, l);
+      addLine(x, y + h, x, y, l);
+    }
+    const totalW = (i.partW * i.arrayCols) + (i.spacingX * (i.arrayCols - 1)) + i.railLeft + i.railRight;
+    const totalH = (i.partH * i.arrayRows) + (i.spacingY * (i.arrayRows - 1)) + i.railTop + i.railBottom;
+    addRect(0, 0, totalW, totalH, "ARRAY_OUTLINE");
+    const startX = i.railLeft;
+    const startY = i.railTop;
+    for (let r = 0; r < i.arrayRows; r++) {
+      for (let c = 0; c < i.arrayCols; c++) {
+        const px = startX + c * (i.partW + i.spacingX);
+        const py = startY + r * (i.partH + i.spacingY);
+        addRect(px, py, i.partW, i.partH, "PCBS");
+      }
+    }
+    dxf.push("0", "ENDSEC", "0", "EOF");
+    return dxf.join("\n");
+  }
+
+  function generateArrayPanelDXF(panelW, panelH, mLeft, mRight, mTop, mBottom, i, res, cols, rows, rotated, spA) {
+    let dxf = [];
+    dxf.push("0", "SECTION", "2", "ENTITIES");
+    function addLine(x1, y1, x2, y2, l) {
+      dxf.push("0", "LINE", "8", l || "0", "10", x1.toFixed(3), "20", y1.toFixed(3), "11", x2.toFixed(3), "21", y2.toFixed(3));
+    }
+    function addRect(x, y, w, h, l) {
+      addLine(x, y, x + w, y, l);
+      addLine(x + w, y, x + w, y + h, l);
+      addLine(x + w, y + h, x, y + h, l);
+      addLine(x, y + h, x, y, l);
+    }
+    addRect(0, 0, panelW, panelH, "PANEL_OUTLINE");
+    const usableW = panelW - (mLeft + mRight);
+    const usableH = panelH - (mTop + mBottom);
+    addRect(mLeft, mTop, usableW, usableH, "USABLE_AREA");
+
+    if (cols > 0 && rows > 0) {
+      const totalW = (i.partW * i.arrayCols) + (i.spacingX * (i.arrayCols - 1)) + i.railLeft + i.railRight;
+      const totalH = (i.partH * i.arrayRows) + (i.spacingY * (i.arrayRows - 1)) + i.railTop + i.railBottom;
+      const gridW = rotated ? totalH : totalW;
+      const gridH = rotated ? totalW : totalH;
+      const totalGridW = cols * gridW + (cols - 1) * spA;
+      const totalGridH = rows * gridH + (rows - 1) * spA;
+      const startX = mLeft + (usableW - totalGridW) / 2;
+      const startY = mTop + (usableH - totalGridH) / 2;
+
+      function addPcb(pxLocal, pyLocal, wPcb, hPcb, isRot, ax, ay, layer) {
+        if (!isRot) {
+          addRect(ax + pxLocal, ay + pyLocal, wPcb, hPcb, layer);
+        } else {
+          const c1x = ax + pyLocal;
+          const c1y = ay + totalW - pxLocal;
+          const c2x = ax + pyLocal;
+          const c2y = ay + totalW - (pxLocal + wPcb);
+          const c3x = ax + pyLocal + hPcb;
+          const c3y = ay + totalW - (pxLocal + wPcb);
+          const c4x = ax + pyLocal + hPcb;
+          const c4y = ay + totalW - pxLocal;
+
+          addLine(c1x, c1y, c2x, c2y, layer);
+          addLine(c2x, c2y, c3x, c3y, layer);
+          addLine(c3x, c3y, c4x, c4y, layer);
+          addLine(c4x, c4y, c1x, c1y, layer);
+        }
+      }
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const ax = startX + c * (gridW + spA);
+          const ay = startY + r * (gridH + spA);
+          addRect(ax, ay, gridW, gridH, "ARRAY_OUTLINES");
+
+          const localSpacing = i.spacingX;
+
+          for (let ar = 0; ar < i.arrayRows; ar++) {
+            for (let ac = 0; ac < i.arrayCols; ac++) {
+              const pcbLocalX = i.railLeft + ac * (i.partW + localSpacing);
+              const pcbLocalY = i.railTop + ar * (i.partH + localSpacing);
+              addPcb(pcbLocalX, pcbLocalY, i.partW, i.partH, rotated, ax, ay, "PCBS");
+            }
+          }
+        }
+      }
+    }
+    dxf.push("0", "ENDSEC", "0", "EOF");
+    return dxf.join("\n");
+  }
+
+  // ─── PDF REPORT EXPORTER ───
+  function exportToPDF(canvas, title, details) {
+    const canvasData = canvas.toDataURL('image/png');
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    let detailsHtml = '';
+    for (const [key, val] of Object.entries(details)) {
+      detailsHtml += `<tr><td style="padding: 10px 16px; font-weight: bold; border-bottom: 1px solid #e0e0e0; color: #333;">${key}</td><td style="padding: 10px 16px; border-bottom: 1px solid #e0e0e0; text-align: right; color: #555;">${val}</td></tr>`;
+    }
+
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>${title}</title>
+          <style>
+            body { font-family: 'DM Sans', sans-serif; padding: 40px; color: #0b0b0b; line-height: 1.5; background: #ffffff; }
+            .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #006536; padding-bottom: 24px; margin-bottom: 40px; }
+            .title { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; color: #0b0b0b; }
+            .subtitle { font-size: 14px; color: #5e5e5e; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+            .content { display: flex; gap: 40px; }
+            .preview-container { flex: 1.2; border: 1.5px solid #006536; border-radius: 12px; overflow: hidden; padding: 20px; display: flex; align-items: center; justify-content: center; background: #fafafa; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+            .preview-image { max-width: 100%; max-height: 520px; object-fit: contain; }
+            .details-container { width: 340px; }
+            .details-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <div class="title">FITBOARD</div>
+              <div class="subtitle">${title}</div>
+            </div>
+            <div style="text-align: right; font-size: 13px; color: #777;">
+              <div>FITBOARD Panel Report</div>
+              <div style="margin-top: 4px; font-weight: bold; color: #006536;">Date: ${new Date().toLocaleDateString()}</div>
+            </div>
+          </div>
+          <div class="content">
+            <div class="preview-container">
+              <img src="${canvasData}" class="preview-image" />
+            </div>
+            <div class="details-container">
+              <h3 style="margin-top: 0; margin-bottom: 8px; color: #006536; border-bottom: 1.5px solid #006536; padding-bottom: 8px;">Specifications</h3>
+              <table class="details-table">
+                ${detailsHtml}
+              </table>
+            </div>
+          </div>
+          <script>
+            setTimeout(function() {
+              window.print();
+              window.close();
+            }, 300);
+          <\/script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  }
+
+  // ─── DOWNLOAD/EXPORT BUTTON FUNCTIONALITY ───
+  function setupExportDropdown(triggerId, dropdownId, containerId) {
+    const trigger = document.getElementById(triggerId);
+    const dropdown = document.getElementById(dropdownId);
+    const container = document.getElementById(containerId);
+    if (!trigger || !dropdown || !container) return;
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = container.classList.contains('open');
+      document.querySelectorAll('.export-container').forEach(c => c.classList.remove('open'));
+      if (!isOpen) {
+        container.classList.add('open');
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!container.contains(e.target)) {
+        container.classList.remove('open');
+      }
+    });
+  }
+
+  function setupExportItem(itemId, canvasId, type, filename) {
+    const item = document.getElementById(itemId);
+    if (!item) return;
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const container = item.closest('.export-container');
+      if (container) container.classList.remove('open');
+
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+
+      const i_arr = getInputs();
+      const totalW_arr = (i_arr.partW * i_arr.arrayCols) + (i_arr.spacingX * (i_arr.arrayCols - 1)) + i_arr.railLeft + i_arr.railRight;
+      const totalH_arr = (i_arr.partH * i_arr.arrayRows) + (i_arr.spacingY * (i_arr.arrayRows - 1)) + i_arr.railTop + i_arr.railBottom;
+
+      const activeCanvas = document.getElementById(canvasId);
+      let activeH = 576;
+      if (activeCanvas) {
+        activeH = parseFloat(activeCanvas.style.height) || 576;
+      }
+
+      // 1. DXF Vector Export
+      if (type === 'dxf') {
+        try {
+          let dxfContent = "";
+          if (canvasId === 'array-canvas') {
+            const originalPCBUnit = pcbUnit;
+            if (originalPCBUnit !== 'mm') {
+              setPCBUnit('mm');
+            }
+            const i_arr_mm = getInputs();
+            dxfContent = generateArrayDXF(i_arr_mm);
+            if (originalPCBUnit !== 'mm') {
+              setPCBUnit(originalPCBUnit);
+            }
+          } else if (canvasId === 'array-panel-canvas') {
+            const originalPCBUnit = pcbUnit;
+            const originalPanelUnit = panelUnit;
+            if (originalPCBUnit !== 'mm') {
+              setPCBUnit('mm');
+            }
+            if (originalPanelUnit !== 'mm') {
+              setPanelUnit('mm');
+            }
+
+            const i_arr_mm = getInputs();
+            const totalW_arr_mm = (i_arr_mm.partW * i_arr_mm.arrayCols) + (i_arr_mm.spacingX * (i_arr_mm.arrayCols - 1)) + i_arr_mm.railLeft + i_arr_mm.railRight;
+            const totalH_arr_mm = (i_arr_mm.partH * i_arr_mm.arrayRows) + (i_arr_mm.spacingY * (i_arr_mm.arrayRows - 1)) + i_arr_mm.railTop + i_arr_mm.railBottom;
+
+            const panelW = val('array-panel-width');
+            const panelH = val('array-panel-height');
+            const mLeft = val('array-margin-left');
+            const mRight = val('array-margin-right');
+            const mTop = val('array-margin-top');
+            const mBottom = val('array-margin-bottom');
+            const spA_mm = Math.max(0, val('array-to-array-spacing'));
+
+            const usableW_mm = panelW - (mLeft + mRight);
+            const usableH_mm = panelH - (mTop + mBottom);
+            const arrayW_mm = totalW_arr_mm;
+            const arrayH_mm = totalH_arr_mm;
+            const sp = spA_mm;
+            const colsA = Math.floor((usableW_mm + sp) / (arrayW_mm + sp));
+            const rowsA = Math.floor((usableH_mm + sp) / (arrayH_mm + sp));
+            const totalA = colsA * rowsA;
+            const colsB = Math.floor((usableW_mm + sp) / (arrayH_mm + sp));
+            const rowsB = Math.floor((usableH_mm + sp) / (arrayW_mm + sp));
+            const totalB = colsB * rowsB;
+
+            let cols, rows, total, rotated;
+            if (totalA >= totalB) {
+              cols = colsA; rows = rowsA; total = totalA; rotated = false;
+            } else {
+              cols = colsB; rows = rowsB; total = totalB; rotated = true;
+            }
+
+            dxfContent = generateArrayPanelDXF(panelW, panelH, mLeft, mRight, mTop, mBottom, i_arr_mm, {}, cols, rows, rotated, spA_mm);
+
+            if (originalPCBUnit !== 'mm') {
+              setPCBUnit(originalPCBUnit);
+            }
+            if (originalPanelUnit !== 'mm') {
+              setPanelUnit(originalPanelUnit);
+            }
+          }
+
+          const blob = new Blob([dxfContent], { type: 'application/dxf' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.download = filename;
+          link.href = url;
+          link.click();
+          URL.revokeObjectURL(url);
+        } catch (err) {
+          console.error('Failed to export DXF:', err);
+        }
+        return;
+      }
+
+      // 2. High Resolution Image rendering (Shared for PNG & PDF)
+      const exportCanvas = document.createElement('canvas');
+      const scaleFactor = 6;
+      exportCanvas.width = 480 * scaleFactor;
+      exportCanvas.height = activeH * scaleFactor;
+      const exportCtx = exportCanvas.getContext('2d');
+      exportCtx.scale(scaleFactor, scaleFactor);
+
+      if (canvasId === 'array-canvas') {
+        drawArrayCanvasForExport(exportCtx, 480, activeH, 48, i_arr, totalW_arr, totalH_arr, mouseBiteImg, pcbUnit);
+      } else if (canvasId === 'array-panel-canvas') {
+        const unitScale = panelUnit === 'mm' ? (1 / MM_PER_INCH) : 1;
+        const panelW = val('array-panel-width') * unitScale;
+        const panelH = val('array-panel-height') * unitScale;
+        const mLeft = val('array-margin-left') * unitScale;
+        const mRight = val('array-margin-right') * unitScale;
+        const mTop = val('array-margin-top') * unitScale;
+        const mBottom = val('array-margin-bottom') * unitScale;
+        const spA_in = Math.max(0, val('array-to-array-spacing')) * unitScale;
+
+        const usableW_in = panelW - (mLeft + mRight);
+        const usableH_in = panelH - (mTop + mBottom);
+        const arrayWin = totalW_arr / MM_PER_INCH;
+        const arrayHin = totalH_arr / MM_PER_INCH;
+        const sp = spA_in;
+        const colsA = Math.floor((usableW_in + sp) / (arrayWin + sp));
+        const rowsA = Math.floor((usableH_in + sp) / (arrayHin + sp));
+        const totalA = colsA * rowsA;
+        const colsB = Math.floor((usableW_in + sp) / (arrayHin + sp));
+        const rowsB = Math.floor((usableH_in + sp) / (arrayWin + sp));
+        const totalB = colsB * rowsB;
+
+        let cols, rows, total, rotated;
+        if (totalA >= totalB) {
+          cols = colsA; rows = rowsA; total = totalA; rotated = false;
+        } else {
+          cols = colsB; rows = rowsB; total = totalB; rotated = true;
+        }
+
+        drawArrayPanelCanvasForExport(exportCtx, 480, activeH, 48, panelW, panelH, mLeft, mRight, mTop, mBottom, i_arr, {}, cols, rows, rotated, spA_in, mouseBiteImg, pcbUnit);
+      }
+
+      if (type === 'png') {
+        try {
+          const dataURL = exportCanvas.toDataURL('image/png');
+          const link = document.createElement('a');
+          link.download = filename;
+          link.href = dataURL;
+          link.click();
+        } catch (err) {
+          console.error('Failed to export PNG:', err);
+        }
+      } else if (type === 'pdf') {
+        try {
+          let title = "";
+          let details = {};
+
+          if (canvasId === 'array-canvas') {
+            title = "Array Configuration Design";
+            details = {
+              'PCB Size': pcbUnit === 'mm' ? `${i_arr.partW.toFixed(1)} × ${i_arr.partH.toFixed(1)} mm` : `${(i_arr.partW / MM_PER_INCH).toFixed(3)}" × ${(i_arr.partH / MM_PER_INCH).toFixed(3)}"`,
+              'Array Layout': `${i_arr.arrayCols} × ${i_arr.arrayRows}`,
+              'Part Spacing': `${i_arr.spacingX.toFixed(1)} mm`,
+              'Rail Left / Right': `${i_arr.railLeft.toFixed(1)} / ${i_arr.railRight.toFixed(1)} mm`,
+              'Rail Top / Bottom': `${i_arr.railTop.toFixed(1)} / ${i_arr.railBottom.toFixed(1)} mm`,
+              'Total Array Dimension': pcbUnit === 'mm' ? `${totalW_arr.toFixed(1)} × ${totalH_arr.toFixed(1)} mm` : `${(totalW_arr / MM_PER_INCH).toFixed(2)}" × ${(totalH_arr / MM_PER_INCH).toFixed(2)}"`
+            };
+          } else if (canvasId === 'array-panel-canvas') {
+            title = "Array Panel Fit Optimization";
+            
+            const unitScale = panelUnit === 'mm' ? (1 / MM_PER_INCH) : 1;
+            const panelW = val('array-panel-width') * unitScale;
+            const panelH = val('array-panel-height') * unitScale;
+            const mLeft = val('array-margin-left') * unitScale;
+            const mRight = val('array-margin-right') * unitScale;
+            const mTop = val('array-margin-top') * unitScale;
+            const mBottom = val('array-margin-bottom') * unitScale;
+            const spA_in = Math.max(0, val('array-to-array-spacing')) * unitScale;
+
+            const usableW_in = panelW - (mLeft + mRight);
+            const usableH_in = panelH - (mTop + mBottom);
+            const arrayWin = totalW_arr / MM_PER_INCH;
+            const arrayHin = totalH_arr / MM_PER_INCH;
+            const sp = spA_in;
+            const colsA = Math.floor((usableW_in + sp) / (arrayWin + sp));
+            const rowsA = Math.floor((usableH_in + sp) / (arrayHin + sp));
+            const totalA = colsA * rowsA;
+            const colsB = Math.floor((usableW_in + sp) / (arrayHin + sp));
+            const rowsB = Math.floor((usableH_in + sp) / (arrayWin + sp));
+            const totalB = colsB * rowsB;
+
+            let cols, rows, total, rotated;
+            if (totalA >= totalB) {
+              cols = colsA; rows = rowsA; total = totalA; rotated = false;
+            } else {
+              cols = colsB; rows = rowsB; total = totalB; rotated = true;
+            }
+
+            const usedAreaMM2 = totalW_arr * totalH_arr * total;
+            const panelAreaMM2 = panelW * panelH * 645.16;
+            const util = panelAreaMM2 > 0 ? (usedAreaMM2 / panelAreaMM2) * 100 : 0;
+
+            title = "Array Panel Fit Report";
+            details = {
+              'Panel Size': panelUnit === 'mm' ? `${(panelW * MM_PER_INCH).toFixed(0)} × ${(panelH * MM_PER_INCH).toFixed(0)} mm` : `${panelW.toFixed(0)}" × ${panelH.toFixed(0)}"`,
+              'Array Size': pcbUnit === 'mm' ? `${totalW_arr.toFixed(1)} × ${totalH_arr.toFixed(1)} mm` : `${(totalW_arr / MM_PER_INCH).toFixed(2)}" × ${(totalH_arr / MM_PER_INCH).toFixed(2)}"`,
+              'Arrays per Panel': `${total}`,
+              'Total PCBs Fitted': `${total * i_arr.arrayCols * i_arr.arrayRows}`,
+              'Utilization': `${util.toFixed(1)}%`
+            };
+          }
+
+          exportToPDF(exportCanvas, title, details);
+        } catch (err) {
+          console.error('Failed to export PDF:', err);
+        }
+      }
+    });
+  }
+
+  // Array Previews
+  setupExportDropdown('download-trigger-array', 'export-dropdown-array', 'export-container-array');
+  setupExportItem('export-dxf-array', 'array-canvas', 'dxf', 'array.dxf');
+  setupExportItem('export-pdf-array', 'array-canvas', 'pdf', 'array.pdf');
+  setupExportItem('export-png-array', 'array-canvas', 'png', 'array-preview.png');
+
+  // Array Panel Fit Previews
+  setupExportDropdown('download-trigger-array-panel', 'export-dropdown-array-panel', 'export-container-array-panel');
+  setupExportItem('export-dxf-array-panel', 'array-panel-canvas', 'dxf', 'array-panel-fit.dxf');
+  setupExportItem('export-pdf-array-panel', 'array-panel-canvas', 'pdf', 'array-panel-fit.pdf');
+  setupExportItem('export-png-array-panel', 'array-panel-canvas', 'png', 'array-panel-fit-preview.png');
+});
+
+  </script>
+
+</body>
+
+</html>

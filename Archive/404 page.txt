@@ -1,0 +1,205 @@
+/* 404 error page */
+
+position: relative;
+width: 1512px;
+height: 982px;
+
+background: linear-gradient(180deg, #FFD600 0%, #F2D966 75.05%);
+
+
+/* Clouds */
+
+position: absolute;
+width: 2431px;
+height: 840px;
+left: -99px;
+top: -303px;
+
+background: url(image.png);
+opacity: 0.5;
+
+
+/* Ellipse 44 */
+
+position: absolute;
+width: 314px;
+height: 30px;
+left: 598px;
+top: 703px;
+
+background: #010101;
+filter: blur(33.9px);
+
+
+/* FITBOARD */
+
+position: absolute;
+width: 120px;
+height: 48px;
+left: 66px;
+top: 35px;
+
+font-family: 'Bebas Neue';
+font-style: normal;
+font-weight: 400;
+font-size: 40px;
+line-height: 48px;
+/* identical to box height */
+letter-spacing: 0.01em;
+
+color: #000000;
+
+
+
+/* Contact */
+
+position: absolute;
+width: 76px;
+height: 26px;
+left: 1317px;
+top: 46px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+line-height: 26px;
+/* identical to box height */
+
+color: #000000;
+
+opacity: 0.8;
+
+
+/* 404 */
+
+position: absolute;
+width: 1187px;
+height: 461px;
+left: 168px;
+top: 0px;
+
+font-family: 'Manrope';
+font-style: normal;
+font-weight: 800;
+font-size: 600px;
+line-height: 820px;
+
+background: linear-gradient(180deg, #FFFFFF 90.95%, #EEEC9C 138.83%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+
+
+
+/* Untitled - 24 May 2026 at 23.46.47 1 */
+
+position: absolute;
+width: 1045px;
+height: 570px;
+left: 230px;
+top: 163px;
+
+background: url(Untitled - 24 May 2026 at 23.46.47.png);
+
+
+/* Group 23 */
+
+position: absolute;
+width: 718px;
+height: 154px;
+left: calc(50% - 718px/2 + 20px);
+top: 727px;
+
+
+
+/* CTA Button */
+
+position: absolute;
+width: 200px;
+height: 46px;
+left: 654px;
+top: 835px;
+
+filter: drop-shadow(8px 8px 10.4px rgba(0, 0, 0, 0.3));
+
+
+/* Rectangle 45 */
+
+position: absolute;
+width: 200px;
+height: 46px;
+left: 654px;
+top: 835px;
+
+background: #0B0B0B;
+border-radius: 80px;
+
+
+/* Back to Home */
+
+position: absolute;
+width: 132px;
+height: 26px;
+left: 695px;
+top: 844px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 500;
+font-size: 20px;
+line-height: 26px;
+/* identical to box height, or 130% */
+
+color: #FFFFFF;
+
+
+
+/* Vector */
+
+position: absolute;
+height: 18px;
+left: 44.78%;
+right: 54.63%;
+top: calc(50% - 18px/2 + 367px);
+
+background: #FFFFFE;
+
+
+/* Bello! This page is under construction */
+
+position: absolute;
+width: 718px;
+height: 55px;
+left: 417px;
+top: 727px;
+
+font-family: 'Manrope';
+font-style: normal;
+font-weight: 600;
+font-size: 40px;
+line-height: 55px;
+/* identical to box height */
+
+color: #373427;
+
+
+
+/* Please come again later */
+
+position: absolute;
+width: 266px;
+height: 33px;
+left: 622px;
+top: 786px;
+
+font-family: 'Manrope';
+font-style: normal;
+font-weight: 500;
+font-size: 24px;
+line-height: 33px;
+/* identical to box height */
+
+color: #717171;
+
