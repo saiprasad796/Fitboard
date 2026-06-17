@@ -1,0 +1,961 @@
+/* How it works */
+
+position: relative;
+width: 1512px;
+height: 982px;
+
+background: #000000;
+
+
+/* HOW IT WORKS */
+
+position: absolute;
+width: 141px;
+height: 38px;
+left: 101px;
+top: 92px;
+
+font-family: 'Bebas Neue';
+font-style: normal;
+font-weight: 400;
+font-size: 32px;
+line-height: 38px;
+
+color: #FFD700;
+
+
+
+/* From dimensions to layout in 3 steps. */
+
+position: absolute;
+width: 487px;
+height: 90px;
+left: 101px;
+top: 155px;
+
+font-family: 'Bebas Neue';
+font-style: normal;
+font-weight: 400;
+font-size: 48px;
+line-height: 45px;
+/* or 94% */
+
+color: #FFFFFF;
+
+
+
+/* Fast & accurate panelization. */
+
+position: absolute;
+width: 200px;
+height: 20px;
+left: 101px;
+top: 255px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 15px;
+line-height: 20px;
+/* identical to box height */
+
+color: #FFD700;
+
+
+
+/* Number 01 */
+
+position: absolute;
+width: 75px;
+height: 75px;
+left: 101px;
+top: 330px;
+
+
+
+/* Ellipse 219 */
+
+position: absolute;
+width: 75px;
+height: 75px;
+left: 101px;
+top: 330px;
+
+background: #FFD700;
+
+
+/* 01 */
+
+position: absolute;
+width: 25px;
+height: 0px;
+left: 126.5px;
+top: 367.5px;
+
+font-family: 'Bebas Neue';
+font-style: normal;
+font-weight: 400;
+font-size: 30px;
+line-height: 0px;
+/* identical to box height, or 0% */
+
+color: #000000;
+
+
+
+/* Number 02 */
+
+position: absolute;
+width: 75px;
+height: 75px;
+left: 590px;
+top: 333px;
+
+
+
+/* Ellipse 219 */
+
+position: absolute;
+width: 75px;
+height: 75px;
+left: 590px;
+top: 333px;
+
+background: #FFD700;
+
+
+/* 02 */
+
+position: absolute;
+width: 25px;
+height: 0px;
+left: 615.5px;
+top: 370.5px;
+
+font-family: 'Bebas Neue';
+font-style: normal;
+font-weight: 400;
+font-size: 30px;
+line-height: 0px;
+/* identical to box height, or 0% */
+
+color: #000000;
+
+
+
+/* Number 03 */
+
+position: absolute;
+width: 75px;
+height: 75px;
+left: 1089px;
+top: 328px;
+
+
+
+/* Ellipse 219 */
+
+position: absolute;
+width: 75px;
+height: 75px;
+left: 1089px;
+top: 328px;
+
+background: #FFD700;
+
+
+/* 03 */
+
+position: absolute;
+width: 25px;
+height: 0px;
+left: 1114.5px;
+top: 365.5px;
+
+font-family: 'Bebas Neue';
+font-style: normal;
+font-weight: 400;
+font-size: 30px;
+line-height: 0px;
+/* identical to box height, or 0% */
+
+color: #000000;
+
+
+
+/* SELECT A CALCULATOR */
+
+position: absolute;
+width: 214px;
+height: 38px;
+left: 196px;
+top: 348px;
+
+font-family: 'Bebas Neue';
+font-style: normal;
+font-weight: 400;
+font-size: 32px;
+line-height: 38px;
+
+color: #FFD700;
+
+
+
+/* ENTER PARAMETERS */
+
+position: absolute;
+width: 194px;
+height: 38px;
+left: 685px;
+top: 351px;
+
+font-family: 'Bebas Neue';
+font-style: normal;
+font-weight: 400;
+font-size: 32px;
+line-height: 38px;
+
+color: #FFD700;
+
+
+
+/* Get results */
+
+position: absolute;
+width: 123px;
+height: 38px;
+left: 1184px;
+top: 345px;
+
+font-family: 'Bebas Neue';
+font-style: normal;
+font-weight: 400;
+font-size: 32px;
+line-height: 38px;
+
+color: #FFD700;
+
+
+
+/* Select calculator card */
+
+position: absolute;
+width: 322px;
+height: 345px;
+left: 101px;
+top: 440px;
+
+
+
+/* Rectangle 125 */
+
+position: absolute;
+width: 322px;
+height: 62px;
+left: 101px;
+top: 440px;
+
+background: #FFD700;
+border-radius: 24px;
+
+
+/* Rectangle 119 */
+
+position: absolute;
+width: 322px;
+height: 337px;
+left: 101px;
+top: 448px;
+
+background: #FFFFFF;
+border-radius: 24px;
+
+
+/* Round PCB pill */
+
+position: absolute;
+width: 125px;
+height: 30px;
+left: 126px;
+top: 717px;
+
+
+
+/* Rectangle 122 */
+
+position: absolute;
+width: 125px;
+height: 30px;
+left: 126px;
+top: 717px;
+
+background: #FFF2AC;
+border-radius: 14px;
+
+
+/* Round PCB */
+
+position: absolute;
+width: 79px;
+height: 20px;
+left: 149px;
+top: 722px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 15px;
+line-height: 20px;
+/* identical to box height */
+
+color: #653100;
+
+
+
+/* Basic pill */
+
+position: absolute;
+width: 125px;
+height: 30px;
+left: 126px;
+top: 667px;
+
+
+
+/* Rectangle 124 */
+
+position: absolute;
+width: 125px;
+height: 30px;
+left: 126px;
+top: 667px;
+
+background: #FFF2AC;
+border-radius: 14px;
+
+
+/* Basic */
+
+position: absolute;
+width: 39px;
+height: 20px;
+left: 167px;
+top: 672px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 15px;
+line-height: 20px;
+/* identical to box height */
+
+color: #653100;
+
+
+
+/* Array pill */
+
+position: absolute;
+width: 125px;
+height: 30px;
+left: 275px;
+top: 664px;
+
+
+
+/* Rectangle 121 */
+
+position: absolute;
+width: 125px;
+height: 30px;
+left: 275px;
+top: 664px;
+
+background: #FFF2AC;
+border-radius: 14px;
+
+
+/* Array */
+
+position: absolute;
+width: 40px;
+height: 20px;
+left: 318px;
+top: 669px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 15px;
+line-height: 20px;
+/* identical to box height */
+
+color: #653100;
+
+
+
+/* Panel shear pill */
+
+position: absolute;
+width: 125px;
+height: 30px;
+left: 275px;
+top: 717px;
+
+
+
+/* Rectangle 123 */
+
+position: absolute;
+width: 125px;
+height: 30px;
+left: 275px;
+top: 717px;
+
+background: #FFF2AC;
+border-radius: 14px;
+
+
+/* Panel shear */
+
+position: absolute;
+width: 83px;
+height: 20px;
+left: 296px;
+top: 722px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 15px;
+line-height: 20px;
+/* identical to box height */
+
+color: #653100;
+
+
+
+/* Select from Basic, Array, Round PCB, or Panel Shear based on production method. */
+
+position: absolute;
+width: 268px;
+height: 104px;
+left: 127px;
+top: 532px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+line-height: 26px;
+display: flex;
+align-items: flex-end;
+
+color: #000000;
+
+
+
+/* Choose your calculator */
+
+position: absolute;
+width: 270px;
+height: 31px;
+left: 125px;
+top: 478px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 24px;
+line-height: 31px;
+
+color: #000000;
+
+
+
+/* Enter parameters card */
+
+position: absolute;
+width: 322px;
+height: 342px;
+left: 600px;
+top: 443px;
+
+
+
+/* Rectangle 126 */
+
+position: absolute;
+width: 322px;
+height: 60px;
+left: 600px;
+top: 443px;
+
+background: #FFD700;
+border-radius: 24px;
+
+
+/* Rectangle 127 */
+
+position: absolute;
+width: 322px;
+height: 337px;
+left: 600px;
+top: 448px;
+
+background: #FFFDFD;
+border-radius: 24px;
+
+
+/* Auto orientation pill */
+
+position: absolute;
+width: 157px;
+height: 30px;
+left: 626px;
+top: 695px;
+
+
+
+/* Rectangle 123 */
+
+position: absolute;
+width: 157px;
+height: 30px;
+left: 626px;
+top: 695px;
+
+background: #FFF2AC;
+border-radius: 14px;
+
+
+/* Auto Orientation */
+
+position: absolute;
+width: 121px;
+height: 20px;
+left: 644px;
+top: 700px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 15px;
+line-height: 20px;
+/* identical to box height */
+
+color: #5F5102;
+
+
+
+/* mm/in pill */
+
+position: absolute;
+width: 91px;
+height: 30px;
+left: 799px;
+top: 695px;
+
+
+
+/* Rectangle 124 */
+
+position: absolute;
+width: 91px;
+height: 30px;
+left: 799px;
+top: 695px;
+
+background: #FFF2AC;
+border-radius: 14px;
+
+
+/* mm/in */
+
+position: absolute;
+width: 48px;
+height: 20px;
+left: 820px;
+top: 700px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 15px;
+line-height: 20px;
+/* identical to box height */
+
+color: #5F5102;
+
+
+
+/* Input PCB width, height, spacing, and margins. FITBOARD tries both orientations automatically and picks the best fit. */
+
+position: absolute;
+width: 255px;
+height: 130px;
+left: 633px;
+top: 532px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+line-height: 26px;
+display: flex;
+align-items: flex-end;
+
+color: #000000;
+
+
+
+/* Enter your board size */
+
+position: absolute;
+width: 255px;
+height: 31px;
+left: 633px;
+top: 481px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 24px;
+line-height: 31px;
+
+color: #000000;
+
+
+
+/* Get results card */
+
+position: absolute;
+width: 322px;
+height: 342px;
+left: 1089px;
+top: 443px;
+
+
+
+/* Frame 7 */
+
+position: absolute;
+width: 322px;
+height: 70px;
+left: 1089px;
+top: 443px;
+
+background: #96FF00;
+border-radius: 24px;
+
+
+/* Rectangle 120 */
+
+position: absolute;
+width: 82px;
+height: 30px;
+left: 20px;
+top: 270px;
+
+background: #FFD700;
+border-radius: 14px;
+
+
+/* Rectangle 121 */
+
+position: absolute;
+width: 82px;
+height: 30px;
+left: 120px;
+top: 270px;
+
+background: #FFD700;
+border-radius: 14px;
+
+
+/* Rectangle 122 */
+
+position: absolute;
+width: 82px;
+height: 30px;
+left: 220px;
+top: 270px;
+
+background: #FFD700;
+border-radius: 14px;
+
+
+/* DXF */
+
+position: absolute;
+width: 27px;
+height: 20px;
+left: 48px;
+top: 275px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 15px;
+line-height: 20px;
+/* identical to box height */
+
+color: #000000;
+
+
+
+/* PNG */
+
+position: absolute;
+width: 31px;
+height: 20px;
+left: 148px;
+top: 275px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 15px;
+line-height: 20px;
+/* identical to box height */
+
+color: #000000;
+
+
+
+/* PDF */
+
+position: absolute;
+width: 28px;
+height: 20px;
+left: 248px;
+top: 275px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 15px;
+line-height: 20px;
+/* identical to box height */
+
+color: #000000;
+
+
+
+/* Frame 6 */
+
+position: absolute;
+width: 322px;
+height: 334px;
+left: 1089px;
+top: 451px;
+
+background: #FFFFFF;
+border-radius: 24px;
+
+
+/* Rectangle 120 */
+
+position: absolute;
+width: 82px;
+height: 30px;
+left: 20px;
+top: 254px;
+
+background: #E6F7CD;
+border-radius: 14px;
+
+
+/* Rectangle 121 */
+
+position: absolute;
+width: 82px;
+height: 30px;
+left: 120px;
+top: 254px;
+
+background: #E6F7CD;
+border-radius: 14px;
+
+
+/* Rectangle 122 */
+
+position: absolute;
+width: 82px;
+height: 30px;
+left: 220px;
+top: 254px;
+
+background: #E6F7CD;
+border-radius: 14px;
+
+
+/* DXF */
+
+position: absolute;
+width: 28px;
+height: 20px;
+left: 48px;
+top: 259px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 15px;
+line-height: 20px;
+/* identical to box height */
+
+color: #3D6208;
+
+
+
+/* PNG */
+
+position: absolute;
+width: 32px;
+height: 20px;
+left: 148px;
+top: 259px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 15px;
+line-height: 20px;
+/* identical to box height */
+
+color: #3D6208;
+
+
+
+/* PDF */
+
+position: absolute;
+width: 28px;
+height: 20px;
+left: 248px;
+top: 259px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 15px;
+line-height: 20px;
+/* identical to box height */
+
+color: #3D6208;
+
+
+
+/* See units per panel, utilization %, a live visual preview, and a full breakdown. Export as PNG, PDF or DXF for your fab. */
+
+position: absolute;
+width: 255px;
+height: 130px;
+left: 1122px;
+top: 532px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+line-height: 26px;
+display: flex;
+align-items: flex-end;
+
+color: #000000;
+
+
+
+/* Get results */
+
+position: absolute;
+width: 255px;
+height: 31px;
+left: 1122px;
+top: 476px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 24px;
+line-height: 31px;
+
+color: #000000;
+
+
+
+/* CTA Button */
+
+position: absolute;
+width: 215px;
+height: 50px;
+left: 101px;
+top: 840px;
+
+filter: drop-shadow(2px 6px 5px rgba(0, 0, 0, 0.3));
+
+
+/* Rectangle 45 */
+
+position: absolute;
+width: 215px;
+height: 50px;
+left: 101px;
+top: 840px;
+
+background: #FFD700;
+border-radius: 100px;
+
+
+/* Start Panelizing */
+
+position: absolute;
+width: 145px;
+height: 26px;
+left: 127px;
+top: 852px;
+
+font-family: 'DM Sans';
+font-style: normal;
+font-weight: 500;
+font-size: 20px;
+line-height: 26px;
+/* identical to box height, or 130% */
+
+color: #000000;
+
+
+
+/* Vector */
+
+position: absolute;
+height: 16px;
+left: 18.58%;
+right: 80.89%;
+top: calc(50% - 16px/2 + 375px);
+
+background: #000000;
+transform: matrix(-1, 0, 0, 1, 0, 0);
+
+
+/* Arrow */
+
+position: absolute;
+width: 60px;
+height: 0px;
+left: 470px;
+top: 370px;
+
+border: 6px solid #8EFF25;
+
+
+/* Arow */
+
+position: absolute;
+width: 60px;
+height: 0px;
+left: 987px;
+top: 370px;
+
+border: 6px solid #8EFF25;

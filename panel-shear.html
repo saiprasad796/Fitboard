@@ -34,7 +34,7 @@
     <aside class="sidebar">
       <div class="sidebar-label">CALCULATORS</div>
       <nav class="sidebar-menu">
-        <a href="basic.html" class="sidebar-item active" data-tab="basic">
+        <a href="basic.html" class="sidebar-item" data-tab="basic">
           <img src="Assets/basic-icon.svg" class="sidebar-icon" alt="">
           <span>Basic</span>
         </a>
@@ -46,7 +46,7 @@
           <img src="Assets/round-icon.svg" class="sidebar-icon" alt="">
           <span>Round PCB</span>
         </a>
-        <a href="panel-shear.html" class="sidebar-item" data-tab="panel-shear">
+        <a href="panel-shear.html" class="sidebar-item active" data-tab="panel-shear">
           <img src="Assets/shear-icon.svg" class="sidebar-icon" alt="">
           <span>Panel Shear</span>
         </a>
@@ -6188,7 +6188,6 @@ document.addEventListener('DOMContentLoaded', () => {
     drawCanvasDimension(ctx, originX + pxW, originY, originX + pxW, originY + pxH, labelH, { offset: 22, scale: scaleExport, color: '#0B0B0B' });
     drawSaiWatermark(ctx, originX, originY, pxW, pxH);
   }
-
   // Panel Shear Previews
   setupExportDropdown('download-trigger-shear', 'export-dropdown-shear', 'export-container-shear');
   setupExportItem('export-dxf-shear', 'shear-canvas', 'dxf', 'shear-panel.dxf');

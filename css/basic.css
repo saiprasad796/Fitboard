@@ -171,7 +171,7 @@ body {
 .main-content {
   margin-left: 200px;
   margin-top: 80px;
-  padding:  40px 40px 40px 40px;
+  padding: 40px 100px 40px 40px;
   display: grid;
   grid-template-columns: 1fr;
 }
@@ -215,6 +215,7 @@ body {
 /* ─── Entry Tab ─── */
 .entry-tab {
   width: 350px;
+  flex: 0 0 350px;
   background: #FFFFFF;
   border-radius: 12px;
   padding: 24px;
@@ -344,13 +345,13 @@ body {
 .basic-main-row {
   display: flex;
   align-items: flex-start;
-  gap: 80px;
+  gap: 30px;
 }
 
 .preview-column {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   min-width: 480px;
 }
 
@@ -363,18 +364,23 @@ body {
   color: #0B0B0B;
 }
 
-#preview-heading {
-  margin-top: 10px;
+#preview-heading,
+#array-preview-heading,
+#round-preview-heading,
+#shear-preview-heading {
+  margin-top: 0;
 }
 
 #results-heading,
-#array-results-heading {
+#array-results-heading,
+#round-results-heading,
+#shear-results-heading {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 24px;
-  line-height: 29px;
+  font-size: 28px;
+  line-height: 1.2;
   color: #0B0B0B;
-  width: 380px;
-  margin: 20px auto 8px auto;
+  margin-top: 0;
+  margin-bottom: 8px;
   text-align: left;
 }
 
@@ -383,7 +389,7 @@ body {
   gap: 10px;
   align-items: stretch;
   width: 380px;
-  margin: 0 auto 16px auto;
+  margin: 0 auto 8px auto;
 }
 
 .result-card {
@@ -432,8 +438,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
-  margin-bottom: 8px;
+  margin-top: 4px;
+  margin-bottom: 6px;
   width: 100%;
 }
 
@@ -562,7 +568,7 @@ body {
 
 .breakdown-table {
   width: 380px;
-  margin: 16px auto 0 auto;
+  margin: 8px auto 0 auto;
   display: none;
 }
 
@@ -1070,5 +1076,83 @@ body {
   background: #000000;
   height: 2px;
   margin: 4px 0;
+}
+
+/* ─── Panel Shear Custom Styles ─── */
+#panel-panel-shear .basic-main-row {
+  gap: 20px;
+}
+
+/* Bigger Material Toggle (Rigid / Flex) */
+.material-toggle {
+  width: 110px !important;
+  height: 34px !important;
+  border-radius: 17px !important;
+}
+
+.material-toggle .toggle-slider {
+  width: 52px !important;
+  height: 28px !important;
+  border-radius: 14px !important;
+  top: 2.25px !important;
+  left: 2.25px !important;
+}
+
+.material-toggle.flex-active .toggle-slider {
+  transform: translateX(53px) !important;
+}
+
+.material-toggle .toggle-label {
+  font-size: 12px !important;
+  line-height: 34px !important;
+}
+
+/* Shear Unit Toggle (mm / in) */
+.shear-unit-toggle {
+  width: 90px !important;
+  height: 28px !important;
+  border-radius: 14px !important;
+}
+
+.shear-unit-toggle .toggle-slider {
+  width: 42px !important;
+  height: 22px !important;
+  border-radius: 11px !important;
+  top: 2.25px !important;
+  left: 2.25px !important;
+}
+
+.shear-unit-toggle.unit-in .toggle-slider {
+  transform: translateX(43px) !important;
+}
+
+.shear-unit-toggle .toggle-label {
+  font-size: 10px !important;
+  line-height: 28px !important;
+}
+
+/* Grain Direction Buttons */
+.grain-btn {
+  flex: 1;
+  height: 40px;
+  background: #FFFFFF;
+  border: 1.5px solid #0B0B0B;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #0B0B0B;
+  cursor: pointer;
+  transition: background-color 0.18s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-sizing: border-box;
+}
+
+.grain-btn.active {
+  background: #FFD600;
+  font-weight: 400;
 }
 

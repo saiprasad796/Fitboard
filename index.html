@@ -9,7 +9,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/index.css">
@@ -33,19 +33,19 @@
         </a>
         <div class="dropdown-menu" id="dropdown-menu">
           <div class="dropdown-highlight" id="dropdown-highlight"></div>
-          <a href="basic.html#basic"       class="dropdown-item">
+          <a href="basic.html"       class="dropdown-item">
             <img src="Assets/basic-icon.svg" class="dropdown-icon" alt="" style="view-transition-name: basic-icon;">
             <span style="view-transition-name: basic-title;">Basic</span>
           </a>
-          <a href="basic.html#array"       class="dropdown-item">
+          <a href="array.html"       class="dropdown-item">
             <img src="Assets/array-icon.svg" class="dropdown-icon" alt="" style="view-transition-name: array-icon;">
             <span style="view-transition-name: array-title;">Array</span>
           </a>
-          <a href="basic.html#round-part"  class="dropdown-item">
+          <a href="round-part.html"  class="dropdown-item">
             <img src="Assets/round-icon.svg" class="dropdown-icon" alt="" style="view-transition-name: round-icon;">
             <span style="view-transition-name: round-title;">Round PCB</span>
           </a>
-          <a href="basic.html#panel-shear" class="dropdown-item">
+          <a href="panel-shear.html" class="dropdown-item">
             <img src="Assets/shear-icon.svg" class="dropdown-icon" alt="" style="view-transition-name: shear-icon;">
             <span style="view-transition-name: shear-title;">Panel Shear</span>
           </a>
@@ -92,79 +92,126 @@
     <!-- ═══ HOW IT WORKS SECTION ═══ -->
     <section class="how-it-works" id="how-it-works">
       <div class="hiw-container">
-        <h2 class="hiw-title">How It Works</h2>
-        <p class="hiw-subtitle">Optimize your PCB panelization layout in three simple steps.</p>
-        
-        <div class="hiw-grid">
+        <header class="hiw-header">
+          <p class="hiw-eyebrow">HOW IT WORKS</p>
+          <h2 class="hiw-headline">FROM DIMENSIONS TO LAYOUT<br>IN 3 STEPS.</h2>
+          <p class="hiw-subheading">Fast & accurate panelization.</p>
+        </header>
+
+        <div class="hiw-steps-row">
           <!-- Step 1 -->
-          <div class="step-card">
-            <span class="step-number">01</span>
-            <div class="step-icon-wrap">
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="6" y="10" width="36" height="28" rx="4" fill="rgba(255, 255, 255, 0.45)" stroke="#0B0B0B" stroke-width="2"/>
-                <path d="M6 24H42" stroke="#0B0B0B" stroke-width="1.5" stroke-dasharray="3 3"/>
-                <path d="M24 10V38" stroke="#0B0B0B" stroke-width="1.5" stroke-dasharray="3 3"/>
-                <circle cx="15" cy="19" r="2.5" fill="#0B0B0B"/>
-                <circle cx="33" cy="19" r="2.5" fill="#0B0B0B"/>
-                <circle cx="15" cy="29" r="2.5" fill="#0B0B0B"/>
-                <circle cx="33" cy="29" r="2.5" fill="#0B0B0B"/>
-              </svg>
+          <div class="hiw-step-col">
+            <div class="hiw-step-header">
+              <span class="hiw-step-badge">01</span>
+              <span class="hiw-step-label">SELECT A CALCULATOR</span>
             </div>
-            <h3 class="step-heading">1. Define Board Dimensions</h3>
-            <p class="step-description">Enter your individual PCB's width, height, spacing requirements, and edge clearances directly into the calculator.</p>
+            <div class="hiw-card-wrapper">
+              <div class="hiw-card card-yellow-cap">
+                <h3 class="hiw-card-title">Choose your calculator</h3>
+                <p class="hiw-card-desc">Select from Basic, Array, Round PCB, or Panel Shear based on production method.</p>
+                <div class="hiw-card-pills">
+                  <a href="basic.html" class="hiw-pill pill-yellow">Basic</a>
+                  <a href="array.html" class="hiw-pill pill-yellow">Array</a>
+                  <a href="round-part.html" class="hiw-pill pill-yellow">Round PCB</a>
+                  <a href="panel-shear.html" class="hiw-pill pill-yellow">Panel shear</a>
+                </div>
+              </div>
+              <a href="basic.html" class="hiw-cta-btn">
+                Start Panelizing
+                <img src="Assets/Triangle.svg" class="hiw-cta-arrow" alt="">
+              </a>
+            </div>
+          </div>
+
+          <!-- Step 1 -> 2 Arrow -->
+          <div class="hiw-step-arrow">
+            <svg width="60" height="24" viewBox="0 0 60 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 12H55M55 12L45 4M55 12L45 20" stroke="#8EFF25" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
 
           <!-- Step 2 -->
-          <div class="step-card">
-            <span class="step-number">02</span>
-            <div class="step-icon-wrap">
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="4" y="4" width="40" height="40" rx="6" fill="rgba(255, 255, 255, 0.45)" stroke="#0B0B0B" stroke-width="2"/>
-                <rect x="10" y="10" width="28" height="28" rx="2" fill="none" stroke="#0B0B0B" stroke-width="1.5" stroke-dasharray="2 2"/>
-                <path d="M4 10H10 M38 10H44 M4 38H10 M38 38H44" stroke="#0B0B0B" stroke-width="1.5"/>
-                <path d="M10 4V10 M10 38V44 M38 4V10 M38 38V44" stroke="#0B0B0B" stroke-width="1.5"/>
-              </svg>
+          <div class="hiw-step-col">
+            <div class="hiw-step-header">
+              <span class="hiw-step-badge">02</span>
+              <span class="hiw-step-label">ENTER PARAMETERS</span>
             </div>
-            <h3 class="step-heading">2. Set Panel Boundaries</h3>
-            <p class="step-description">Specify the target fabrication panel size and manufacturing margins to calculate the printable board real estate.</p>
+            <div class="hiw-card-wrapper">
+              <div class="hiw-card card-yellow-cap">
+                <h3 class="hiw-card-title">Enter your board size</h3>
+                <p class="hiw-card-desc">Input your PCB size, panel dimensions, spacing, and margins. FITBOARD runs both orientations simultaneously and returns the layout with the highest yield.</p>
+                <div class="hiw-card-pills">
+                  <span class="hiw-pill pill-yellow-static">Auto Orientation</span>
+                  <span class="hiw-pill pill-yellow-static">mm/in</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -> 3 Arrow -->
+          <div class="hiw-step-arrow">
+            <svg width="60" height="24" viewBox="0 0 60 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 12H55M55 12L45 4M55 12L45 20" stroke="#8EFF25" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
 
           <!-- Step 3 -->
-          <div class="step-card">
-            <span class="step-number">03</span>
-            <div class="step-icon-wrap">
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="24" cy="24" r="20" fill="rgba(255, 255, 255, 0.45)" stroke="#0B0B0B" stroke-width="2"/>
-                <path d="M24 10V24L34 24" stroke="#0B0B0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M24 4C35.0457 4 44 12.9543 44 24" stroke="#008C4A" stroke-width="3" stroke-linecap="round"/>
-              </svg>
+          <div class="hiw-step-col">
+            <div class="hiw-step-header">
+              <span class="hiw-step-badge">03</span>
+              <span class="hiw-step-label">GET RESULTS</span>
             </div>
-            <h3 class="step-heading">3. Analyze & Optimize</h3>
-            <p class="step-description">Get instant visual panel maps, calculated utilization rates, and optimized layout options for alternative panel sizes.</p>
+            <div class="hiw-card-wrapper">
+              <div class="hiw-card card-green-cap">
+                <h3 class="hiw-card-title">Get results</h3>
+                <p class="hiw-card-desc">See units per panel, utilization %, a live visual preview, and a full breakdown. Export as PNG, PDF or DXF for your fab.</p>
+                <div class="hiw-card-pills">
+                  <span class="hiw-pill pill-green-static">DXF</span>
+                  <span class="hiw-pill pill-green-static">PNG</span>
+                  <span class="hiw-pill pill-green-static">PDF</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══ ABOUT SECTION ═══ -->
-    <section class="info-section" id="about">
-      <div class="info-container">
-        <h3 class="info-title">About</h3>
-        <div class="info-card">
-          <p>This page was developed purely out of boredom</p>
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="site-footer">
+      <div class="footer-container">
+        
+        <!-- Left Side: Brand and About -->
+        <div class="footer-brand-section" id="about">
+          <h2 class="footer-logo">FITBOARD</h2>
+          <p class="footer-about-text">
+            FITBOARD is a PCB panelization tool. Built out of boredom. Used out of necessity.
+          </p>
         </div>
-      </div>
-    </section>
-
-    <!-- ═══ CONTACT SECTION ═══ -->
-    <section class="info-section" id="contact">
-      <div class="info-container">
-        <h3 class="info-title">Contact</h3>
-        <div class="info-card">
-          <p>For further assistance reach out to <a href="mailto:ks.lachna@kaynescircuits.com">ks.lachna@kaynescircuits.com</a></p>
+        
+        <!-- Right Side: Contact / Info -->
+        <div class="footer-contact-section" id="contact">
+          <h3 class="footer-heading">GET IN TOUCH</h3>
+          <p class="footer-contact-text">
+            For inquiries, technical assistance, or feedback, feel free to contact:
+          </p>
+          <a href="mailto:ks.lachna@kaynescircuits.com" class="footer-email-link">
+            ks.lachna@kaynescircuits.com
+            <span class="email-arrow">→</span>
+          </a>
+          <a href="mailto:sai79649@gmail.com" class="footer-email-link">
+            sai79649@gmail.com
+            <span class="email-arrow">→</span>
+          </a>
         </div>
+        
       </div>
-    </section>
+      
+      <!-- Bottom bar: Copyright / Metadata -->
+      <div class="footer-bottom">
+        <p class="footer-copyright">&copy; 2026 FITBOARD. All rights yet to be reserved</p>
+      </div>
+    </footer>
   </main>
 
   <script>
