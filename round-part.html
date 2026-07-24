@@ -1075,6 +1075,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Preload sai watermark signature image
   const saiWatermarkImg = new Image();
+  saiWatermarkImg.crossOrigin = 'anonymous';
   saiWatermarkImg.src = 'Assets/sai watermark.png';
   let saiWatermarkLoaded = false;
   saiWatermarkImg.onload = () => {
@@ -1104,11 +1105,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (fromUnit === toUnit) return val;
     if (fromUnit === 'mm' && toUnit === 'in') {
       const res = val / MM_PER_INCH;
-      return parseFloat(res.toFixed(3));
+      return parseFloat(res.toFixed(4));
     }
     if (fromUnit === 'in' && toUnit === 'mm') {
       const res = val * MM_PER_INCH;
-      return parseFloat(res.toFixed(1));
+      return parseFloat(res.toFixed(4));
     }
     return val;
   }
@@ -1480,7 +1481,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pxH = i.panelH * scale;
 
     const dpr = window.devicePixelRatio || 1;
-    const currentCanvasH = Math.round(pxH + 12);
+    const currentCanvasH = Math.round(pxH + PADDING * 1.5);
     canvas.width = CANVAS_W * dpr;
     canvas.height = currentCanvasH * dpr;
     canvas.style.height = `${currentCanvasH}px`;
@@ -1489,7 +1490,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.clearRect(0, 0, CANVAS_W, currentCanvasH);
 
     const originX = (CANVAS_W - pxW) / 2;
-    const originY = 6;
+    const originY = (currentCanvasH - pxH) / 2;
 
     ctx.fillStyle = '#C1D99E';
     ctx.fillRect(originX, originY, pxW, pxH);
@@ -1802,11 +1803,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (fromUnit === toUnit) return val;
     if (fromUnit === 'mm' && toUnit === 'in') {
       const res = val / MM_PER_INCH;
-      return parseFloat(res.toFixed(3));
+      return parseFloat(res.toFixed(4));
     }
     if (fromUnit === 'in' && toUnit === 'mm') {
       const res = val * MM_PER_INCH;
-      return parseFloat(res.toFixed(1));
+      return parseFloat(res.toFixed(4));
     }
     return val;
   }
@@ -1940,6 +1941,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupPanelUnitToggle();
 
   const mouseBiteImg = new Image();
+  mouseBiteImg.crossOrigin = 'anonymous';
   mouseBiteImg.src = 'Assets/Mouse-Bites.svg';
   mouseBiteImg.onload = () => {
     drawArrayPreview();
@@ -2841,47 +2843,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function drawBasicCanvasForExport(ctx, width, height, padding, i, res, showArray, basicUnit) {
     const MM_PER_INCH = 25.4;
+    const scaleExport = width / 480;
+
+    // Plain clean background (Original format)
     ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
 
-    if (i.panelW <= 0 || i.panelH <= 0) {
-      if (i.partW > 0 && i.partH > 0) {
-        const partWin = i.partW / MM_PER_INCH;
-        const partHin = i.partH / MM_PER_INCH;
-        const scaleX = (width - padding * 2) / partWin;
-        const scaleY = (height - padding * 2) / partHin;
-        const scale = Math.min(scaleX, scaleY);
+    if (i.panelW <= 0 || i.panelH <= 0) return;
 
-        const partPxW = partWin * scale;
-        const partPxH = partHin * scale;
-
-        const x = (width - partPxW) / 2;
-        const y = 6 * (width / 480);
-
-        ctx.fillStyle = '#008C4A';
-        ctx.fillRect(x, y, partPxW, partPxH);
-        ctx.strokeStyle = '#FFD600';
-        ctx.lineWidth = 1 * (width / 480);
-        ctx.strokeRect(x, y, partPxW, partPxH);
-      }
-      return;
-    }
-
-    const scaleX = (width - padding * 2) / i.panelW;
-    const scaleY = (height - padding * 2) / i.panelH;
+    // Center panel with margins for Left Y-axis & Bottom X-axis dimensions
+    const extraPadding = 52 * scaleExport;
+    const scaleX = (width - extraPadding * 2) / i.panelW;
+    const scaleY = (height - extraPadding * 2) / i.panelH;
     const scale = Math.min(scaleX, scaleY);
 
     const pxW = i.panelW * scale;
     const pxH = i.panelH * scale;
 
-    const originX = (width - pxW) / 2;
-    const originY = 6 * (width / 480);
+    const originX = (width - pxW) / 2 + 16 * scaleExport;
+    const originY = (height - pxH) / 2 - 16 * scaleExport;
 
+    // Original Panel Box (#C1D99E with #000000 border)
     ctx.fillStyle = '#C1D99E';
     ctx.fillRect(originX, originY, pxW, pxH);
     ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 0.5 * (width / 480);
+    ctx.lineWidth = 0.5 * scaleExport;
     ctx.strokeRect(originX, originY, pxW, pxH);
 
+    // Original Margins (#006536)
     const mLpx = i.mLeft * scale;
     const mRpx = i.mRight * scale;
     const mTpx = i.mTop * scale;
@@ -2904,17 +2894,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const partPxW = partWin * scale;
     const partPxH = partHin * scale;
 
-    if (!showArray) {
-      if (i.partW > 0 && i.partH > 0 && usableW > 0 && usableH > 0) {
-        ctx.fillStyle = '#008C4A';
-        ctx.fillRect(usableX + 2 * (width / 480), usableY + 2 * (width / 480), partPxW, partPxH);
-        ctx.strokeStyle = '#FFD600';
-        ctx.lineWidth = 0.8 * (width / 480);
-        ctx.strokeRect(usableX + 2 * (width / 480), usableY + 2 * (width / 480), partPxW, partPxH);
-        drawSaiWatermark(ctx, originX, originY, pxW, pxH);
-      }
-      return;
+    const partW_mm = isRotated ? i.partH : i.partW;
+    const partH_mm = isRotated ? i.partW : i.partH;
+    const partW_in = partW_mm / MM_PER_INCH;
+    const partH_in = partH_mm / MM_PER_INCH;
+
+    function fmt2(val) {
+      if (isNaN(val)) return '0.00';
+      return Number(val).toFixed(2);
     }
+
+    const pcbLine1 = `${fmt2(partW_in)}"×${fmt2(partH_in)}"`;
+    const pcbLine2 = `(${fmt2(partW_mm)}mm×${fmt2(partH_mm)}mm)`;
 
     if (res.total > 0 && res.cols > 0 && res.rows > 0) {
       const spacingXin = i.spacingX / MM_PER_INCH;
@@ -2937,79 +2928,52 @@ document.addEventListener('DOMContentLoaded', () => {
           if (x + partPxW > usableX + usableW + 0.1) continue;
           if (y + partPxH > usableY + usableH + 0.1) continue;
 
+          // Original PCB Card (#008C4A with #C1D99E border)
           ctx.fillStyle = '#008C4A';
           ctx.fillRect(x, y, partPxW, partPxH);
           ctx.strokeStyle = '#C1D99E';
-          ctx.lineWidth = 0.5 * (width / 480);
+          ctx.lineWidth = 0.5 * scaleExport;
           ctx.strokeRect(x, y, partPxW, partPxH);
+
+          // Centered PCB Dimensions Text (Line 1: X"xY", Line 2: (XmmxYmm) below)
+          ctx.save();
+          const maxW = partPxW * 0.9;
+          const fontSize = Math.min(partPxH * 0.18, 9.5 * scaleExport);
+          if (fontSize >= 4 * scaleExport) {
+            ctx.font = `bold ${fontSize}px "DM Sans", sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#ffffff';
+
+            const centerY = y + partPxH / 2;
+            const lineSpacing = fontSize * 1.15;
+
+            if (partPxH >= fontSize * 2.4) {
+              ctx.fillText(pcbLine1, x + partPxW / 2, centerY - lineSpacing / 2, maxW);
+              ctx.fillText(pcbLine2, x + partPxW / 2, centerY + lineSpacing / 2, maxW);
+            } else {
+              ctx.fillText(`${pcbLine1} ${pcbLine2}`, x + partPxW / 2, centerY, maxW);
+            }
+          }
+          ctx.restore();
         }
       }
     }
 
-    // Auto-dimensioning callouts
-    const scaleExport = width / 480;
-    
-    function fmtIn(val) {
-      return val % 1 === 0 ? val.toFixed(0) : val.toFixed(3).replace(/\.?0+$/, '');
-    }
-    
-    function fmtMM(val) {
-      return val % 1 === 0 ? val.toFixed(0) : val.toFixed(1).replace(/\.?0+$/, '');
-    }
+    // Panel Dimensions Formatting: BOTH Inches AND MM visible with 2 decimal places!
+    const panelW_in = i.panelW;
+    const panelH_in = i.panelH;
+    const panelW_mm = i.panelW * MM_PER_INCH;
+    const panelH_mm = i.panelH * MM_PER_INCH;
 
-    const panelW_in = basicUnit === 'mm' ? i.panelW / MM_PER_INCH : i.panelW;
-    const panelH_in = basicUnit === 'mm' ? i.panelH / MM_PER_INCH : i.panelH;
-    const panelW_mm = basicUnit === 'mm' ? i.panelW : i.panelW * MM_PER_INCH;
-    const panelH_mm = basicUnit === 'mm' ? i.panelH : i.panelH * MM_PER_INCH;
+    const labelPanelW = `${fmt2(panelW_in)}" (${fmt2(panelW_mm)}mm)`;
+    const labelPanelH = `${fmt2(panelH_in)}" (${fmt2(panelH_mm)}mm)`;
 
-    const labelPanelW = `${fmtIn(panelW_in)}" (${fmtMM(panelW_mm)}mm)`;
-    const labelPanelH = `${fmtIn(panelH_in)}" (${fmtMM(panelH_mm)}mm)`;
-
-    // Draw Panel bounds
-    drawCanvasDimension(ctx, originX, originY, originX + pxW, originY, labelPanelW, { offset: -22, scale: scaleExport, color: '#0B0B0B' });
-    drawCanvasDimension(ctx, originX + pxW, originY, originX + pxW, originY + pxH, labelPanelH, { offset: 22, scale: scaleExport, color: '#0B0B0B' });
-
-    if (res.total > 0 && res.cols > 0 && res.rows > 0) {
-      const spacingXin = i.spacingX / MM_PER_INCH;
-      const spacingYin = i.spacingY / MM_PER_INCH;
-      const gapPxX = spacingXin * scale;
-      const gapPxY = spacingYin * scale;
-      const arrayPxW = res.cols * partPxW + (res.cols - 1) * gapPxX;
-      const arrayPxH = res.rows * partPxH + (res.rows - 1) * gapPxY;
-      const startX = usableX + (usableW - arrayPxW) / 2;
-      const startY = usableY + (usableH - arrayPxH) / 2;
-
-      const pcbX1 = startX;
-      const pcbY1 = startY;
-
-      const partW_mm = basicUnit === 'mm' ? i.partW : i.partW * MM_PER_INCH;
-      const partH_mm = basicUnit === 'mm' ? i.partH : i.partH * MM_PER_INCH;
-      const partW_in = partW_mm / MM_PER_INCH;
-      const partH_in = partH_mm / MM_PER_INCH;
-
-      const labelPCBW = basicUnit === 'mm' ? `${fmtMM(partW_mm)}mm` : `${fmtIn(partW_in)}"`;
-      const labelPCBH = basicUnit === 'mm' ? `${fmtMM(partH_mm)}mm` : `${fmtIn(partH_in)}"`;
-
-      const spacingX_mm = basicUnit === 'mm' ? i.spacingX : i.spacingX * MM_PER_INCH;
-      const spacingY_mm = basicUnit === 'mm' ? i.spacingY : i.spacingY * MM_PER_INCH;
-      const spacingX_in = spacingX_mm / MM_PER_INCH;
-      const spacingY_in = spacingY_mm / MM_PER_INCH;
-
-      const labelSpX = basicUnit === 'mm' ? `${fmtMM(spacingX_mm)}mm` : `${fmtIn(spacingX_in)}"`;
-      const labelSpY = basicUnit === 'mm' ? `${fmtMM(spacingY_mm)}mm` : `${fmtIn(spacingY_in)}"`;
-
-      // PCB dimensions
-      drawCanvasDimension(ctx, pcbX1, pcbY1 + partPxH, pcbX1 + partPxW, pcbY1 + partPxH, labelPCBW, { offset: 22, scale: scaleExport, color: '#E86A1A' });
-      drawCanvasDimension(ctx, pcbX1, pcbY1, pcbX1, pcbY1 + partPxH, labelPCBH, { offset: -22, scale: scaleExport, color: '#E86A1A' });
-
-      // Spacing dimensions
-      if (res.cols > 1 && i.spacingX > 0) {
-        drawCanvasDimension(ctx, pcbX1 + partPxW, pcbY1 + partPxH/2, pcbX1 + partPxW + gapPxX, pcbY1 + partPxH/2, labelSpX, { offset: 0, scale: scaleExport, color: '#1A6FE8' });
-      }
-      if (res.rows > 1 && i.spacingY > 0) {
-        drawCanvasDimension(ctx, pcbX1 + partPxW/2, pcbY1 + partPxH, pcbX1 + partPxW/2, pcbY1 + partPxH + gapPxY, labelSpY, { offset: 0, scale: scaleExport, color: '#1A6FE8' });
-      }
-    }
+    // Panel Dimensions Placement:
+    // - Y-axis (Height): LEFT side of Panel (Rotated Text)
+    // - X-axis (Width): BOTTOM of Panel (Horizontal Text)
+    drawCanvasDimension(ctx, originX, originY + pxH, originX, originY, labelPanelH, { offset: -30, scale: scaleExport, color: '#0b0b0b' });
+    drawCanvasDimension(ctx, originX, originY + pxH, originX + pxW, originY + pxH, labelPanelW, { offset: 30, scale: scaleExport, color: '#0b0b0b' });
     drawSaiWatermark(ctx, originX, originY, pxW, pxH);
   }
 
@@ -4315,11 +4279,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (type === 'png') {
         try {
-          const dataURL = exportCanvas.toDataURL('image/png');
-          const link = document.createElement('a');
-          link.download = filename;
-          link.href = dataURL;
-          link.click();
+          if (exportCanvas.toBlob) {
+            exportCanvas.toBlob((blob) => {
+              if (!blob) {
+                console.error('Failed to create PNG blob');
+                return;
+              }
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.download = filename;
+              link.href = url;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              setTimeout(() => URL.revokeObjectURL(url), 1000);
+            }, 'image/png');
+          } else {
+            const dataURL = exportCanvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = dataURL;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
         } catch (err) {
           console.error('Failed to export PNG:', err);
         }
@@ -4464,10 +4447,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isNaN(val) || val <= 0) return 0;
     if (fromUnit === toUnit) return val;
     if (fromUnit === 'mm' && toUnit === 'in') {
-      return parseFloat((val / MM_PER_INCH).toFixed(3));
+      return parseFloat((val / MM_PER_INCH).toFixed(4));
     }
     if (fromUnit === 'in' && toUnit === 'mm') {
-      return parseFloat((val * MM_PER_INCH).toFixed(1));
+      return parseFloat((val * MM_PER_INCH).toFixed(4));
     }
     return val;
   }
@@ -5469,10 +5452,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isNaN(val) || val <= 0) return 0;
     if (fromUnit === toUnit) return val;
     if (fromUnit === 'mm' && toUnit === 'in') {
-      return parseFloat((val / MM_PER_INCH).toFixed(3));
+      return parseFloat((val / MM_PER_INCH).toFixed(4));
     }
     if (fromUnit === 'in' && toUnit === 'mm') {
-      return parseFloat((val * MM_PER_INCH).toFixed(1));
+      return parseFloat((val * MM_PER_INCH).toFixed(4));
     }
     return val;
   }
