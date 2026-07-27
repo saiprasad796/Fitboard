@@ -2959,36 +2959,172 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     }
-
-    // Panel Dimensions Formatting: BOTH Inches AND MM visible with 2 decimal places!
-    const panelW_in = i.panelW;
-    const panelH_in = i.panelH;
-    const panelW_mm = i.panelW * MM_PER_INCH;
-    const panelH_mm = i.panelH * MM_PER_INCH;
-
-    const labelPanelW = `${fmt2(panelW_in)}" (${fmt2(panelW_mm)}mm)`;
-    const labelPanelH = `${fmt2(panelH_in)}" (${fmt2(panelH_mm)}mm)`;
-
-    // Panel Dimensions Placement:
-    // - Y-axis (Height): LEFT side of Panel (Rotated Text)
-    // - X-axis (Width): BOTTOM of Panel (Horizontal Text)
-    drawCanvasDimension(ctx, originX, originY + pxH, originX, originY, labelPanelH, { offset: -30, scale: scaleExport, color: '#0b0b0b' });
-    drawCanvasDimension(ctx, originX, originY + pxH, originX + pxW, originY + pxH, labelPanelW, { offset: 30, scale: scaleExport, color: '#0b0b0b' });
     drawSaiWatermark(ctx, originX, originY, pxW, pxH);
   }
 
-  function drawArrayCanvasForExport(ctx, width, height, padding, i, totalW, totalH, mouseBiteImg, pcbUnit) {
-    ctx.clearRect(0, 0, width, height);
+  function drawCanvasDimensionRefactored(ctx, items, boardRects = [], scaleExport = 1) {
+    if (!items || items.length === 0) return;
 
-    const scaleX = (width - padding * 2) / totalW;
-    const scaleY = (height - padding * 2) / totalH;
+    // 1. COMPUTATION & LAYOUT PASS (Calculate base positions and resolve label collisions)
+    const processedItems = items.map((item, index) => {
+      const scale = item.scale || scaleExport || 1;
+      const offset = (item.offset || 20) * scale;
+      const x1 = item.x1, y1 = item.y1, x2 = item.x2, y2 = item.y2;
+      const dx = x2 - x1, dy = y2 - y1;
+      const len = Math.hypot(dx, dy);
+      if (len === 0) return null;
+
+      const ux = dx / len, uy = dy / len;
+      const px = -uy, py = ux;
+
+      const dimX1 = x1 + px * offset;
+      const dimY1 = y1 + py * offset;
+      const dimX2 = x2 + px * offset;
+      const dimY2 = y2 + py * offset;
+
+      let midX = (dimX1 + dimX2) / 2;
+      let midY = (dimY1 + dimY2) / 2;
+
+      const fontSize = Math.round((item.fontSize || 9.5) * scale);
+      ctx.save();
+      ctx.font = `bold ${fontSize}px "DM Sans", sans-serif`;
+      const textWidth = ctx.measureText(item.text).width;
+      const textHeight = fontSize;
+      ctx.restore();
+
+      const boxW = textWidth + 8 * scale;
+      const boxH = textHeight + 4 * scale;
+
+      return {
+        ...item,
+        id: index,
+        scale,
+        offset,
+        dx, dy, len, ux, uy, px, py,
+        dimX1, dimY1, dimX2, dimY2,
+        midX, midY,
+        boxW, boxH,
+        textWidth, textHeight,
+        fontSize,
+        bounds: {
+          x: midX - boxW / 2,
+          y: midY - boxH / 2,
+          w: boxW,
+          h: boxH
+        }
+      };
+    }).filter(Boolean);
+
+    // Collision Avoidance Pass: Nudge label positions if bounding boxes overlap
+    for (let iter = 0; iter < 4; iter++) {
+      let collided = false;
+      for (let i = 0; i < processedItems.length; i++) {
+        const a = processedItems[i];
+        for (let j = i + 1; j < processedItems.length; j++) {
+          const b = processedItems[j];
+          if (
+            a.bounds.x < b.bounds.x + b.bounds.w &&
+            a.bounds.x + a.bounds.w > b.bounds.x &&
+            a.bounds.y < b.bounds.y + b.bounds.h &&
+            a.bounds.y + a.bounds.h > b.bounds.y
+          ) {
+            collided = true;
+            const shiftY = (a.bounds.y + a.bounds.h + 6) - b.bounds.y;
+            b.midY += shiftY;
+            b.bounds.y = b.midY - b.boxH / 2;
+          }
+        }
+      }
+      if (!collided) break;
+    }
+
+    // 2. PASS A: DRAW EXTENSION/DIMENSION LINES & ARROWS (Z-order: above panel fill, below text)
+    processedItems.forEach(item => {
+      const scale = item.scale;
+      const arrowLength = (item.arrowLength || 8) * scale;
+      const arrowWidth = (item.arrowWidth || 3.5) * scale;
+
+      ctx.save();
+      ctx.strokeStyle = item.color || '#333333';
+      ctx.lineWidth = (item.lineWidth || 1) * scale;
+      ctx.fillStyle = item.color || '#333333';
+
+      ctx.beginPath();
+      // Extension lines
+      ctx.moveTo(item.x1 + item.px * 2 * scale, item.y1 + item.py * 2 * scale);
+      ctx.lineTo(item.dimX1 + item.px * 4 * scale, item.dimY1 + item.py * 4 * scale);
+      ctx.moveTo(item.x2 + item.px * 2 * scale, item.y2 + item.py * 2 * scale);
+      ctx.lineTo(item.dimX2 + item.px * 4 * scale, item.dimY2 + item.py * 4 * scale);
+
+      // Dimension line
+      ctx.moveTo(item.dimX1, item.dimY1);
+      ctx.lineTo(item.dimX2, item.dimY2);
+      ctx.stroke();
+
+      // Arrowheads
+      const drawArrow = (ax, ay, rotAngle) => {
+        ctx.beginPath();
+        ctx.moveTo(ax, ay);
+        ctx.lineTo(
+          ax - arrowLength * Math.cos(rotAngle) + arrowWidth * Math.sin(rotAngle),
+          ay - arrowLength * Math.sin(rotAngle) - arrowWidth * Math.cos(rotAngle)
+        );
+        ctx.lineTo(
+          ax - arrowLength * Math.cos(rotAngle) - arrowWidth * Math.sin(rotAngle),
+          ay - arrowLength * Math.sin(rotAngle) + arrowWidth * Math.cos(rotAngle)
+        );
+        ctx.closePath();
+        ctx.fill();
+      };
+
+      drawArrow(item.dimX1, item.dimY1, Math.atan2(item.dy, item.dx) + Math.PI);
+      drawArrow(item.dimX2, item.dimY2, Math.atan2(item.dy, item.dx));
+      ctx.restore();
+    });
+
+    // 3. PASS B: DRAW TEXT LABELS (Z-order: above lines & arrowheads, horizontal right-side-up)
+    processedItems.forEach(item => {
+      ctx.save();
+      ctx.font = `bold ${item.fontSize}px "DM Sans", sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Mask background box behind text label so dimension lines never strike through text
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(item.bounds.x, item.bounds.y, item.bounds.w, item.bounds.h);
+
+      // Horizontal right-side-up text label (no rotation inherited from axis)
+      ctx.fillStyle = item.textColor || item.color || '#333333';
+      ctx.fillText(item.text, item.midX, item.midY);
+      ctx.restore();
+    });
+  }
+
+  function drawArrayCanvasForExport(ctx, width, height, padding, i, totalW, totalH, mouseBiteImg, pcbUnit, isChildInPanel = false) {
+    const MM_PER_INCH = 25.4;
+    const scaleExport = width / 480;
+
+    if (!isChildInPanel) {
+      ctx.clearRect(0, 0, width, height);
+      if (padding > 0) {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, width, height);
+      }
+    }
+
+    if (totalW <= 0 || totalH <= 0) return;
+
+    // Center array panel with margins for Left Y-axis & Bottom X-axis dimensions (matching Basic page)
+    const extraPadding = (padding > 0 && !isChildInPanel) ? 52 * scaleExport : 0;
+    const scaleX = (width - extraPadding * 2) / totalW;
+    const scaleY = (height - extraPadding * 2) / totalH;
     const scale = Math.min(scaleX, scaleY);
 
     const pxW = totalW * scale;
     const pxH = totalH * scale;
 
-    const originX = (width - pxW) / 2;
-    const originY = padding > 0 ? 6 * (width / 480) : 0;
+    const originX = (padding > 0 && !isChildInPanel) ? (width - pxW) / 2 + 16 * scaleExport : (width - pxW) / 2;
+    const originY = (padding > 0 && !isChildInPanel) ? (height - pxH) / 2 - 16 * scaleExport : 0;
 
     const hasRail = i.railLeft > 0 || i.railRight > 0 || i.railTop > 0 || i.railBottom > 0;
     if (hasRail) {
@@ -3009,7 +3145,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (rightStripW > 0) ctx.fillRect(originX + pxW - rightStripW, originY + topStripH, rightStripW, pxH - topStripH - bottomStripH);
 
       ctx.strokeStyle = '#005C30';
-      ctx.lineWidth = 2 * (width / 480);
+      ctx.lineWidth = 2 * scaleExport;
       ctx.strokeRect(originX, originY, pxW, pxH);
     } else {
       ctx.fillStyle = '#C1D99E';
@@ -3031,7 +3167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fillStyle = '#008C4A';
         ctx.fillRect(px, py, pcbPxW, pcbPxH);
         ctx.strokeStyle = '#005C30';
-        ctx.lineWidth = 1 * (width / 480);
+        ctx.lineWidth = 1 * scaleExport;
         ctx.strokeRect(px, py, pcbPxW, pcbPxH);
       }
     }
@@ -3134,29 +3270,30 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Auto-dimensioning for Array exports
-    const scaleExport = width / 480;
+    if (isChildInPanel) {
+      drawSaiWatermark(ctx, originX, originY, pxW, pxH);
+      return;
+    }
+
+    // Auto-dimensioning for Array exports with Layout Pass & Collision Resolution
+    function fmt2(val) {
+      if (isNaN(val)) return '0.00';
+      return Number(val).toFixed(2);
+    }
     
     function fmtVal(val) {
       return pcbUnit === 'mm' ? 
         (val % 1 === 0 ? val.toFixed(0) : val.toFixed(1).replace(/\.?0+$/, '')) + 'mm' : 
         (val / MM_PER_INCH).toFixed(3).replace(/\.?0+$/, '') + '"';
     }
-    
-    function fmtIn(val) {
-      return val % 1 === 0 ? val.toFixed(0) : val.toFixed(3).replace(/\.?0+$/, '');
-    }
-    
-    function fmtMM(val) {
-      return val % 1 === 0 ? val.toFixed(0) : val.toFixed(1).replace(/\.?0+$/, '');
-    }
-    
-    const labelTotalW = pcbUnit === 'mm' ? 
-      `${fmtMM(totalW)}mm (${fmtIn(totalW / MM_PER_INCH)}")` : 
-      `${fmtIn(totalW / MM_PER_INCH)}" (${fmtMM(totalW)}mm)`;
-    const labelTotalH = pcbUnit === 'mm' ? 
-      `${fmtMM(totalH)}mm (${fmtIn(totalH / MM_PER_INCH)}")` : 
-      `${fmtIn(totalH / MM_PER_INCH)}" (${fmtMM(totalH)}mm)`;
+
+    const totalW_in = totalW / MM_PER_INCH;
+    const totalH_in = totalH / MM_PER_INCH;
+    const totalW_mm = totalW;
+    const totalH_mm = totalH;
+
+    const labelTotalW = `${fmt2(totalW_in)}" (${fmt2(totalW_mm)}mm)`;
+    const labelTotalH = `${fmt2(totalH_in)}" (${fmt2(totalH_mm)}mm)`;
       
     const labelPCBW = fmtVal(i.partW);
     const labelPCBH = fmtVal(i.partH);
@@ -3166,57 +3303,72 @@ document.addEventListener('DOMContentLoaded', () => {
     const labelRailTop = fmtVal(i.railTop);
     const labelRailBottom = fmtVal(i.railBottom);
 
-    // Draw Outer Array bounds
-    drawCanvasDimension(ctx, originX, originY, originX + pxW, originY, labelTotalW, { offset: -22, scale: scaleExport, color: '#0B0B0B' });
-    drawCanvasDimension(ctx, originX + pxW, originY, originX + pxW, originY + pxH, labelTotalH, { offset: 22, scale: scaleExport, color: '#0B0B0B' });
+    const annotationItems = [];
 
-    // Draw PCB size callouts
+    if (padding > 0) {
+      // Outer Array bounds: Left Y-axis & Bottom X-axis
+      annotationItems.push({ x1: originX, y1: originY + pxH, x2: originX, y2: originY, text: labelTotalH, offset: -30, scale: scaleExport, color: '#0b0b0b' });
+      annotationItems.push({ x1: originX, y1: originY + pxH, x2: originX + pxW, y2: originY + pxH, text: labelTotalW, offset: 30, scale: scaleExport, color: '#0b0b0b' });
+    }
+
+    // PCB size callouts (annotated ONCE on top-left PCB repeat unit)
     if (i.partW > 0 && i.partH > 0) {
-      drawCanvasDimension(ctx, usableX, usableY + pcbPxH, usableX + pcbPxW, usableY + pcbPxH, labelPCBW, { offset: 22, scale: scaleExport, color: '#E86A1A' });
-      drawCanvasDimension(ctx, usableX, usableY, usableX, usableY + pcbPxH, labelPCBH, { offset: -22, scale: scaleExport, color: '#E86A1A' });
+      annotationItems.push({ x1: usableX, y1: usableY + pcbPxH, x2: usableX + pcbPxW, y2: usableY + pcbPxH, text: labelPCBW, offset: 22, scale: scaleExport, color: '#E86A1A' });
+      annotationItems.push({ x1: usableX, y1: usableY, x2: usableX, y2: usableY + pcbPxH, text: labelPCBH, offset: -22, scale: scaleExport, color: '#E86A1A' });
 
-      // Draw spacing (if cols > 1 and spacing > 0)
+      // Spacing between PCBs (part-to-part distance)
       if (i.arrayCols > 1 && i.spacingX > 0) {
-        drawCanvasDimension(ctx, usableX + pcbPxW, usableY + pcbPxH / 2, usableX + pcbPxW + spacingPx, usableY + pcbPxH / 2, labelSpX, { offset: 0, scale: scaleExport, color: '#1A6FE8' });
+        annotationItems.push({ x1: usableX + pcbPxW, y1: usableY + pcbPxH / 2, x2: usableX + pcbPxW + spacingPx, y2: usableY + pcbPxH / 2, text: labelSpX, offset: 0, scale: scaleExport, color: '#1A6FE8' });
       }
 
-      // Draw rails (only when greater than 0)
+      // Outer Rails
       if (i.railLeft > 0) {
-        drawCanvasDimension(ctx, originX, usableY + pcbPxH / 2, usableX, usableY + pcbPxH / 2, labelRailLeft, { offset: 0, scale: scaleExport, color: '#A78BFA' });
+        annotationItems.push({ x1: originX, y1: usableY + pcbPxH / 2, x2: usableX, y2: usableY + pcbPxH / 2, text: labelRailLeft, offset: 0, scale: scaleExport, color: '#A78BFA' });
       }
       if (i.railRight > 0) {
         const rightStart = usableX + i.arrayCols * pcbPxW + (i.arrayCols - 1) * spacingPx;
-        drawCanvasDimension(ctx, rightStart, usableY + pcbPxH / 2, originX + pxW, usableY + pcbPxH / 2, labelRailRight, { offset: 0, scale: scaleExport, color: '#A78BFA' });
+        annotationItems.push({ x1: rightStart, y1: usableY + pcbPxH / 2, x2: originX + pxW, y2: usableY + pcbPxH / 2, text: labelRailRight, offset: 0, scale: scaleExport, color: '#A78BFA' });
       }
       if (i.railTop > 0) {
-        drawCanvasDimension(ctx, usableX + pcbPxW / 2, originY, usableX + pcbPxW / 2, usableY, labelRailTop, { offset: 0, scale: scaleExport, color: '#A78BFA' });
+        annotationItems.push({ x1: usableX + pcbPxW / 2, y1: originY, x2: usableX + pcbPxW / 2, y2: usableY, text: labelRailTop, offset: 0, scale: scaleExport, color: '#A78BFA' });
       }
       if (i.railBottom > 0) {
         const bottomStart = usableY + i.arrayRows * pcbPxH + (i.arrayRows - 1) * spacingPx;
-        drawCanvasDimension(ctx, usableX + pcbPxW / 2, bottomStart, usableX + pcbPxW / 2, originY + pxH, labelRailBottom, { offset: 0, scale: scaleExport, color: '#A78BFA' });
+        annotationItems.push({ x1: usableX + pcbPxW / 2, y1: bottomStart, x2: usableX + pcbPxW / 2, y2: originY + pxH, text: labelRailBottom, offset: 0, scale: scaleExport, color: '#A78BFA' });
       }
     }
+
+    const boardRects = [{ x: originX, y: originY, w: pxW, h: pxH }];
+    drawCanvasDimensionRefactored(ctx, annotationItems, boardRects, scaleExport);
     drawSaiWatermark(ctx, originX, originY, pxW, pxH);
   }
 
   function drawArrayPanelCanvasForExport(ctx, width, height, padding, panelW, panelH, mLeft, mRight, mTop, mBottom, i, res, cols, rows, rotated, spA, mouseBiteImg, pcbUnit) {
     const MM_PER_INCH = 25.4;
-    ctx.clearRect(0, 0, width, height);
+    const scaleExport = width / 480;
 
-    const scaleX = (width - padding * 2) / panelW;
-    const scaleY = (height - padding * 2) / panelH;
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+
+    if (panelW <= 0 || panelH <= 0) return;
+
+    // Center panel with margins for Left Y-axis & Bottom X-axis dimensions (matching Basic page)
+    const extraPadding = 52 * scaleExport;
+    const scaleX = (width - extraPadding * 2) / panelW;
+    const scaleY = (height - extraPadding * 2) / panelH;
     const scale = Math.min(scaleX, scaleY);
 
     const pxW = panelW * scale;
     const pxH = panelH * scale;
 
-    const originX = (width - pxW) / 2;
-    const originY = 6 * (width / 480);
+    const originX = (width - pxW) / 2 + 16 * scaleExport;
+    const originY = (height - pxH) / 2 - 16 * scaleExport;
 
     ctx.fillStyle = '#C1D99E';
     ctx.fillRect(originX, originY, pxW, pxH);
     ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 0.5 * (width / 480);
+    ctx.lineWidth = 0.5 * scaleExport;
     ctx.strokeRect(originX, originY, pxW, pxH);
 
     const mLpx = mLeft * scale;
@@ -3235,6 +3387,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const usableW = pxW - mLpx - mRpx;
     const usableH = pxH - mTpx - mBpx;
 
+    let startX = usableX, startY = usableY;
+    let gridW_px = 0, gridH_px = 0, spA_px = 0;
+
     if (usableW > 0 && usableH > 0 && cols > 0 && rows > 0) {
       const arrayW_mm = (i.partW * i.arrayCols) + (i.spacingX * (i.arrayCols - 1)) + i.railLeft + i.railRight;
       const arrayH_mm = (i.partH * i.arrayRows) + (i.spacingY * (i.arrayRows - 1)) + i.railTop + i.railBottom;
@@ -3242,15 +3397,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const gridW_mm = rotated ? arrayH_mm : arrayW_mm;
       const gridH_mm = rotated ? arrayW_mm : arrayH_mm;
 
-      const gridW_px = gridW_mm * (scale / MM_PER_INCH);
-      const gridH_px = gridH_mm * (scale / MM_PER_INCH);
-      const spA_px = spA * scale;
+      gridW_px = gridW_mm * (scale / MM_PER_INCH);
+      gridH_px = gridH_mm * (scale / MM_PER_INCH);
+      spA_px = spA * scale;
 
       const gridW_total_px = cols * gridW_px + (cols - 1) * spA_px;
       const gridH_total_px = rows * gridH_px + (rows - 1) * spA_px;
 
-      const startX = usableX + (usableW - gridW_total_px) / 2;
-      const startY = usableY + (usableH - gridH_total_px) / 2;
+      startX = usableX + (usableW - gridW_total_px) / 2;
+      startY = usableY + (usableH - gridH_total_px) / 2;
 
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
@@ -3268,14 +3423,18 @@ document.addEventListener('DOMContentLoaded', () => {
           const arrayW_px = arrayW_mm * scaleExportVal;
           const arrayH_px = arrayH_mm * scaleExportVal;
           ctx.translate(-arrayW_px / 2, -arrayH_px / 2);
-          drawArrayCanvasForExport(ctx, arrayW_px, arrayH_px, 0, i, arrayW_mm, arrayH_mm, mouseBiteImg, pcbUnit);
+          // Pass isChildInPanel = true so child arrays don't draw duplicate inner callouts!
+          drawArrayCanvasForExport(ctx, arrayW_px, arrayH_px, 0, i, arrayW_mm, arrayH_mm, mouseBiteImg, pcbUnit, true);
           ctx.restore();
+        }
       }
     }
-  }
 
-    // Auto-dimensioning for Array Panel Fit exports
-    const scaleExport = width / 480;
+    // Auto-dimensioning for Array Panel Fit exports (using Layout Pass & Collision Resolution)
+    function fmt2(val) {
+      if (isNaN(val)) return '0.00';
+      return Number(val).toFixed(2);
+    }
     
     function fmtIn(val) {
       return val % 1 === 0 ? val.toFixed(0) : val.toFixed(3).replace(/\.?0+$/, '');
@@ -3285,34 +3444,23 @@ document.addEventListener('DOMContentLoaded', () => {
       return val % 1 === 0 ? val.toFixed(0) : val.toFixed(1).replace(/\.?0+$/, '');
     }
 
-    const panelW_in = panelUnit === 'mm' ? panelW / MM_PER_INCH : panelW;
-    const panelH_in = panelUnit === 'mm' ? panelH / MM_PER_INCH : panelH;
-    const panelW_mm = panelUnit === 'mm' ? panelW : panelW * MM_PER_INCH;
-    const panelH_mm = panelUnit === 'mm' ? panelH : panelH * MM_PER_INCH;
+    const panelW_in = panelW;
+    const panelH_in = panelH;
+    const panelW_mm = panelW * MM_PER_INCH;
+    const panelH_mm = panelH * MM_PER_INCH;
 
-    const labelPanelW = `${fmtIn(panelW_in)}" (${fmtMM(panelW_mm)}mm)`;
-    const labelPanelH = `${fmtIn(panelH_in)}" (${fmtMM(panelH_mm)}mm)`;
+    const labelPanelW = `${fmt2(panelW_in)}" (${fmt2(panelW_mm)}mm)`;
+    const labelPanelH = `${fmt2(panelH_in)}" (${fmt2(panelH_mm)}mm)`;
 
-    // Draw Panel bounds
-    drawCanvasDimension(ctx, originX, originY, originX + pxW, originY, labelPanelW, { offset: -22, scale: scaleExport, color: '#0B0B0B' });
-    drawCanvasDimension(ctx, originX + pxW, originY, originX + pxW, originY + pxH, labelPanelH, { offset: 22, scale: scaleExport, color: '#0B0B0B' });
+    const annotationItems = [];
+
+    // Panel Outer Bounds (Left Y-axis & Bottom X-axis)
+    annotationItems.push({ x1: originX, y1: originY + pxH, x2: originX, y2: originY, text: labelPanelH, offset: -30, scale: scaleExport, color: '#0b0b0b' });
+    annotationItems.push({ x1: originX, y1: originY + pxH, x2: originX + pxW, y2: originY + pxH, text: labelPanelW, offset: 30, scale: scaleExport, color: '#0b0b0b' });
 
     if (usableW > 0 && usableH > 0 && cols > 0 && rows > 0) {
       const arrayW_mm = (i.partW * i.arrayCols) + (i.spacingX * (i.arrayCols - 1)) + i.railLeft + i.railRight;
       const arrayH_mm = (i.partH * i.arrayRows) + (i.spacingY * (i.arrayRows - 1)) + i.railTop + i.railBottom;
-
-      const gridW_mm = rotated ? arrayH_mm : arrayW_mm;
-      const gridH_mm = rotated ? arrayW_mm : arrayH_mm;
-
-      const gridW_px = gridW_mm * (scale / MM_PER_INCH);
-      const gridH_px = gridH_mm * (scale / MM_PER_INCH);
-      const spA_px = spA * scale;
-
-      const gridW_total_px = cols * gridW_px + (cols - 1) * spA_px;
-      const gridH_total_px = rows * gridH_px + (rows - 1) * spA_px;
-
-      const startX = usableX + (usableW - gridW_total_px) / 2;
-      const startY = usableY + (usableH - gridH_total_px) / 2;
 
       const arrayW_in = arrayW_mm / MM_PER_INCH;
       const arrayH_in = arrayH_mm / MM_PER_INCH;
@@ -3324,18 +3472,21 @@ document.addEventListener('DOMContentLoaded', () => {
         `${fmtMM(spA * MM_PER_INCH)}mm` : 
         `${fmtIn(spA)}"`;
 
-      // Draw Single Array Group dimensions (under the first row/col array)
-      drawCanvasDimension(ctx, startX, startY + gridH_px, startX + gridW_px, startY + gridH_px, labelArrayW, { offset: 22, scale: scaleExport, color: '#E86A1A' });
-      drawCanvasDimension(ctx, startX, startY, startX, startY + gridH_px, labelArrayH, { offset: -22, scale: scaleExport, color: '#E86A1A' });
+      // Single Array Group dimensions (no (typ))
+      annotationItems.push({ x1: startX, y1: startY + gridH_px, x2: startX + gridW_px, y2: startY + gridH_px, text: labelArrayW, offset: 22, scale: scaleExport, color: '#E86A1A' });
+      annotationItems.push({ x1: startX, y1: startY, x2: startX, y2: startY + gridH_px, text: labelArrayH, offset: -22, scale: scaleExport, color: '#E86A1A' });
 
-      // Draw spacing between arrays (if cols > 1 or rows > 1 and spA > 0)
+      // Spacing between arrays
       if (cols > 1 && spA > 0) {
-        drawCanvasDimension(ctx, startX + gridW_px, startY + gridH_px/2, startX + gridW_px + spA_px, startY + gridH_px/2, labelSpA, { offset: 0, scale: scaleExport, color: '#1A6FE8' });
+        annotationItems.push({ x1: startX + gridW_px, y1: startY + gridH_px / 2, x2: startX + gridW_px + spA_px, y2: startY + gridH_px / 2, text: labelSpA, offset: 0, scale: scaleExport, color: '#1A6FE8' });
       }
       if (rows > 1 && spA > 0) {
-        drawCanvasDimension(ctx, startX + gridW_px/2, startY + gridH_px, startX + gridW_px/2, startY + gridH_px + spA_px, labelSpA, { offset: 0, scale: scaleExport, color: '#1A6FE8' });
+        annotationItems.push({ x1: startX + gridW_px / 2, y1: startY + gridH_px, x2: startX + gridW_px / 2, y2: startY + gridH_px + spA_px, text: labelSpA, offset: 0, scale: scaleExport, color: '#1A6FE8' });
       }
     }
+
+    const boardRects = [{ x: originX, y: originY, w: pxW, h: pxH }];
+    drawCanvasDimensionRefactored(ctx, annotationItems, boardRects, scaleExport);
     drawSaiWatermark(ctx, originX, originY, pxW, pxH);
   }
 
