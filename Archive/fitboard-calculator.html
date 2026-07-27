@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FITBOARD — PCB Panelization Calculator</title>
+  <meta name="description" content="Calculate and optimize PCB panel layouts with Fitboard's Basic, Array, Round, and Panel Shear calculators.">
+  
+  <!-- Google Fonts: Bebas Neue, DM Sans, Inter (for button) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&family=Inter:wght@700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Brand Colors & CSS Variables */
+    :root {
+      --primary-yellow: #FFD600;
+      --nav-green: #ABD372;
+      --black: #0B0B0B;
+      --pcb-green: #008C4A;
+      --result-cards: #FFE873;
+      --bg-gradient-start: #FFD700;
+      --bg-gradient-end: #F3DA67;
+    }
+
+    /* Reset Styles */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #1A1A1A;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--black);
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    /* Frame Container (1512px wide, Desktop Only) */
+    .frame-container {
+      width: 1512px;
+      height: 982px;
+      position: relative;
+      background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+      overflow: hidden;
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Navbar (Height 80px, background #ABD372) */
+    .navbar {
+      width: 100%;
+      height: 80px;
+      background-color: var(--nav-green);
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      z-index: 10;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-logo {
+      position: absolute;
+      left: 50px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40px;
+      color: var(--black);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: transform 0.2s ease;
+    }
+    .nav-logo:hover {
+      transform: scale(1.05);
+    }
+
+    .back-btn {
+      position: absolute;
+      right: 50px;
+      width: 150px;
+      height: 34.5px;
+      background-color: var(--black);
+      color: #FFF;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+    .back-btn:hover {
+      background-color: #222;
+      transform: scale(1.03);
+    }
+
+    /* Left Sidebar (Width 185px, background #ABD372) */
+    .sidebar {
+      position: absolute;
+      left: 0;
+      top: 80px;
+      width: 185px;
+      height: 902px;
+      background-color: var(--nav-green);
+      display: flex;
+      flex-direction: column;
+      padding-top: 30px;
+      border-right: 1px solid rgba(0, 0, 0, 0.08);
+      z-index: 5;
+    }
+
+    .sidebar-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--black);
+      opacity: 0.6;
+      margin: 0 0 20px 24px;
+      letter-spacing: 0.05em;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 24px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--black);
+      cursor: pointer;
+      border-left: 4px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-item:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .sidebar-item.active {
+      background-color: var(--primary-yellow);
+      border-left: 4px solid var(--black);
+      font-weight: 700;
+    }
+
+    .sidebar-icon-img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
+
+    /* Main Area Container (Absolute layouts) */
+    .main-content {
+      position: absolute;
+      left: 185px;
+      top: 80px;
+      width: 1327px;
+      height: 902px;
+      transition: opacity 0.2s ease;
+    }
+
+    /* Calculator Header */
+    .calc-header {
+      position: absolute;
+      left: 101px; /* 286px from page edge (101 + 185) */
+      top: 58px; /* 138px from page top (58 + 80) */
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .calc-header-icon {
+      width: 42px;
+      height: 42px;
+      background-color: white;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .calc-header-icon img {
+      width: 22px;
+      height: 22px;
+    }
+
+    .calc-header-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .calc-header-subtitle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: var(--black);
+      opacity: 0.6;
+      margin-top: 2px;
+    }
+
+    /* Input Card (350x655px, left 286px, top 218px) */
+    .input-card {
+      position: absolute;
+      left: 101px; /* 286px from page edge (101 + 185) */
+      top: 138px; /* 218px from page top (138 + 80) */
+      width: 350px;
+      height: 655px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 9px 4px 4px rgba(0, 0, 0, 0.25);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .input-card-inner {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    /* Form Fields Styling */
+    .section-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--black);
+      opacity: 0.5;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-group label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--black);
+      opacity: 0.7;
+    }
+
+    .input-field {
+      width: 100%;
+      height: 38px;
+      border: 1px solid rgba(0,0,0,0.15);
+      border-radius: 6px;
+      padding: 0 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-field:focus {
+      border-color: var(--primary-yellow);
+      box-shadow: 0 0 0 3px rgba(255, 214, 0, 0.2);
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      margin: 16px 0;
+    }
+
+    .btn-calculate {
+      width: 100%;
+      height: 44px;
+      background-color: var(--primary-yellow);
+      border: none;
+      border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--black);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+      margin-top: 16px;
+    }
+    .btn-calculate:hover {
+      background-color: #E2BE00;
+      transform: scale(1.02);
+      box-shadow: 0 4px 12px rgba(255, 214, 0, 0.3);
+    }
+    .btn-calculate:active {
+      transform: scale(0.98);
+    }
+
+    .btn-reset {
+      width: 100%;
+      height: 44px;
+      background-color: white;
+      border: 1.5px solid var(--black);
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--black);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+      margin-top: 10px;
+    }
+    .btn-reset:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+      transform: scale(1.02);
+    }
+    .btn-reset:active {
+      transform: scale(0.98);
+    }
+
+    /* Results Area (left ~48% = 540px relative to main area) */
+    .results-section {
+      position: absolute;
+      left: 540px; /* ~48% from page edge (540 + 185 = 725px) */
+      top: 138px;
+      width: 485px;
+    }
+
+    .results-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      color: var(--black);
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Result Cards */
+    .cards-container {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .result-card {
+      width: 120px;
+      height: 80px;
+      background-color: var(--result-cards);
+      border: 1px solid rgba(154, 154, 154, 0.5);
+      border-radius: 19px;
+      box-shadow: 5px 5px 8.9px rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      opacity: 0; /* Animated in via JS */
+    }
+
+    .result-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 34px;
+      color: var(--black);
+      line-height: 1;
+    }
+
+    .result-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      color: var(--black);
+      opacity: 0.6;
+      margin-top: 4px;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    /* Canvas Preview Section */
+    .preview-container {
+      margin-bottom: 20px;
+    }
+
+    .preview-canvas-wrapper {
+      position: relative;
+      width: 304px;
+      height: 412px;
+      border-radius: 8px;
+      overflow: hidden;
+      filter: drop-shadow(12px 12px 12px rgba(0, 0, 0, 0.25));
+    }
+
+    #previewCanvas {
+      width: 100%;
+      height: 100%;
+      background-color: #C1D99E;
+      display: block;
+    }
+
+    /* Breakdown Table (304px width) */
+    .breakdown-table {
+      width: 304px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      opacity: 0.9;
+      border-collapse: collapse;
+      margin-top: 14px;
+      background: rgba(255, 255, 255, 0.35);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .breakdown-table tr {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .breakdown-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .breakdown-table td {
+      padding: 8px 12px;
+    }
+
+    .breakdown-table td.lbl {
+      font-weight: 500;
+      opacity: 0.65;
+    }
+
+    .breakdown-table td.val {
+      font-weight: 700;
+      text-align: right;
+    }
+
+    /* Other Sizes Panel (240x580px, left 1210px, top 320px) */
+    .other-sizes-panel {
+      position: absolute;
+      left: 1025px; /* 1210px from page edge (1025 + 185) */
+      top: 240px; /* 320px from top (240 + 80) */
+      width: 240px;
+      height: 580px;
+      background-color: var(--result-cards);
+      border-radius: 18px;
+      box-shadow: 4px 6px 6px rgba(0, 0, 0, 0.25);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .other-sizes-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      color: var(--black);
+      margin-bottom: 16px;
+      letter-spacing: 0.05em;
+    }
+
+    .other-sizes-list {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+
+    .size-option {
+      background: rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(0,0,0,0.05);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .size-option:hover {
+      background-color: rgba(255, 255, 255, 0.7);
+      transform: scale(1.02);
+      border-color: var(--pcb-green);
+    }
+
+    .mini-canvas-container {
+      width: 52px;
+      height: 40px;
+      border: 2px solid #006536;
+      border-radius: 5px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .mini-canvas {
+      width: 100%;
+      height: 100%;
+      background-color: #C1D99E;
+      display: block;
+    }
+
+    .size-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .size-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      color: var(--black);
+    }
+
+    .size-parts {
+      font-size: 11px;
+      color: rgba(0, 0, 0, 0.5);
+      margin-top: 2px;
+    }
+
+    .size-util {
+      font-size: 11px;
+      color: #006536;
+      font-weight: 700;
+      margin-top: 1px;
+    }
+
+    /* Result Animation Keyframes */
+    @keyframes cardPopUp {
+      0% {
+        opacity: 0;
+        transform: translateY(15px) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="frame-container">
+    
+    <!-- Navbar -->
+    <nav class="navbar" role="navigation">
+      <a href="fitboard.html" class="nav-logo">FITBOARD</a>
+      <a href="fitboard.html" class="back-btn">◀ Back to Home</a>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-label">CALCULATORS</div>
+      
+      <div class="sidebar-item active" id="sb-basic" onclick="switchCalculator('basic')">
+        <img src="Assets/basic-icon.svg" class="sidebar-icon-img" alt="Basic Icon">
+        Basic
+      </div>
+      <div class="sidebar-item" id="sb-array" onclick="switchCalculator('array')">
+        <img src="Assets/array-icon.svg" class="sidebar-icon-img" alt="Array Icon">
+        Array
+      </div>
+      <div class="sidebar-item" id="sb-round" onclick="switchCalculator('round')">
+        <img src="Assets/round-icon.svg" class="sidebar-icon-img" alt="Round Part Icon">
+        Round Part
+      </div>
+      <div class="sidebar-item" id="sb-shear" onclick="switchCalculator('shear')">
+        <img src="Assets/shear-icon.svg" class="sidebar-icon-img" alt="Panel Shear Icon">
+        Panel Shear
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content" id="mainArea">
+      
+      <!-- Calculator Header -->
+      <div class="calc-header">
+        <div class="calc-header-icon">
+          <img src="Assets/basic-icon.svg" id="headerIcon" alt="Calculator Icon">
+        </div>
+        <div>
+          <h2 class="calc-header-title" id="headerTitle">Basic calculator</h2>
+          <p class="calc-header-subtitle" id="headerSubtitle">Calculate how many individual parts fit on a panel</p>
+        </div>
+      </div>
+
+      <!-- Input Card -->
+      <div class="input-card">
+        <div class="input-card-inner">
+          <form id="calcForm" onsubmit="event.preventDefault();">
+            <!-- Dynamic Fields Container -->
+            <div id="fieldsContainer">
+              <!-- Fields injected by JS -->
+            </div>
+            
+            <button class="btn-calculate" type="button" onclick="calculate()">Calculate →</button>
+            <button class="btn-reset" type="button" onclick="resetCalculator()">Reset ↺</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Results Area -->
+      <div class="results-section">
+        <div class="results-label">RESULT:</div>
+        
+        <div class="cards-container">
+          <div class="result-card" id="cardPanel">
+            <span class="result-val" id="valPanelSize">12"×18"</span>
+            <span class="result-sub">Panel</span>
+          </div>
+          <div class="result-card" id="cardUnits">
+            <span class="result-val" id="valUnits">21</span>
+            <span class="result-sub" id="lblUnits">Units per panel</span>
+          </div>
+          <div class="result-card" id="cardUtil">
+            <span class="result-val" id="valUtil">75%</span>
+            <span class="result-sub">Utilization</span>
+          </div>
+        </div>
+
+        <div class="preview-container">
+          <div class="results-label">PREVIEW:</div>
+          
+          <div class="preview-canvas-wrapper">
+            <canvas id="previewCanvas" width="304" height="412"></canvas>
+          </div>
+        </div>
+
+        <!-- Breakdown Table -->
+        <table class="breakdown-table" id="breakdownTable">
+          <!-- Injected dynamically by JS -->
+        </table>
+      </div>
+
+      <!-- Other Sizes Panel -->
+      <div class="other-sizes-panel" id="otherSizesPanel">
+        <div class="other-sizes-title">Other sizes:</div>
+        <div class="other-sizes-list" id="otherSizesList">
+          <!-- Injected dynamically by JS -->
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // State management for currently selected calculator
+    let currentCalc = 'basic';
+    let animationFrameId = null;
+
+    // Default configuration schemas for each calculator
+    const calcConfig = {
+      basic: {
+        title: 'Basic calculator',
+        subtitle: 'Calculate how many individual parts fit on a panel',
+        icon: 'Assets/basic-icon.svg',
+        fields: [
+          { type: 'section', label: 'PART PARAMETERS' },
+          { type: 'row', fields: [
+            { id: 'partW', label: 'Part Width (mm)', value: 85 },
+            { id: 'partH', label: 'Part Height (mm)', value: 55 }
+          ]},
+          { type: 'row', fields: [
+            { id: 'spacingX', label: 'Spacing X (mm)', value: 3 },
+            { id: 'spacingY', label: 'Spacing Y (mm)', value: 3 }
+          ]},
+          { type: 'divider' },
+          { type: 'section', label: 'PANEL SIZE' },
+          { type: 'row', fields: [
+            { id: 'panelW', label: 'Panel Width (mm)', value: 450 },
+            { id: 'panelH', label: 'Panel Height (mm)', value: 300 }
+          ]},
+          { type: 'divider' },
+          { type: 'section', label: 'MARGINS' },
+          { type: 'row', fields: [
+            { id: 'mLeft', label: 'Left', value: 85 },
+            { id: 'mRight', label: 'Right', value: 85 }
+          ]},
+          { type: 'row', fields: [
+            { id: 'mTop', label: 'Top', value: 3 },
+            { id: 'mBottom', label: 'Bottom', value: 3 }
+          ]}
+        ]
+      },
+      array: {
+        title: 'Array calculator',
+        subtitle: 'Calculate arrays of parts fitting on a panel',
+        icon: 'Assets/array-icon.svg',
+        fields: [
+          { type: 'section', label: 'INDIVIDUAL PART' },
+          { type: 'row', fields: [
+            { id: 'partW', label: 'Part Width (mm)', value: 50 },
+            { id: 'partH', label: 'Part Height (mm)', value: 40 }
+          ]},
+          { type: 'row', fields: [
+            { id: 'spacingX', label: 'Spacing X (mm)', value: 2 },
+            { id: 'spacingY', label: 'Spacing Y (mm)', value: 2 }
+          ]},
+          { type: 'divider' },
+          { type: 'section', label: 'ARRAY CONFIG' },
+          { type: 'row', fields: [
+            { id: 'arrCols', label: 'Array Columns', value: 2 },
+            { id: 'arrRows', label: 'Array Rows', value: 3 }
+          ]},
+          { type: 'row', fields: [
+            { id: 'arrGapX', label: 'Array Gap X (mm)', value: 4 },
+            { id: 'arrGapY', label: 'Array Gap Y (mm)', value: 4 }
+          ]},
+          { type: 'divider' },
+          { type: 'section', label: 'PANEL' },
+          { type: 'row', fields: [
+            { id: 'panelW', label: 'Panel Width (mm)', value: 450 },
+            { id: 'panelH', label: 'Panel Height (mm)', value: 300 }
+          ]},
+          { type: 'row', fields: [
+            { id: 'mLeft', label: 'Left Margin', value: 10 },
+            { id: 'mTop', label: 'Top Margin', value: 10 }
+          ]}
+        ]
+      },
+      round: {
+        title: 'Round part calculator',
+        subtitle: 'Calculate packing of circles on a rectangular panel',
+        icon: 'Assets/round-icon.svg',
+        fields: [
+          { type: 'section', label: 'PART PARAMETERS' },
+          { type: 'row', fields: [
+            { id: 'partD', label: 'Part Diameter (mm)', value: 50 },
+            { id: 'spacing', label: 'Spacing (mm)', value: 3 }
+          ]},
+          { type: 'divider' },
+          { type: 'section', label: 'PANEL SIZE' },
+          { type: 'row', fields: [
+            { id: 'panelW', label: 'Panel Width (mm)', value: 450 },
+            { id: 'panelH', label: 'Panel Height (mm)', value: 300 }
+          ]},
+          { type: 'divider' },
+          { type: 'section', label: 'MARGINS' },
+          { type: 'row', fields: [
+            { id: 'mLeft', label: 'Left / Right Margin', value: 8 },
+            { id: 'mTop', label: 'Top / Bottom Margin', value: 8 }
+          ]}
+        ]
+      },
+      shear: {
+        title: 'Panel Shear calculator',
+        subtitle: 'Calculate panel cuts from a master sheet',
+        icon: 'Assets/shear-icon.svg',
+        fields: [
+          { type: 'section', label: 'MASTER SHEET SIZE' },
+          { type: 'row', fields: [
+            { id: 'sheetW', label: 'Sheet Width (mm)', value: 1000 },
+            { id: 'sheetH', label: 'Sheet Height (mm)', value: 1000 }
+          ]},
+          { type: 'divider' },
+          { type: 'section', label: 'PANEL SIZE' },
+          { type: 'row', fields: [
+            { id: 'panelW', label: 'Panel Width (mm)', value: 450 },
+            { id: 'panelH', label: 'Panel Height (mm)', value: 300 }
+          ]},
+          { type: 'divider' },
+          { type: 'section', label: 'SHEARING MARGINS' },
+          { type: 'row', fields: [
+            { id: 'edgeTrim', label: 'Edge Trim (mm)', value: 10 },
+            { id: 'gapX', label: 'Blade Gap X (mm)', value: 5 }
+          ]},
+          { type: 'row', fields: [
+            { id: 'gapY', label: 'Blade Gap Y (mm)', value: 5 }
+          ]}
+        ]
+      }
+    };
+
+    // Initialize Calculator fields on load
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check query parameter to see if we should direct route to a calculator
+      const urlParams = new URLSearchParams(window.location.search);
+      const type = urlParams.get('type');
+      if (type && calcConfig[type]) {
+        switchCalculator(type);
+      } else {
+        switchCalculator('basic');
+      }
+
+      // Initial visual animation matching Figma default design spec
+      // 12"x18", 21 units, 75% utilization, 3x7 grid layout
+      const isInitial = !type || type === 'basic';
+      if (isInitial) {
+        setMockInitialState();
+      }
+    });
+
+    function setMockInitialState() {
+      document.getElementById('valPanelSize').textContent = '12"×18"';
+      document.getElementById('valUnits').textContent = '21';
+      document.getElementById('valUtil').textContent = '75%';
+      
+      // Draw 3x7 grid on preview
+      const canvas = document.getElementById('previewCanvas');
+      const ctx = canvas.getContext('2d');
+      drawPcbPanelGrid(ctx, 3, 7, 304, 412, 12, 4);
+
+      // Populate breakdown table
+      populateBreakdownTable({
+        'Part size': '85mm × 55mm',
+        'Parts': '3 × 7 (21 total)',
+        'Utilization': '75%',
+        'Left margin': '3mm',
+        'Right margin': '3mm',
+        'Top margin': '3mm',
+        'Bottom margin': '3mm'
+      });
+
+      // Animate result cards entrance
+      animateResultCards();
+
+      // Render standard other sizes
+      renderOtherSizesList(85, 55, 3, 3, 3, 3, 3, 3);
+    }
+
+    function switchCalculator(calcType) {
+      currentCalc = calcType;
+      
+      // Update sidebar state
+      document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+      document.getElementById(`sb-${calcType}`).classList.add('active');
+
+      // Main content smooth transition
+      const main = document.getElementById('mainArea');
+      main.style.opacity = 0;
+
+      setTimeout(() => {
+        // Update header details
+        document.getElementById('headerIcon').src = calcConfig[calcType].icon;
+        document.getElementById('headerTitle').textContent = calcConfig[calcType].title;
+        document.getElementById('headerSubtitle').textContent = calcConfig[calcType].subtitle;
+
+        if (calcType === 'shear') {
+          document.getElementById('lblUnits').textContent = 'Panels per sheet';
+        } else {
+          document.getElementById('lblUnits').textContent = 'Units per panel';
+        }
+
+        // Render fields
+        renderFields(calcConfig[calcType].fields);
+        
+        main.style.opacity = 1;
+
+        // Perform calculation
+        calculate();
+      }, 200);
+    }
+
+    function renderFields(fields) {
+      const container = document.getElementById('fieldsContainer');
+      container.innerHTML = '';
+
+      fields.forEach(field => {
+        if (field.type === 'section') {
+          const el = document.createElement('div');
+          el.className = 'section-label';
+          el.textContent = field.label;
+          container.appendChild(el);
+        } else if (field.type === 'divider') {
+          const el = document.createElement('hr');
+          el.className = 'divider';
+          container.appendChild(el);
+        } else if (field.type === 'row') {
+          const row = document.createElement('div');
+          row.className = 'form-row';
+          
+          field.fields.forEach(f => {
+            const fg = document.createElement('div');
+            fg.className = 'field-group';
+            
+            const label = document.createElement('label');
+            label.setAttribute('for', f.id);
+            label.textContent = f.label;
+            
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.className = 'input-field';
+            input.id = f.id;
+            input.value = f.value;
+            // Redraw/recalculate on input change
+            input.addEventListener('input', () => {
+              calculate();
+            });
+
+            fg.appendChild(label);
+            fg.appendChild(input);
+            row.appendChild(fg);
+          });
+          container.appendChild(row);
+        }
+      });
+    }
+
+    function getVal(id) {
+      const el = document.getElementById(id);
+      return el ? parseFloat(el.value) || 0 : 0;
+    }
+
+    function setVal(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    }
+
+    function resetCalculator() {
+      // Reload defaults
+      renderFields(calcConfig[currentCalc].fields);
+      calculate();
+    }
+
+    function animateResultCards() {
+      const cards = ['cardPanel', 'cardUnits', 'cardUtil'];
+      cards.forEach((id, i) => {
+        const el = document.getElementById(id);
+        el.style.animation = 'none';
+        void el.offsetHeight; // Reflow
+        el.style.animation = `cardPopUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.08}s both`;
+      });
+    }
+
+    function calculate() {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+      const canvas = document.getElementById('previewCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (currentCalc === 'basic') {
+        runBasicCalc(ctx);
+      } else if (currentCalc === 'array') {
+        runArrayCalc(ctx);
+      } else if (currentCalc === 'round') {
+        runRoundCalc(ctx);
+      } else if (currentCalc === 'shear') {
+        runShearCalc(ctx);
+      }
+
+      animateResultCards();
+    }
+
+    // --- BASIC CALCULATOR MATH & DRAW ---
+    function runBasicCalc(ctx) {
+      const partW = getVal('partW');
+      const partH = getVal('partH');
+      const spacingX = getVal('spacingX');
+      const spacingY = getVal('spacingY');
+      const panelW = getVal('panelW');
+      const panelH = getVal('panelH');
+      const mL = getVal('mLeft');
+      const mR = getVal('mRight');
+      const mT = getVal('mTop');
+      const mB = getVal('mBottom');
+
+      // Formula: cols = floor((panelW - leftMargin - rightMargin + spacingX) / (partW + spacingX))
+      const usableW = panelW - mL - mR;
+      const usableH = panelH - mT - mB;
+
+      let cols = 0, rows = 0, total = 0, utilization = 0;
+      if (usableW > 0 && usableH > 0 && partW > 0 && partH > 0) {
+        cols = Math.floor((usableW + spacingX) / (partW + spacingX));
+        rows = Math.floor((usableH + spacingY) / (partH + spacingY));
+        cols = Math.max(0, cols);
+        rows = Math.max(0, rows);
+        total = cols * rows;
+        utilization = Math.round(((total * partW * partH) / (panelW * panelH)) * 100);
+      }
+
+      // Convert mm panel dimensions to standard inches label
+      const inW = Math.round(panelW / 25.4);
+      const inH = Math.round(panelH / 25.4);
+
+      document.getElementById('valPanelSize').textContent = `${inH}"×${inW}"`;
+      document.getElementById('valUnits').textContent = total;
+      document.getElementById('valUtil').textContent = `${utilization}%`;
+
+      // Draw panel grid progressively
+      drawPcbPanelGridProgressive(ctx, cols, rows, 304, 412, 12, 4);
+
+      // Breakdown table
+      populateBreakdownTable({
+        'Part size': `${partW}mm × ${partH}mm`,
+        'Parts': `${cols} × ${rows} (${total} total)`,
+        'Utilization': `${utilization}%`,
+        'Left margin': `${mL}mm`,
+        'Right margin': `${mR}mm`,
+        'Top margin': `${mT}mm`,
+        'Bottom margin': `${mB}mm`
+      });
+
+      // Render other sizes list
+      renderOtherSizesList(partW, partH, spacingX, spacingY, mL, mR, mT, mB);
+    }
+
+    // --- ARRAY CALCULATOR MATH & DRAW ---
+    function runArrayCalc(ctx) {
+      const partW = getVal('partW');
+      const partH = getVal('partH');
+      const spacingX = getVal('spacingX');
+      const spacingY = getVal('spacingY');
+      const arrCols = getVal('arrCols');
+      const arrRows = getVal('arrRows');
+      const arrGapX = getVal('arrGapX');
+      const arrGapY = getVal('arrGapY');
+      const panelW = getVal('panelW');
+      const panelH = getVal('panelH');
+      const mL = getVal('mLeft');
+      const mT = getVal('mTop');
+
+      // Calculate single array cluster dimensions
+      const arrayW = arrCols * partW + (arrCols - 1) * spacingX;
+      const arrayH = arrRows * partH + (arrRows - 1) * spacingY;
+
+      // Fit array cluster onto panel with margins (mirrored left/right and top/bottom)
+      const usableW = panelW - 2 * mL;
+      const usableH = panelH - 2 * mT;
+
+      let cols = 0, rows = 0, totalClusters = 0, totalParts = 0, utilization = 0;
+      if (usableW > 0 && usableH > 0 && arrayW > 0 && arrayH > 0) {
+        cols = Math.floor((usableW + arrGapX) / (arrayW + arrGapX));
+        rows = Math.floor((usableH + arrGapY) / (arrayH + arrGapY));
+        cols = Math.max(0, cols);
+        rows = Math.max(0, rows);
+        totalClusters = cols * rows;
+        totalParts = totalClusters * (arrCols * arrRows);
+        utilization = Math.round(((totalParts * partW * partH) / (panelW * panelH)) * 100);
+      }
+
+      const inW = Math.round(panelW / 25.4);
+      const inH = Math.round(panelH / 25.4);
+
+      document.getElementById('valPanelSize').textContent = `${inH}"×${inW}"`;
+      document.getElementById('valUnits').textContent = totalParts;
+      document.getElementById('valUtil').textContent = `${utilization}%`;
+
+      // Draw arrays on canvas
+      drawArrayPanelProgressive(ctx, cols, rows, arrCols, arrRows, 304, 412, 12);
+
+      populateBreakdownTable({
+        'Array size': `${Math.round(arrayW)}mm × ${Math.round(arrayH)}mm`,
+        'Array Grid': `${cols} × ${rows} (${totalClusters} arrays)`,
+        'Parts per Array': `${arrCols} × ${arrRows} = ${arrCols * arrRows}`,
+        'Total Parts': `${totalParts} units`,
+        'Utilization': `${utilization}%`,
+        'Panel Margins': `${mL}mm`,
+        'Internal Spacing': `${spacingX}mm`
+      });
+
+      // Simple empty or placeholder other sizes list for Array calculator
+      document.getElementById('otherSizesList').innerHTML = '<div style="font-size:11px; opacity:0.6; text-align:center; padding-top:20px;">Other sizes calculations are currently optimized for standard part panelization.</div>';
+    }
+
+    // --- ROUND PART CALCULATOR MATH & DRAW ---
+    function runRoundCalc(ctx) {
+      const partD = getVal('partD');
+      const spacing = getVal('spacing');
+      const panelW = getVal('panelW');
+      const panelH = getVal('panelH');
+      const mL = getVal('mLeft');
+      const mT = getVal('mTop');
+
+      const usableW = panelW - 2 * mL;
+      const usableH = panelH - 2 * mT;
+
+      let bestType = 'square';
+      let bestTotal = 0;
+      let squareTotal = 0;
+      let hexTotal = 0;
+      let hexCols1 = 0, hexCols2 = 0, hexRows = 0;
+      let sqCols = 0, sqRows = 0;
+
+      if (usableW > 0 && usableH > 0 && partD > 0) {
+        // 1. Square Grid calculation
+        sqCols = Math.floor((usableW + spacing) / (partD + spacing));
+        sqRows = Math.floor((usableH + spacing) / (partD + spacing));
+        sqCols = Math.max(0, sqCols);
+        sqRows = Math.max(0, sqRows);
+        squareTotal = sqCols * sqRows;
+
+        // 2. Hexagonal Grid calculation
+        const dy = (partD + spacing) * 0.866; // cos(30 deg)
+        hexRows = Math.floor((usableH - partD) / dy) + 1;
+        hexRows = Math.max(0, hexRows);
+
+        if (hexRows >= 1) {
+          hexCols1 = Math.floor((usableW + spacing) / (partD + spacing));
+          hexCols2 = Math.floor((usableW - (partD / 2) + spacing) / (partD + spacing));
+          hexCols1 = Math.max(0, hexCols1);
+          hexCols2 = Math.max(0, hexCols2);
+
+          const oddRows = Math.ceil(hexRows / 2);
+          const evenRows = Math.floor(hexRows / 2);
+          hexTotal = oddRows * hexCols1 + evenRows * hexCols2;
+        }
+
+        if (hexTotal > squareTotal) {
+          bestType = 'hex';
+          bestTotal = hexTotal;
+        } else {
+          bestType = 'square';
+          bestTotal = squareTotal;
+        }
+      }
+
+      const areaPart = Math.PI * Math.pow(partD / 2, 2);
+      const utilization = Math.round(((bestTotal * areaPart) / (panelW * panelH)) * 100);
+
+      const inW = Math.round(panelW / 25.4);
+      const inH = Math.round(panelH / 25.4);
+
+      document.getElementById('valPanelSize').textContent = `${inH}"×${inW}"`;
+      document.getElementById('valUnits').textContent = bestTotal;
+      document.getElementById('valUtil').textContent = `${utilization}%`;
+
+      // Draw round parts
+      drawRoundPanelProgressive(ctx, bestType, sqCols, sqRows, hexCols1, hexCols2, hexRows, partD, spacing, usableW, usableH, mL, mT, 304, 412, 12);
+
+      populateBreakdownTable({
+        'Part Diameter': `${partD}mm`,
+        'Packing Layout': bestType === 'hex' ? 'Hexagonal Packing' : 'Square Grid Packing',
+        'Total Parts': `${bestTotal} circular parts`,
+        'Utilization': `${utilization}%`,
+        'Hex layout row counts': bestType === 'hex' ? `Odd rows: ${hexCols1}, Even rows: ${hexCols2}` : 'N/A',
+        'Side Margins': `${mL}mm`,
+        'Spacing': `${spacing}mm`
+      });
+
+      document.getElementById('otherSizesList').innerHTML = '<div style="font-size:11px; opacity:0.6; text-align:center; padding-top:20px;">Circular packing previews are rendered dynamically on the panel container above.</div>';
+    }
+
+    // --- PANEL SHEAR CALCULATOR MATH & DRAW ---
+    function runShearCalc(ctx) {
+      const sheetW = getVal('sheetW');
+      const sheetH = getVal('sheetH');
+      const panelW = getVal('panelW');
+      const panelH = getVal('panelH');
+      const edgeTrim = getVal('edgeTrim');
+      const gapX = getVal('gapX');
+      const gapY = getVal('gapY');
+
+      const usableW = sheetW - 2 * edgeTrim;
+      const usableH = sheetH - 2 * edgeTrim;
+
+      let cols = 0, rows = 0, total = 0, utilization = 0;
+      if (usableW > 0 && usableH > 0 && panelW > 0 && panelH > 0) {
+        // Normal orientation
+        const colsNormal = Math.floor((usableW + gapX) / (panelW + gapX));
+        const rowsNormal = Math.floor((usableH + gapY) / (panelH + gapY));
+        const totalNormal = Math.max(0, colsNormal) * Math.max(0, rowsNormal);
+
+        // Rotated 90 degrees orientation
+        const colsRotated = Math.floor((usableW + gapX) / (panelH + gapX));
+        const rowsRotated = Math.floor((usableH + gapY) / (panelW + gapY));
+        const totalRotated = Math.max(0, colsRotated) * Math.max(0, rowsRotated);
+
+        if (totalRotated > totalNormal) {
+          cols = colsRotated;
+          rows = rowsRotated;
+          total = totalRotated;
+          utilization = Math.round(((total * panelW * panelH) / (sheetW * sheetH)) * 100);
+        } else {
+          cols = colsNormal;
+          rows = rowsNormal;
+          total = totalNormal;
+          utilization = Math.round(((total * panelW * panelH) / (sheetW * sheetH)) * 100);
+        }
+      }
+
+      document.getElementById('valPanelSize').textContent = `${Math.round(sheetH/10)}×${Math.round(sheetW/10)}cm`;
+      document.getElementById('valUnits').textContent = total;
+      document.getElementById('valUtil').textContent = `${utilization}%`;
+
+      // Draw sheared sheet
+      drawShearSheetProgressive(ctx, cols, rows, 304, 412, 10);
+
+      populateBreakdownTable({
+        'Master Sheet Size': `${sheetW}mm × ${sheetH}mm`,
+        'Panel Size': `${panelW}mm × ${panelH}mm`,
+        'Panels Yield': `${total} panels`,
+        'Grid Arrangement': `${cols} × ${rows}`,
+        'Material Util': `${utilization}%`,
+        'Edge Trim margins': `${edgeTrim}mm`,
+        'Saw Blade width': `${gapX}mm`
+      });
+
+      document.getElementById('otherSizesList').innerHTML = '<div style="font-size:11px; opacity:0.6; text-align:center; padding-top:20px;">Blade shearing yields are calculated on standard 1000mm master raw sheets.</div>';
+    }
+
+    // --- OTHER SIZES RENDERER (BASIC CALC ONLY) ---
+    function renderOtherSizesList(partW, partH, spacingX, spacingY, mL, mR, mT, mB) {
+      const sizes = [
+        { label: '14"×16"', w: 356, h: 406 },
+        { label: '16"×21"', w: 406, h: 533 },
+        { label: '18"×24"', w: 457, h: 610 },
+        { label: '21"×24"', w: 533, h: 610 }
+      ];
+
+      const listContainer = document.getElementById('otherSizesList');
+      listContainer.innerHTML = '';
+
+      sizes.forEach((s, idx) => {
+        // Calculate details
+        const usableW = s.w - mL - mR;
+        const usableH = s.h - mT - mB;
+        let cols = 0, rows = 0, total = 0, utilization = 0;
+        if (usableW > 0 && usableH > 0 && partW > 0 && partH > 0) {
+          cols = Math.floor((usableW + spacingX) / (partW + spacingX));
+          rows = Math.floor((usableH + spacingY) / (partH + spacingY));
+          cols = Math.max(0, cols);
+          rows = Math.max(0, rows);
+          total = cols * rows;
+          utilization = Math.round(((total * partW * partH) / (s.w * s.h)) * 100);
+        }
+
+        // Create size card element
+        const opt = document.createElement('div');
+        opt.className = 'size-option';
+        opt.onclick = () => {
+          setVal('panelW', s.w);
+          setVal('panelH', s.h);
+          calculate();
+        };
+
+        const canvasWrapper = document.createElement('div');
+        canvasWrapper.className = 'mini-canvas-container';
+        
+        const canvas = document.createElement('canvas');
+        canvas.className = 'mini-canvas';
+        canvas.width = 52;
+        canvas.height = 40;
+        
+        canvasWrapper.appendChild(canvas);
+        opt.appendChild(canvasWrapper);
+
+        const info = document.createElement('div');
+        info.className = 'size-info';
+        
+        const label = document.createElement('span');
+        label.className = 'size-label';
+        label.textContent = s.label;
+        
+        const partsText = document.createElement('span');
+        partsText.className = 'size-parts';
+        partsText.textContent = `${total} Parts`;
+
+        const utilText = document.createElement('span');
+        utilText.className = 'size-util';
+        utilText.textContent = `${utilization}% Utilization`;
+
+        info.appendChild(label);
+        info.appendChild(partsText);
+        info.appendChild(utilText);
+        opt.appendChild(info);
+        
+        listContainer.appendChild(opt);
+
+        // Draw mini canvas grid
+        const miniCtx = canvas.getContext('2d');
+        drawMiniPanelGrid(miniCtx, cols, rows);
+      });
+    }
+
+    // --- TABLE POPULATOR ---
+    function populateBreakdownTable(data) {
+      const tbl = document.getElementById('breakdownTable');
+      tbl.innerHTML = '';
+      for (const [key, value] of Object.entries(data)) {
+        const row = document.createElement('tr');
+        const cellKey = document.createElement('td');
+        cellKey.className = 'lbl';
+        cellKey.textContent = key;
+        
+        const cellVal = document.createElement('td');
+        cellVal.className = 'val';
+        cellVal.textContent = value;
+        
+        row.appendChild(cellKey);
+        row.appendChild(cellVal);
+        tbl.appendChild(row);
+      }
+    }
+
+    // --- CANVAS GRAPHICS ---
+    function drawPcbPanelGrid(ctx, cols, rows, w, h, pad, gap) {
+      // Draw PCB Green background
+      ctx.fillStyle = '#006536';
+      ctx.fillRect(0, 0, w, h);
+      
+      // Draw internal substrate boundary
+      ctx.fillStyle = '#C1D99E';
+      ctx.fillRect(pad, pad, w - 2 * pad, h - 2 * pad);
+
+      // Substrate mounting holes
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      const holes = [
+        [pad + 6, pad + 6],
+        [w - pad - 6, pad + 6],
+        [pad + 6, h - pad - 6],
+        [w - pad - 6, h - pad - 6]
+      ];
+      holes.forEach(pt => {
+        ctx.beginPath();
+        ctx.arc(pt[0], pt[1], 3.5, 0, 2 * Math.PI);
+        ctx.fill();
+      });
+
+      if (cols === 0 || rows === 0) return;
+
+      const innerW = w - 2 * pad;
+      const innerH = h - 2 * pad;
+      const cellW = (innerW - (cols - 1) * gap) / cols;
+      const cellH = (innerH - (rows - 1) * gap) / rows;
+
+      ctx.fillStyle = '#008C4A';
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const x = pad + c * (cellW + gap);
+          const y = pad + r * (cellH + gap);
+          
+          // Draw card with rounded corners
+          ctx.beginPath();
+          ctx.roundRect(x, y, cellW, cellH, 3);
+          ctx.fill();
+        }
+      }
+    }
+
+    function drawPcbPanelGridProgressive(ctx, cols, rows, w, h, pad, gap) {
+      // Draw background layers instantly
+      ctx.fillStyle = '#006536';
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#C1D99E';
+      ctx.fillRect(pad, pad, w - 2 * pad, h - 2 * pad);
+
+      // Substrate mounting holes
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      const holes = [
+        [pad + 6, pad + 6],
+        [w - pad - 6, pad + 6],
+        [pad + 6, h - pad - 6],
+        [w - pad - 6, h - pad - 6]
+      ];
+      holes.forEach(pt => {
+        ctx.beginPath();
+        ctx.arc(pt[0], pt[1], 3.5, 0, 2 * Math.PI);
+        ctx.fill();
+      });
+
+      if (cols === 0 || rows === 0) return;
+
+      const innerW = w - 2 * pad;
+      const innerH = h - 2 * pad;
+      const cellW = (innerW - (cols - 1) * gap) / cols;
+      const cellH = (innerH - (rows - 1) * gap) / rows;
+
+      let current = 0;
+      const total = cols * rows;
+
+      function step() {
+        if (current >= total) return;
+        const batchSize = Math.max(1, Math.floor(total / 20));
+        ctx.fillStyle = '#008C4A';
+        
+        for (let i = 0; i < batchSize && current < total; i++) {
+          const c = current % cols;
+          const r = Math.floor(current / cols);
+          const x = pad + c * (cellW + gap);
+          const y = pad + r * (cellH + gap);
+          
+          ctx.beginPath();
+          ctx.roundRect(x, y, cellW, cellH, 3);
+          ctx.fill();
+          current++;
+        }
+        animationFrameId = requestAnimationFrame(step);
+      }
+      step();
+    }
+
+    function drawArrayPanelProgressive(ctx, cols, rows, arrCols, arrRows, w, h, pad) {
+      ctx.fillStyle = '#006536';
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#C1D99E';
+      ctx.fillRect(pad, pad, w - 2 * pad, h - 2 * pad);
+
+      if (cols === 0 || rows === 0) return;
+
+      const innerW = w - 2 * pad;
+      const innerH = h - 2 * pad;
+      
+      const clusterW = (innerW - (cols - 1) * 8) / cols; // 8px cluster gap
+      const clusterH = (innerH - (rows - 1) * 8) / rows;
+
+      let current = 0;
+      const total = cols * rows;
+
+      function step() {
+        if (current >= total) return;
+        ctx.fillStyle = '#005a2e'; // Slightly darker array outline container
+        
+        const c = current % cols;
+        const r = Math.floor(current / cols);
+        const cx = pad + c * (clusterW + 8);
+        const cy = pad + r * (clusterH + 8);
+        
+        ctx.fillRect(cx, cy, clusterW, clusterH);
+
+        // Draw parts inside cluster
+        ctx.fillStyle = '#008C4A';
+        const pGap = 2;
+        const partW = (clusterW - (arrCols - 1) * pGap - 4) / arrCols;
+        const partH = (clusterH - (arrRows - 1) * pGap - 4) / arrRows;
+
+        for (let ar = 0; ar < arrRows; ar++) {
+          for (let ac = 0; ac < arrCols; ac++) {
+            const px = cx + 2 + ac * (partW + pGap);
+            const py = cy + 2 + ar * (partH + pGap);
+            ctx.beginPath();
+            ctx.roundRect(px, py, partW, partH, 2);
+            ctx.fill();
+          }
+        }
+
+        current++;
+        animationFrameId = requestAnimationFrame(step);
+      }
+      step();
+    }
+
+    function drawRoundPanelProgressive(ctx, type, sqCols, sqRows, hexCols1, hexCols2, hexRows, partD, spacing, usableW, usableH, mL, mT, w, h, pad) {
+      ctx.fillStyle = '#006536';
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#C1D99E';
+      ctx.fillRect(pad, pad, w - 2 * pad, h - 2 * pad);
+
+      const canvasUsableW = w - 2 * pad;
+      const canvasUsableH = h - 2 * pad;
+
+      const scaleX = canvasUsableW / usableW;
+      const scaleY = canvasUsableH / usableH;
+      const scale = Math.min(scaleX, scaleY);
+
+      ctx.fillStyle = '#008C4A';
+      ctx.strokeStyle = '#004d28';
+      ctx.lineWidth = 1;
+
+      let drawIndex = 0;
+      let circles = [];
+
+      if (type === 'square') {
+        const drawRadius = (partD / 2) * scale;
+        const cellW = (partD + spacing) * scale;
+        
+        for (let r = 0; r < sqRows; r++) {
+          for (let c = 0; c < sqCols; c++) {
+            const cx = pad + (c * cellW) + drawRadius;
+            const cy = pad + (r * cellW) + drawRadius;
+            circles.push({x: cx, y: cy, r: drawRadius});
+          }
+        }
+      } else {
+        const drawRadius = (partD / 2) * scale;
+        const dx = (partD + spacing) * scale;
+        const dy = dx * 0.866;
+
+        for (let r = 0; r < hexRows; r++) {
+          const isEven = (r % 2 === 1);
+          const rowCols = isEven ? hexCols2 : hexCols1;
+          const offsetX = isEven ? ((partD / 2) * scale) : 0;
+          
+          for (let c = 0; c < rowCols; c++) {
+            const cx = pad + offsetX + (c * dx) + drawRadius;
+            const cy = pad + (r * dy) + drawRadius;
+            circles.push({x: cx, y: cy, r: drawRadius});
+          }
+        }
+      }
+
+      function step() {
+        if (drawIndex >= circles.length) return;
+        const batchSize = Math.max(1, Math.floor(circles.length / 20));
+        
+        for (let i = 0; i < batchSize && drawIndex < circles.length; i++) {
+          const circ = circles[drawIndex];
+          ctx.beginPath();
+          ctx.arc(circ.x, circ.y, circ.r, 0, 2 * Math.PI);
+          ctx.fill();
+          ctx.stroke();
+          drawIndex++;
+        }
+        animationFrameId = requestAnimationFrame(step);
+      }
+      step();
+    }
+
+    function drawShearSheetProgressive(ctx, cols, rows, w, h, pad) {
+      // Background of Sheet Shear (Represent raw silver metal or material sheet)
+      ctx.fillStyle = '#E8E8E8';
+      ctx.fillRect(0, 0, w, h);
+
+      // Draw margins
+      ctx.strokeStyle = '#999';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(pad, pad, w - 2 * pad, h - 2 * pad);
+
+      if (cols === 0 || rows === 0) return;
+
+      const innerW = w - 2 * pad;
+      const innerH = h - 2 * pad;
+      const gap = 3;
+      const cellW = (innerW - (cols - 1) * gap) / cols;
+      const cellH = (innerH - (rows - 1) * gap) / rows;
+
+      let current = 0;
+      const total = cols * rows;
+
+      function step() {
+        if (current >= total) return;
+        ctx.fillStyle = '#008C4A'; // Panels drawn in PCB Green
+        ctx.strokeStyle = '#004d28';
+
+        const c = current % cols;
+        const r = Math.floor(current / cols);
+        const x = pad + c * (cellW + gap);
+        const y = pad + r * (cellH + gap);
+
+        ctx.fillRect(x, y, cellW, cellH);
+        ctx.strokeRect(x, y, cellW, cellH);
+        
+        current++;
+        animationFrameId = requestAnimationFrame(step);
+      }
+      step();
+    }
+
+    function drawMiniPanelGrid(ctx, cols, rows) {
+      const w = 52, h = 40, pad = 4, gap = 1.5;
+      
+      // Draw background substrate
+      ctx.fillStyle = '#006536';
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#C1D99E';
+      ctx.fillRect(pad, pad, w - 2 * pad, h - 2 * pad);
+
+      if (cols === 0 || rows === 0) return;
+
+      const innerW = w - 2 * pad;
+      const innerH = h - 2 * pad;
+      const cellW = (innerW - (cols - 1) * gap) / cols;
+      const cellH = (innerH - (rows - 1) * gap) / rows;
+
+      ctx.fillStyle = '#008C4A';
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const x = pad + c * (cellW + gap);
+          const y = pad + r * (cellH + gap);
+          ctx.fillRect(x, y, cellW, cellH);
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FITBOARD — PCB Panelization Tool</title>
+  <meta name="description" content="FITBOARD is a state-of-the-art PCB panelization tool. Calculate, optimize, and visualize your PCB panels in real time.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+
+    <!-- Logo -->
+    <a href="/" class="nav-logo" id="nav-logo">FITBOARD</a>
+
+    <!-- Left Nav Links -->
+    <div class="nav-links">
+      <a href="#how-it-works" class="nav-link" id="link-how-it-works">How it works</a>
+
+      <div class="dropdown" id="dropdown-calculators">
+        <a href="#calculators" class="nav-link dropdown-trigger"
+           id="link-calculators">
+          <span class="dropdown-text">Calculators</span> ▾
+        </a>
+        <div class="dropdown-menu" id="dropdown-menu">
+          <a href="basic.html"       class="dropdown-item">Basic</a>
+          <a href="array.html"       class="dropdown-item">Array</a>
+          <a href="round-part.html"  class="dropdown-item">Round Part</a>
+          <a href="panel-shear.html" class="dropdown-item">Panel Shear</a>
+        </div>
+      </div>
+
+      <a href="#about" class="nav-link" id="link-about">About</a>
+    </div>
+
+    <!-- Right Side -->
+    <div class="nav-right">
+      <a href="#contact" class="contact-link" id="link-contact">Contact</a>
+      <button class="signin-btn" id="btn-signin" type="button">Sign In</button>
+    </div>
+
+  </nav>
+
+  <!-- ═══ HERO SECTION ═══ -->
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <p class="hero-eyebrow" id="hero-eyebrow">PCB PANELIZATION TOOL</p>
+        <h1 class="hero-headline" id="hero-headline">
+          PCB<br>
+          PANELIZATION<br>
+          AT THE<br>
+          SPEED OF<br>
+          THOUGHT.
+        </h1>
+        <p class="hero-subheadline" id="hero-subheadline">Everything you need.<br>Nothing you don't.</p>
+        <a href="#" class="hero-cta" id="hero-cta">
+          Start Panelizing
+          <img src="Triangle.svg" class="cta-arrow" alt="">
+        </a>
+      </div>
+
+      <div class="hero-illustration" id="hero-illustration">
+        <img src="Small_Panel.svg" class="panel panel-small" alt="Small PCB Panel">
+        <img src="Big_Panel.svg"   class="panel panel-big"   alt="Big PCB Panel">
+        <img src="Array.svg"       class="panel panel-array" alt="PCB Array Panel">
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>

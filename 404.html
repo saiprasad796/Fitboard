@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Page Under Construction</title>
+  <meta name="description" content="Bello! This page is under construction. Please come again later.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&family=Manrope:wght@500;600;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/404.css">
+</head>
+<body>
+
+  <div class="error-page-wrapper">
+    <!-- Clouds background -->
+    <div class="clouds-bg"></div>
+
+    <!-- 404 background text -->
+    <div class="error-giant-404">404</div>
+
+    <!-- Logo (FITBOARD) -->
+    <a href="index.html" class="error-logo">FITBOARD</a>
+    
+    <!-- Contact Link -->
+    <a href="index.html#contact" class="error-contact">Contact</a>
+
+    <!-- Minion Container with Eye Tracking -->
+    <div class="minion-container error-minion-img">
+      <img src="Assets/minion-404.png" id="minion-img" alt="Minion">
+      <img src="Assets/Pupil-Left.svg"  id="pupil-left"  class="pupil"
+           data-eyeball-width="54" data-eyeball-height="48" alt="">
+      <img src="Assets/Pupil-Right.svg" id="pupil-right" class="pupil"
+           data-eyeball-width="54" data-eyeball-height="48" alt="">
+    </div>
+
+    <!-- Shadow under Minion -->
+    <div class="error-minion-shadow"></div>
+
+    <!-- Bello! This page is under construction -->
+    <h2 class="error-bello-text">Bello! This page is under construction</h2>
+
+    <!-- Please come again later -->
+    <p class="error-later-text">Please come again later</p>
+
+    <!-- Back to Home Button -->
+    <a href="index.html" class="error-back-btn" id="btn-back-home">
+      <img src="Assets/Triangle.svg" class="error-btn-arrow" alt="">
+      <span>Back to Home</span>
+    </a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Smoothly fade in the page
+      setTimeout(() => {
+        document.body.classList.add('fade-in');
+      }, 50);
+
+      // Smoothly fade out when returning home
+      const btnBackHome = document.getElementById('btn-back-home');
+      if (btnBackHome) {
+        btnBackHome.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.body.classList.remove('fade-in');
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 400); // matches transition time
+        });
+      }
+    });
+
+    (function () {
+      const minionImg = document.getElementById('minion-img');
+
+      function getScaleFactor() {
+        if (!minionImg) return 1;
+        // The eyeball dataset sizes (64x52) are defined in design/layout pixels (for 1045px width).
+        // We scale them relative to the current offsetWidth of the minion image.
+        const currentWidth = minionImg.offsetWidth;
+        if (!currentWidth) return 1;
+        return currentWidth / 1045;
+      }
+
+      function trackEyes(e) {
+        const pupils = document.querySelectorAll('.pupil');
+
+        // Check if mouse is near the goggles center to reset eyes to origin
+        if (pupils.length === 2) {
+          const rectL = pupils[0].getBoundingClientRect();
+          const rectR = pupils[1].getBoundingClientRect();
+          
+          const gogglesCX = (rectL.left + rectL.width/2 + rectR.left + rectR.width/2) / 2;
+          const gogglesCY = (rectL.top + rectL.height/2 + rectR.top + rectR.height/2) / 2;
+          
+          const dist = Math.hypot(e.clientX - gogglesCX, e.clientY - gogglesCY);
+          const scale = getScaleFactor();
+          const threshold = 90 * scale; // Proximity threshold around goggles center
+          
+          if (dist < threshold) {
+            pupils.forEach(pupil => {
+              pupil.style.transform = 'translate(-50%, -50%)';
+            });
+            return;
+          }
+        }
+
+        pupils.forEach(pupil => {
+          const rect = pupil.getBoundingClientRect();
+
+          // Center of pupil in viewport coordinates
+          const pupilCX = rect.left + rect.width  / 2;
+          const pupilCY = rect.top  + rect.height / 2;
+
+          // Angle from pupil center to mouse cursor
+          const angle = Math.atan2(
+            e.clientY - pupilCY,
+            e.clientX - pupilCX
+          );
+
+          // Scale eyeball dimensions with image size
+          const scale        = getScaleFactor();
+          const eyeballW     = parseFloat(pupil.dataset.eyeballWidth)  * scale;
+          const eyeballH     = parseFloat(pupil.dataset.eyeballHeight) * scale;
+
+          // Usable travel: eyeball radius minus pupil radius per axis
+          const a = (eyeballW / 2) - (rect.width  / 2);
+          const b = (eyeballH / 2) - (rect.height / 2);
+
+          // Clamp to 0 in case pupil is larger than eyeball
+          const safeA = Math.max(0, a);
+          const safeB = Math.max(0, b);
+
+          // Ellipse boundary formula at this angle
+          const cosA = Math.cos(angle);
+          const sinA = Math.sin(angle);
+          const maxTravel = (safeA * safeB) /
+            Math.sqrt((safeB * cosA) ** 2 + (safeA * sinA) ** 2);
+
+          const dx = cosA * maxTravel;
+          const dy = sinA * maxTravel;
+
+          // Apply translation on top of the base centering transform
+          pupil.style.transform =
+            `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+        });
+      }
+
+      // Use requestAnimationFrame to throttle for smooth 60fps performance
+      let ticking = false;
+      document.addEventListener('mousemove', (e) => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            trackEyes(e);
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+
+      // Reset pupils to center when mouse leaves the page
+      document.addEventListener('mouseleave', () => {
+        document.querySelectorAll('.pupil').forEach(pupil => {
+          pupil.style.transform = 'translate(-50%, -50%)';
+        });
+      });
+
+      // Reset pupils to center on resize since scale factor changes
+      window.addEventListener('resize', () => {
+        document.querySelectorAll('.pupil').forEach(pupil => {
+          pupil.style.transform = 'translate(-50%, -50%)';
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

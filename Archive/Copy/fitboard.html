@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FITBOARD — PCB Panelization at the speed of thought</title>
+  <meta name="description" content="Fitboard is a state-of-the-art PCB panelization tool. Calculate, optimize, and visualize your PCB panels in real time.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Brand Colors & CSS Variables */
+    :root {
+      --primary-yellow: #FFD600;
+      --nav-green: #ABD372;
+      --black: #0B0B0B;
+      --pcb-green: #008C4A;
+      --result-cards: #FFE873;
+      --hero-gradient-start: #FFD700;
+      --hero-gradient-end: #EED66B;
+    }
+
+    /* Reset Styles */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #1A1A1A;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--black);
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1A1A1A;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary-yellow);
+      border-radius: 4px;
+    }
+
+    /* Frame Container (1512px wide, Desktop Only) */
+    .frame-container {
+      width: 1512px;
+      height: 982px;
+      position: relative;
+      background: linear-gradient(180deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
+      overflow: hidden;
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Navbar (Height 80px, background #ABD372) */
+    .navbar {
+      width: 100%;
+      height: 80px;
+      background-color: var(--nav-green);
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      z-index: 10;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-logo {
+      position: absolute;
+      left: 50px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40px;
+      color: var(--black);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: transform 0.2s ease;
+    }
+    .nav-logo:hover {
+      transform: scale(1.05);
+    }
+
+    .nav-links {
+      position: absolute;
+      left: 280px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-link {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--black);
+      opacity: 0.8;
+      text-decoration: none;
+      position: relative;
+      padding: 6px 0;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--black);
+      transition: width 0.25s ease;
+    }
+
+    .nav-link:hover {
+      opacity: 1;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* Dropdown Styles */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #FFF;
+      min-width: 180px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      border-radius: 8px;
+      padding: 8px 0;
+      z-index: 12;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .dropdown-item {
+      color: var(--black);
+      padding: 10px 16px;
+      text-decoration: none;
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      transition: background-color 0.2s ease, padding-left 0.2s ease;
+    }
+
+    .dropdown-item:hover {
+      background-color: rgba(171, 211, 114, 0.2);
+      padding-left: 20px;
+      color: var(--pcb-green);
+    }
+
+    .nav-right {
+      position: absolute;
+      right: 50px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .contact-link {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--black);
+      opacity: 0.8;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+    .contact-link:hover {
+      opacity: 1;
+    }
+
+    .signin-btn {
+      width: 80px;
+      height: 32px;
+      border: 1px solid rgba(0,0,0,0.3);
+      border-radius: 4px;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--black);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+    .signin-btn:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      border-color: rgba(0, 0, 0, 0.6);
+    }
+
+    /* Hero Section (Absolute Positions Matching Figma Specifications) */
+    .hero-eyebrow {
+      position: absolute;
+      left: 120px;
+      top: 180px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--black);
+      opacity: 0.5;
+      text-transform: uppercase;
+    }
+
+    .hero-headline {
+      position: absolute;
+      left: 120px;
+      top: 215px;
+      width: 368px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 88px;
+      line-height: 90px;
+      color: var(--black);
+    }
+
+    .hero-subtext {
+      position: absolute;
+      left: 120px;
+      top: 680px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      line-height: 22px;
+      color: var(--black);
+      opacity: 0.6;
+    }
+
+    .hero-cta {
+      position: absolute;
+      left: 112px;
+      top: 759px;
+      width: 215px;
+      height: 50px;
+      background-color: #0A0A0A;
+      color: #FFFBFB;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+      filter: drop-shadow(2px 6px 5px rgba(0,0,0,0.3));
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease;
+    }
+
+    .hero-cta:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 25px rgba(255, 214, 0, 0.6), 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-cta:active {
+      transform: scale(0.98);
+    }
+
+    /* Floating Panels (Absolute Positions) */
+    .panel-img {
+      position: absolute;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .panel-big {
+      left: 958px;
+      top: 224px;
+      width: 301px;
+      filter: drop-shadow(10px 9px 7.2px rgba(0, 0, 0, 0.25));
+      animation: floatBig 5s ease-in-out infinite;
+    }
+
+    .panel-small {
+      left: 760px;
+      top: 421px;
+      width: 183px;
+      filter: drop-shadow(10px 9px 4px rgba(0, 0, 0, 0.25));
+      animation: floatSmall 5s ease-in-out infinite;
+      animation-delay: 1.2s;
+    }
+
+    .panel-array {
+      left: 784px;
+      top: 526px;
+      width: 199px;
+      filter: drop-shadow(10px 10px 4px rgba(0, 0, 0, 0.25));
+      animation: floatArray 5s ease-in-out infinite;
+      animation-delay: 2.4s;
+    }
+
+    /* Float Animations */
+    @keyframes floatBig {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes floatSmall {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes floatArray {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* Page Load Entrance Animations (JS will flag scroll/load active classes) */
+    .fade-up-init {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-up-active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.3s; }
+    .stagger-3 { transition-delay: 0.5s; }
+    .stagger-4 { transition-delay: 0.7s; }
+
+    /* Footer Credits (Subtle) */
+    .footer-credits {
+      position: absolute;
+      bottom: 24px;
+      left: 50px;
+      font-size: 11px;
+      opacity: 0.4;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="frame-container">
+    
+    <!-- Navbar -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+      <a href="fitboard.html" class="nav-logo" id="logo">FITBOARD</a>
+      
+      <div class="nav-links">
+        <a href="#how-it-works" class="nav-link" id="link-how">How it works</a>
+        
+        <!-- Calculators Dropdown -->
+        <div class="dropdown">
+          <a href="#" class="nav-link" id="link-calc">Calculators ▾</a>
+          <div class="dropdown-content">
+            <a href="fitboard-calculator.html?type=basic" class="dropdown-item">Basic Calculator</a>
+            <a href="fitboard-calculator.html?type=array" class="dropdown-item">Array Calculator</a>
+            <a href="fitboard-calculator.html?type=round" class="dropdown-item">Round Part Calculator</a>
+            <a href="fitboard-calculator.html?type=shear" class="dropdown-item">Panel Shear Calculator</a>
+          </div>
+        </div>
+        
+        <a href="#about" class="nav-link" id="link-about">About</a>
+      </div>
+      
+      <div class="nav-right">
+        <a href="#contact" class="contact-link" id="link-contact">Contact</a>
+        <button class="signin-btn" id="btn-signin" onclick="window.location.href='fitboard-404.html'">Sign In</button>
+      </div>
+    </nav>
+
+    <!-- Hero Content -->
+    <p class="hero-eyebrow fade-up-init stagger-1" id="tag-pcb">PCB Panelization Tool</p>
+    
+    <h1 class="hero-headline fade-up-init stagger-2" id="headline-main">
+      PCB Panelization at the speed of thought.
+    </h1>
+    
+    <p class="hero-subtext fade-up-init stagger-3" id="subtext-main">
+      Everything you need.<br>Nothing you don't.
+    </p>
+    
+    <a href="fitboard-calculator.html" class="hero-cta fade-up-init stagger-4" id="btn-cta">
+      Start Panelizing ▶
+    </a>
+
+    <!-- Floating Panels -->
+    <img src="Assets/Big Panel.svg" alt="Big PCB Panel" class="panel-img panel-big" id="img-big-panel">
+    <img src="Assets/Small Panel.svg" alt="Small PCB Panel" class="panel-img panel-small" id="img-small-panel">
+    <img src="Assets/Array.svg" alt="Array PCB Panel" class="panel-img panel-array" id="img-array-panel">
+
+    <div class="footer-credits">
+      © 2026 Fitboard Corp. Desktop optimized view.
+    </div>
+
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Trigger entrance animations on load
+      const anims = document.querySelectorAll('.fade-up-init');
+      
+      // Use IntersectionObserver as requested (perfect for scroll animations as well)
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-up-active');
+            observer.unobserve(entry.target); // Trigger once
+          }
+        });
+      }, {
+        threshold: 0.15
+      });
+
+      anims.forEach(el => observer.observe(el));
+    });
+  </script>
+
+</body>
+</html>
