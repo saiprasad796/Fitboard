@@ -1162,8 +1162,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.getElementById('basic-pcb-unit-toggle');
     if (!toggle) return;
 
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
+    const mmSpan = toggle.querySelector('.mm');
+    const inSpan = toggle.querySelector('.in');
+
+    if (mmSpan) {
+      mmSpan.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setBasicUnit('mm');
+      });
+    }
+    if (inSpan) {
+      inSpan.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setBasicUnit('in');
+      });
+    }
+    toggle.addEventListener('click', () => {
       setBasicUnit(basicUnit === 'mm' ? 'in' : 'mm');
     });
   }
@@ -1886,8 +1900,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.getElementById('pcb-unit-toggle');
     if (!toggle) return;
 
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
+    const mmSpan = toggle.querySelector('.mm');
+    const inSpan = toggle.querySelector('.in');
+
+    if (mmSpan) {
+      mmSpan.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setPCBUnit('mm');
+      });
+    }
+    if (inSpan) {
+      inSpan.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setPCBUnit('in');
+      });
+    }
+    toggle.addEventListener('click', () => {
       setPCBUnit(pcbUnit === 'mm' ? 'in' : 'mm');
     });
 
@@ -1935,8 +1963,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.getElementById('panel-unit-toggle');
     if (!toggle) return;
 
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
+    const mmSpan = toggle.querySelector('.mm');
+    const inSpan = toggle.querySelector('.in');
+
+    if (mmSpan) {
+      mmSpan.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setPanelUnit('mm');
+      });
+    }
+    if (inSpan) {
+      inSpan.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setPanelUnit('in');
+      });
+    }
+    toggle.addEventListener('click', () => {
       setPanelUnit(panelUnit === 'mm' ? 'in' : 'mm');
     });
 
@@ -4682,8 +4724,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.getElementById('round-pcb-unit-toggle');
     if (!toggle) return;
 
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
+    const mmSpan = toggle.querySelector('.mm');
+    const inSpan = toggle.querySelector('.in');
+
+    if (mmSpan) {
+      mmSpan.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setRoundUnit('mm');
+      });
+    }
+    if (inSpan) {
+      inSpan.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setRoundUnit('in');
+      });
+    }
+    toggle.addEventListener('click', () => {
       setRoundUnit(roundUnit === 'mm' ? 'in' : 'mm');
     });
   }
@@ -5678,8 +5734,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.getElementById('shear-unit-toggle');
     if (!toggle) return;
 
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
+    const mmSpan = toggle.querySelector('.mm');
+    const inSpan = toggle.querySelector('.in');
+
+    if (mmSpan) {
+      mmSpan.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setShearUnit('mm');
+      });
+    }
+    if (inSpan) {
+      inSpan.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setShearUnit('in');
+      });
+    }
+    toggle.addEventListener('click', () => {
       setShearUnit(shearUnit === 'mm' ? 'in' : 'mm');
     });
   }
