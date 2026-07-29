@@ -5509,13 +5509,13 @@ document.addEventListener('DOMContentLoaded', () => {
       return val % 1 === 0 ? val.toFixed(0) : val.toFixed(1).replace(/\.?0+$/, '');
     }
 
-    const panelW_in = roundUnit === 'mm' ? i.panelW / MM_PER_INCH : i.panelW;
-    const panelH_in = roundUnit === 'mm' ? i.panelH / MM_PER_INCH : i.panelH;
-    const panelW_mm = roundUnit === 'mm' ? i.panelW : i.panelW * MM_PER_INCH;
-    const panelH_mm = roundUnit === 'mm' ? i.panelH : i.panelH * MM_PER_INCH;
+    const panelW_in = i.panelW;
+    const panelH_in = i.panelH;
+    const panelW_mm = i.panelW * MM_PER_INCH;
+    const panelH_mm = i.panelH * MM_PER_INCH;
 
-    const labelPanelW = `${fmtIn(panelW_in)}" (${fmtMM(panelW_mm)}mm)`;
-    const labelPanelH = `${fmtIn(panelH_in)}" (${fmtMM(panelH_mm)}mm)`;
+    const labelPanelW = roundUnit === 'mm' ? `${fmtMM(panelW_mm)}mm (${fmtIn(panelW_in)}")` : `${fmtIn(panelW_in)}" (${fmtMM(panelW_mm)}mm)`;
+    const labelPanelH = roundUnit === 'mm' ? `${fmtMM(panelH_mm)}mm (${fmtIn(panelH_in)}")` : `${fmtIn(panelH_in)}" (${fmtMM(panelH_mm)}mm)`;
 
     drawCanvasDimension(ctx, originX, originY, originX + pxW, originY, labelPanelW, { offset: -22, scale: scaleExport, color: '#0B0B0B' });
     drawCanvasDimension(ctx, originX + pxW, originY, originX + pxW, originY + pxH, labelPanelH, { offset: 22, scale: scaleExport, color: '#0B0B0B' });
