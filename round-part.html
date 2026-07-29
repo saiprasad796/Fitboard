@@ -3207,6 +3207,33 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.strokeStyle = '#005C30';
         ctx.lineWidth = 1 * scaleExport;
         ctx.strokeRect(px, py, pcbPxW, pcbPxH);
+
+        // Render centered white PCB size text inside each PCB card: e.g. 25×50mm (0.984"×1.968")
+        ctx.save();
+        const pcbTextLine1 = `${fmtMM(i.partW)}×${fmtMM(i.partH)}mm`;
+        const pcbTextLine2 = `(${fmtIn(i.partW / MM_PER_INCH)}"×${fmtIn(i.partH / MM_PER_INCH)}")`;
+        const pcbFullText = `${pcbTextLine1} ${pcbTextLine2}`;
+
+        const maxW = pcbPxW * 0.92;
+        const fontSize = Math.min(pcbPxH * 0.18, 9.5 * scaleExport);
+        if (fontSize >= 3 * scaleExport) {
+          ctx.font = `bold ${fontSize}px "DM Sans", sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = '#ffffff';
+
+          const centerX = px + pcbPxW / 2;
+          const centerY = py + pcbPxH / 2;
+          const lineSpacing = fontSize * 1.18;
+
+          if (pcbPxH >= fontSize * 2.2 && ctx.measureText(pcbFullText).width > maxW) {
+            ctx.fillText(pcbTextLine1, centerX, centerY - lineSpacing / 2, maxW);
+            ctx.fillText(pcbTextLine2, centerX, centerY + lineSpacing / 2, maxW);
+          } else {
+            ctx.fillText(pcbFullText, centerX, centerY, maxW);
+          }
+        }
+        ctx.restore();
       }
     }
 
@@ -3487,41 +3514,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const panelW_mm = panelW * MM_PER_INCH;
     const panelH_mm = panelH * MM_PER_INCH;
 
-    const labelPanelW = `${fmt2(panelW_in)}" (${fmt2(panelW_mm)}mm)`;
-    const labelPanelH = `${fmt2(panelH_in)}" (${fmt2(panelH_mm)}mm)`;
+    const labelPanelW = panelUnit === 'mm' ? `${fmt2(panelW_mm)}mm (${fmt2(panelW_in)}")` : `${fmt2(panelW_in)}" (${fmt2(panelW_mm)}mm)`;
+    const labelPanelH = panelUnit === 'mm' ? `${fmt2(panelH_mm)}mm (${fmt2(panelH_in)}")` : `${fmt2(panelH_in)}" (${fmt2(panelH_mm)}mm)`;
 
     const annotationItems = [];
 
     // Panel Outer Bounds (Left Y-axis & Bottom X-axis)
     annotationItems.push({ x1: originX, y1: originY + pxH, x2: originX, y2: originY, text: labelPanelH, offset: -30, scale: scaleExport, color: '#0b0b0b' });
     annotationItems.push({ x1: originX, y1: originY + pxH, x2: originX + pxW, y2: originY + pxH, text: labelPanelW, offset: 30, scale: scaleExport, color: '#0b0b0b' });
-
-    if (usableW > 0 && usableH > 0 && cols > 0 && rows > 0) {
-      const arrayW_mm = (i.partW * i.arrayCols) + (i.spacingX * (i.arrayCols - 1)) + i.railLeft + i.railRight;
-      const arrayH_mm = (i.partH * i.arrayRows) + (i.spacingY * (i.arrayRows - 1)) + i.railTop + i.railBottom;
-
-      const arrayW_in = arrayW_mm / MM_PER_INCH;
-      const arrayH_in = arrayH_mm / MM_PER_INCH;
-
-      const labelArrayW = pcbUnit === 'mm' ? `${fmtMM(arrayW_mm)}mm` : `${fmtIn(arrayW_in)}"`;
-      const labelArrayH = pcbUnit === 'mm' ? `${fmtMM(arrayH_mm)}mm` : `${fmtIn(arrayH_in)}"`;
-
-      const labelSpA = panelUnit === 'mm' ? 
-        `${fmtMM(spA * MM_PER_INCH)}mm` : 
-        `${fmtIn(spA)}"`;
-
-      // Single Array Group dimensions (no (typ))
-      annotationItems.push({ x1: startX, y1: startY + gridH_px, x2: startX + gridW_px, y2: startY + gridH_px, text: labelArrayW, offset: 22, scale: scaleExport, color: '#E86A1A' });
-      annotationItems.push({ x1: startX, y1: startY, x2: startX, y2: startY + gridH_px, text: labelArrayH, offset: -22, scale: scaleExport, color: '#E86A1A' });
-
-      // Spacing between arrays
-      if (cols > 1 && spA > 0) {
-        annotationItems.push({ x1: startX + gridW_px, y1: startY + gridH_px / 2, x2: startX + gridW_px + spA_px, y2: startY + gridH_px / 2, text: labelSpA, offset: 0, scale: scaleExport, color: '#1A6FE8' });
-      }
-      if (rows > 1 && spA > 0) {
-        annotationItems.push({ x1: startX + gridW_px / 2, y1: startY + gridH_px, x2: startX + gridW_px / 2, y2: startY + gridH_px + spA_px, text: labelSpA, offset: 0, scale: scaleExport, color: '#1A6FE8' });
-      }
-    }
 
     const boardRects = [{ x: originX, y: originY, w: pxW, h: pxH }];
     drawCanvasDimensionRefactored(ctx, annotationItems, boardRects, scaleExport);
