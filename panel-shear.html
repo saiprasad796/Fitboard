@@ -1162,15 +1162,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.getElementById('basic-pcb-unit-toggle');
     if (!toggle) return;
 
-    toggle.querySelector('.mm').addEventListener('click', (e) => {
+    toggle.addEventListener('click', (e) => {
       e.stopPropagation();
-      setBasicUnit('mm');
-    });
-    toggle.querySelector('.in').addEventListener('click', (e) => {
-      e.stopPropagation();
-      setBasicUnit('in');
-    });
-    toggle.addEventListener('click', () => {
       setBasicUnit(basicUnit === 'mm' ? 'in' : 'mm');
     });
   }
@@ -1541,6 +1534,14 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    function fmtIn(val) {
+      return val % 1 === 0 ? val.toFixed(0) : val.toFixed(3).replace(/\.?0+$/, '');
+    }
+    
+    function fmtMM(val) {
+      return val % 1 === 0 ? val.toFixed(0) : val.toFixed(1).replace(/\.?0+$/, '');
+    }
+
     if (res.total > 0 && res.cols > 0 && res.rows > 0) {
       const spacingXin = i.spacingX / MM_PER_INCH;
       const spacingYin = i.spacingY / MM_PER_INCH;
@@ -1552,6 +1553,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const startX = usableX + (usableW - arrayPxW) / 2;
       const startY = usableY + (usableH - arrayPxH) / 2;
+
+      const partW_mm = isRotated ? i.partH : i.partW;
+      const partH_mm = isRotated ? i.partW : i.partH;
+      const partW_in = partW_mm / MM_PER_INCH;
+      const partH_in = partH_mm / MM_PER_INCH;
 
       for (let r = 0; r < res.rows; r++) {
         for (let c = 0; c < res.cols; c++) {
@@ -1878,15 +1884,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.getElementById('pcb-unit-toggle');
     if (!toggle) return;
 
-    toggle.querySelector('.mm').addEventListener('click', (e) => {
+    toggle.addEventListener('click', (e) => {
       e.stopPropagation();
-      setPCBUnit('mm');
-    });
-    toggle.querySelector('.in').addEventListener('click', (e) => {
-      e.stopPropagation();
-      setPCBUnit('in');
-    });
-    toggle.addEventListener('click', () => {
       setPCBUnit(pcbUnit === 'mm' ? 'in' : 'mm');
     });
 
@@ -1934,15 +1933,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.getElementById('panel-unit-toggle');
     if (!toggle) return;
 
-    toggle.querySelector('.mm').addEventListener('click', (e) => {
+    toggle.addEventListener('click', (e) => {
       e.stopPropagation();
-      setPanelUnit('mm');
-    });
-    toggle.querySelector('.in').addEventListener('click', (e) => {
-      e.stopPropagation();
-      setPanelUnit('in');
-    });
-    toggle.addEventListener('click', () => {
       setPanelUnit(panelUnit === 'mm' ? 'in' : 'mm');
     });
 
@@ -2929,45 +2921,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const arrayPxH = res.rows * partPxH + (res.rows - 1) * gapPxY;
 
         const startX = usableX + (usableW - arrayPxW) / 2;
-        const startY = usableY + (usableH - arrayPxH) / 2;
-
-        for (let r = 0; r < res.rows; r++) {
-          for (let c = 0; c < res.cols; c++) {
-            const x = startX + c * (partPxW + gapPxX);
-            const y = startY + r * (partPxH + gapPxY);
-
-            if (x < usableX || y < usableY) continue;
-            if (x + partPxW > usableX + usableW + 0.1) continue;
-            if (y + partPxH > usableY + usableH + 0.1) continue;
-
-            // Original PCB Card (#008C4A with #C1D99E border)
-            ctx.fillStyle = '#008C4A';
-            ctx.fillRect(x, y, partPxW, partPxH);
-            ctx.strokeStyle = '#C1D99E';
-            ctx.lineWidth = 0.5 * scaleExport;
-            ctx.strokeRect(x, y, partPxW, partPxH);
-
-            // Centered PCB Dimensions Text (Line 1: X"xY", Line 2: (XmmxYmm) below)
-            ctx.save();
-            const maxW = partPxW * 0.9;
-            const fontSize = Math.min(partPxH * 0.18, 9.5 * scaleExport);
-            if (fontSize >= 4 * scaleExport) {
-              ctx.font = `bold ${fontSize}px "DM Sans", sans-serif`;
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
-              ctx.fillStyle = '#ffffff';
-
-              const centerY = y + partPxH / 2;
-              const lineSpacing = fontSize * 1.15;
-
-              if (partPxH >= fontSize * 2.4) {
-                ctx.fillText(pcbLine1, x + partPxW / 2, centerY - lineSpacing / 2, maxW);
-                ctx.fillText(pcbLine2, x + partPxW / 2, centerY + lineSpacing / 2, maxW);
-              } else {
-                ctx.fillText(`${pcbLine1} ${pcbLine2}`, x + partPxW / 2, centerY, maxW);
-              }
-            }
-            ctx.restore();
           }
         }
       }
@@ -4658,15 +4611,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.getElementById('round-pcb-unit-toggle');
     if (!toggle) return;
 
-    toggle.querySelector('.mm').addEventListener('click', (e) => {
+    toggle.addEventListener('click', (e) => {
       e.stopPropagation();
-      setRoundUnit('mm');
-    });
-    toggle.querySelector('.in').addEventListener('click', (e) => {
-      e.stopPropagation();
-      setRoundUnit('in');
-    });
-    toggle.addEventListener('click', () => {
       setRoundUnit(roundUnit === 'mm' ? 'in' : 'mm');
     });
   }
@@ -5661,15 +5607,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.getElementById('shear-unit-toggle');
     if (!toggle) return;
 
-    toggle.querySelector('.mm').addEventListener('click', (e) => {
+    toggle.addEventListener('click', (e) => {
       e.stopPropagation();
-      setShearUnit('mm');
-    });
-    toggle.querySelector('.in').addEventListener('click', (e) => {
-      e.stopPropagation();
-      setShearUnit('in');
-    });
-    toggle.addEventListener('click', () => {
       setShearUnit(shearUnit === 'mm' ? 'in' : 'mm');
     });
   }
